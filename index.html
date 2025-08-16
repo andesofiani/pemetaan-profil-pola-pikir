@@ -6,7 +6,7 @@
 <title>PEMETAAN PROFIL POLA PIKIR</title>
 <style>
   :root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#2563eb;--good:#16a34a;--warn:#ea580c;--bad:#dc2626;--border:#e2e8f0}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
+  body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
   .wrap{max-width:960px;margin:20px auto;padding:16px}
   .card{background:var(--card);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
   h1{margin:0 0 .4em;font-weight:900}
@@ -34,31 +34,35 @@
 <div class="wrap">
   <div class="card">
     <h1>PEMETAAN PROFIL POLA PIKIR</h1>
-    <p>Pilih jawaban untuk 20 pernyataan. Skor dan kategori dihitung otomatis.</p>
+    <p>Isi nama Anda, jawab 20 pernyataan, lalu klik <b>Lihat Hasil & Kirim</b>. Skor & kategori langsung tampil, data otomatis masuk ke Google Sheet Anda.</p>
+
+    <label><b>Nama Responden:</b></label>
+    <input type="text" id="nama" placeholder="Tuliskan nama Anda" style="width:100%;padding:8px;margin:8px 0" />
+
     <div class="progress"><div class="bar" id="bar"></div></div>
     <p id="progressTxt">0/20 terjawab</p>
 
     <form id="quiz"></form>
 
     <div class="actions">
-      <button type="button" class="primary" id="submitBtn">Lihat Hasil</button>
+      <button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
       <button type="button" class="soft" id="resetBtn">Reset</button>
     </div>
 
     <div id="result" class="result" style="display:none"></div>
 
     <h3>Bagikan Link</h3>
-    <p>Scan QR atau salin link ini untuk membagikan kuis:</p>
     <input type="text" id="shareUrl" style="width:100%;padding:8px" />
     <div id="qrcode"></div>
     <button type="button" class="soft" id="downloadQR">Unduh QR sebagai Gambar</button>
   </div>
 </div>
 
-<!-- Library QRCodeJS -->
+<!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqa0_IpKF6pVSAD9p-ILx-Ez2Mol7VYWtFEegdM9RjhR7pncjN75nUWgQvhlxqpfH--w/exec"; // <<-- Ganti dengan URL Web App Google Apps Script Anda
+
 const statements=[
 "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
 "2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
@@ -86,6 +90,7 @@ const scoring=[
 [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
 const labels=["Sangat Setuju","Setuju","Tidak Setuju","Sangat Tidak Setuju"];
+
 const form=document.getElementById('quiz'),bar=document.getElementById('bar'),progressTxt=document.getElementById('progressTxt'),resultBox=document.getElementById('result');
 
 function render(){form.innerHTML='';statements.forEach((t,i)=>{const q=document.createElement('div');q.className='q';
@@ -96,11 +101,16 @@ function answered(){let c=0;for(let i=0;i<statements.length;i++)if(getVal(i)!=nu
 function updateProg(){const c=answered(),t=statements.length;bar.style.width=(c/t*100)+"%";progressTxt.textContent=`${c}/${t} terjawab`;}
 form.addEventListener('change',updateProg);
 
-function compute(){let tot=0;for(let i=0;i<statements.length;i++){const v=getVal(i);if(v==null)return{ok:false,miss:i};tot+=scoring[i][v];}
-let cat="";if(tot<=20)cat="F";else if(tot<=33)cat="FG";else if(tot<=44)cat="GF";else cat="G";return{ok:true,tot,cat};}
-function showRes(r){resultBox.style.display='block';resultBox.innerHTML=`<div class="score">${r.tot}</div><div class="badge ${r.cat}">${r.cat}</div>`;}
+function compute(){let tot=0;const detail=[];for(let i=0;i<statements.length;i++){const v=getVal(i);if(v==null)return{ok:false,miss:i};const score=scoring[i][v];tot+=score;detail.push({no:i+1,jawaban:labels[v],skor:score});}
+let cat="";if(tot<=20)cat="F";else if(tot<=33)cat="FG";else if(tot<=44)cat="GF";else cat="G";return{ok:true,total:tot,category:cat,detail};}
+function showRes(r){resultBox.style.display='block';resultBox.innerHTML=`<div class="score">${r.total}</div><div class="badge ${r.category}">${r.category}</div>`;}
 
-document.getElementById('submitBtn').onclick=()=>{const r=compute();if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}showRes(r);};
+document.getElementById('submitBtn').onclick=async()=>{const nama=document.getElementById('nama').value.trim()||"Anonim";const r=compute();
+if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}showRes(r);
+// kirim ke Google Sheet
+const data={nama:nama,jawaban:r.detail,skor:r.total,kategori:r.category};
+try{const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data),headers:{"Content-Type":"application/json"}});const j=await res.json();
+if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}}catch(e){alert("Gagal menyimpan jawaban.");console.error(e);}};
 document.getElementById('resetBtn').onclick=()=>{form.reset();resultBox.style.display='none';updateProg();};
 updateProg();
 
