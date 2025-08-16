@@ -61,7 +61,7 @@
 <!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqa0_IpKF6pVSAD9p-ILx-Ez2Mol7VYWtFEegdM9RjhR7pncjN75nUWgQvhlxqpfH--w/exec"; // <<-- Ganti dengan URL Web App Google Apps Script Anda
+const SCRIPT_URL = "PASTE_URL_DI_SINI"; // Ganti dengan URL Web App Google Apps Script
 
 const statements=[
 "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
@@ -107,10 +107,18 @@ function showRes(r){resultBox.style.display='block';resultBox.innerHTML=`<div cl
 
 document.getElementById('submitBtn').onclick=async()=>{const nama=document.getElementById('nama').value.trim()||"Anonim";const r=compute();
 if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}showRes(r);
-// kirim ke Google Sheet
+
+// Data dikirim via form-urlencoded
 const data={nama:nama,jawaban:r.detail,skor:r.total,kategori:r.category};
-try{const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data),headers:{"Content-Type":"application/json"}});const j=await res.json();
-if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}}catch(e){alert("Gagal menyimpan jawaban.");console.error(e);}};
+const body=new URLSearchParams({payload:JSON.stringify(data)});
+try{
+  const res=await fetch(SCRIPT_URL,{method:"POST",body:body});
+  const j=await res.json();
+  if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}
+  else{alert("Gagal menyimpan jawaban.");}
+}catch(e){alert("Terjadi error saat mengirim jawaban.");console.error(e);}
+};
+
 document.getElementById('resetBtn').onclick=()=>{form.reset();resultBox.style.display='none';updateProg();};
 updateProg();
 
