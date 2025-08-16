@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PEMETAAN PROFIL POLA PIKIR</title>
+<style>
+  :root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#2563eb;--good:#16a34a;--warn:#ea580c;--bad:#dc2626;--border:#e2e8f0}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
+  .wrap{max-width:960px;margin:20px auto;padding:16px}
+  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
+  h1{margin:0 0 .4em;font-weight:900}
+  .q{padding:12px;border:1px solid var(--border);border-radius:12px;margin:10px 0;background:#fff}
+  .opt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .opt label{display:flex;gap:6px;align-items:center;border:1px solid var(--border);padding:8px 10px;border-radius:10px;cursor:pointer}
+  .opt input{accent-color:var(--accent)}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+  .primary{background:var(--accent);color:#fff}
+  .soft{background:#e2e8f0}
+  .result{margin-top:16px;padding:14px;border:1px dashed var(--border);border-radius:10px}
+  .score{font-size:2rem;font-weight:900}
+  .badge{padding:6px 10px;border-radius:999px;font-weight:800}
+  .badge.F{background:#fee2e2;color:var(--bad)}
+  .badge.FG{background:#ffedd5;color:var(--warn)}
+  .badge.GF{background:#e0f2fe;color:#0369a1}
+  .badge.G{background:#dcfce7;color:var(--good)}
+  .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:6px 0}
+  .bar{height:100%;width:0;background:var(--accent);transition:width .2s}
+  #qrcode{margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>PEMETAAN PROFIL POLA PIKIR</h1>
+    <p>Pilih jawaban untuk 20 pernyataan. Skor dan kategori dihitung otomatis.</p>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <p id="progressTxt">0/20 terjawab</p>
+
+    <form id="quiz"></form>
+
+    <div class="actions">
+      <button type="button" class="primary" id="submitBtn">Lihat Hasil</button>
+      <button type="button" class="soft" id="resetBtn">Reset</button>
+    </div>
+
+    <div id="result" class="result" style="display:none"></div>
+
+    <h3>Bagikan Link</h3>
+    <p>Scan QR atau salin link ini untuk membagikan kuis:</p>
+    <input type="text" id="shareUrl" style="width:100%;padding:8px" />
+    <div id="qrcode"></div>
+    <button type="button" class="soft" id="downloadQR">Unduh QR sebagai Gambar</button>
+  </div>
+</div>
+
+<!-- Library QRCodeJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+const statements=[
+"1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
+"2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
+"3. Anda akan selalu dapat mengubah kemampuan Anda",
+"4. Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
+"5. Anda akan selalu dapat mengubah diri Anda sendiri",
+"6. Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun",
+"7. Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
+"8. Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya",
+"9. Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini",
+"10. Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya",
+"11. Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
+"12. Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
+"13. Saya sengat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
+"14. Saya kurang senang bila ada kritik dan saran dari orang lain.",
+"15. Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar",
+"16. Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda",
+"17. Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda",
+"18. Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah",
+"19. Alasan terpenting mengapa Anda mela-kukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
+"20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
+];
+const scoring=[
+[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
+[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
+];
+const labels=["Sangat Setuju","Setuju","Tidak Setuju","Sangat Tidak Setuju"];
+const form=document.getElementById('quiz'),bar=document.getElementById('bar'),progressTxt=document.getElementById('progressTxt'),resultBox=document.getElementById('result');
+
+function render(){form.innerHTML='';statements.forEach((t,i)=>{const q=document.createElement('div');q.className='q';
+q.innerHTML=`<p>${t}</p><div class="opt">${labels.map((lab,j)=>`<label><input type="radio" name="q${i}" value="${j}"/>${lab}</label>`).join('')}</div>`;form.appendChild(q);});}
+render();
+function getVal(i){const s=form.querySelector(`input[name="q${i}"]:checked`);return s?parseInt(s.value):null;}
+function answered(){let c=0;for(let i=0;i<statements.length;i++)if(getVal(i)!=null)c++;return c;}
+function updateProg(){const c=answered(),t=statements.length;bar.style.width=(c/t*100)+"%";progressTxt.textContent=`${c}/${t} terjawab`;}
+form.addEventListener('change',updateProg);
+
+function compute(){let tot=0;for(let i=0;i<statements.length;i++){const v=getVal(i);if(v==null)return{ok:false,miss:i};tot+=scoring[i][v];}
+let cat="";if(tot<=20)cat="F";else if(tot<=33)cat="FG";else if(tot<=44)cat="GF";else cat="G";return{ok:true,tot,cat};}
+function showRes(r){resultBox.style.display='block';resultBox.innerHTML=`<div class="score">${r.tot}</div><div class="badge ${r.cat}">${r.cat}</div>`;}
+
+document.getElementById('submitBtn').onclick=()=>{const r=compute();if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}showRes(r);};
+document.getElementById('resetBtn').onclick=()=>{form.reset();resultBox.style.display='none';updateProg();};
+updateProg();
+
+// QR Code
+const shareUrl=document.getElementById('shareUrl');shareUrl.value=window.location.href;
+const qrcodeDiv=document.getElementById("qrcode");
+const qr=new QRCode(qrcodeDiv,{text:shareUrl.value,width:180,height:180});
+document.getElementById("downloadQR").onclick=()=>{
+  const canvas=qrcodeDiv.querySelector("canvas");
+  const link=document.createElement("a");
+  link.download="QR-Pemetaan-Pola-Pikir.png";
+  link.href=canvas.toDataURL("image/png");
+  link.click();
+};
+</script>
+</body>
+</html>
