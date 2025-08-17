@@ -34,7 +34,7 @@
 <div class="wrap">
   <div class="card">
     <h1>PEMETAAN PROFIL POLA PIKIR</h1>
-    <p>Isi nama lengkap Anda, jawab 20 pernyataan, lalu klik <b>Lihat Hasil & Kirim</b>. Skor & kategori langsung tampil.</p>
+    <p>Isi nama Anda, jawab 20 pernyataan, lalu klik <b>Lihat Hasil & Kirim</b>. Skor & kategori langsung tampil, data otomatis masuk ke Google Sheet Anda.</p>
 
     <label><b>Nama Responden:</b></label>
     <input type="text" id="nama" placeholder="Tuliskan nama Anda" style="width:100%;padding:8px;margin:8px 0" />
@@ -61,7 +61,7 @@
 <!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF-ZrMtGysoQBC3NK-0fQkaRm8k3BGOncKhi_d4sUd8Ei8ZkvwFe536Qz5-8hyoh4VzQ/exec"; // Ganti dengan URL Web App Google Apps Script
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF-ZrMtGysoQBC3NK-0fQkaRm8k3BGOncKhi_d4sUd8Ei8ZkvwFe536Qz5-8hyoh4VzQ/exec"; // Ganti dengan URL Web App Google Apps Script Anda
 
 const statements=[
 "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
@@ -126,15 +126,22 @@ updateProg();
 const shareUrl=document.getElementById('shareUrl');shareUrl.value=window.location.href;
 const qrcodeDiv=document.getElementById("qrcode");
 const qr=new QRCode(qrcodeDiv,{text:shareUrl.value,width:180,height:180});
+
 document.getElementById("downloadQR").onclick=()=>{
   const canvas=qrcodeDiv.querySelector("canvas");
+  const img=qrcodeDiv.querySelector("img");
   const link=document.createElement("a");
   link.download="QR-Pemetaan-Pola-Pikir.png";
-  link.href=canvas.toDataURL("image/png");
-  link.click();
+  if(canvas){
+    link.href=canvas.toDataURL("image/png");
+    link.click();
+  }else if(img){
+    link.href=img.src;
+    link.click();
+  }else{
+    alert("QR belum berhasil dibuat.");
+  }
 };
 </script>
 </body>
 </html>
-
-
