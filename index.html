@@ -284,7 +284,7 @@ function compute(){
 function showResult(r){
   const res=document.getElementById("result");
   res.style.display="block";
-  // mapping kategori ke teks lengkap
+  
   const labelsFull = {
     F: "F - Fixed Mindset",
     FG: "FG - Fixed Growth Mindset",
@@ -295,7 +295,7 @@ function showResult(r){
   res.innerHTML=`
     <div class="score">${r.total}</div>
     <div class="badge ${r.category}">${labelsFull[r.category]}</div>
-   ;
+  `;
 }
 
 /* ==== KIRIM DATA (PERBAIKAN FETCH) ==== */
@@ -359,3 +359,4 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
+
