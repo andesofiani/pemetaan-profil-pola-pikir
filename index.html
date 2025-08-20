@@ -339,7 +339,9 @@ document.getElementById("submitBtn").onclick=async()=>{
     alert("Jawaban tersimpan!");
   }catch(err){alert(err.message);}
 };
-document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz").reset();document.getElementById("result").style.display="none";};
+document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz").reset();document.getElementById("result").style.display="none"; 
+document.getElementById("nama").value = ""; document.getElementById("instansi").value = ""; document.getElementById("mapel").value = "";
+};
 
 /* ==== QR ==== */
 document.addEventListener("DOMContentLoaded",()=>{
@@ -359,4 +361,5 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
+
 
