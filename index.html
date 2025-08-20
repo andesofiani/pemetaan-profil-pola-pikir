@@ -294,7 +294,7 @@ function showResult(r){
   
   res.innerHTML=`
     <div class="score">${r.total}</div>
-    <div class="badge ${r.category}">${r.category}</div>
+    <div class="badge ${r.category}">${labelsFull[r.category]}</div>
    ;
 }
 
@@ -359,9 +359,3 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
-
-
-
-
-
-
