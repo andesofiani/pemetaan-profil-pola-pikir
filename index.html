@@ -80,7 +80,7 @@
 <script>
 /* ==== 1) KONFIGURASI ==== */
 /* Ganti nilai di bawah dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqa0_IpKF6pVSAD9p-ILx-Ez2Mol7VYWtFEegdM9RjhR7pncjN75nUWgQvhlxqpfH--w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw00O3qvrhupLs8jZJzGzTYORIUh9fZS0eshpO40injRsRfm7vyYksSBUwfPzPt9XwDRg/exec";
 
 /* ==== 2) DATA PERTANYAAN & SKOR ==== */
 const statements = [
@@ -260,58 +260,8 @@ document.getElementById("downloadQR").onclick = () => {
   link.remove();
 };
 </script>
-
-<!-- ==== 9) OPSIONAL: CONTOH APPS SCRIPT UNTUK SERVER (salin ke Apps Script Anda)
-function doPost(e) {
-  try {
-    var data;
-    if (e && e.parameter && e.parameter.payload) {
-      data = JSON.parse(e.parameter.payload);
-    } else if (e && e.postData && e.postData.contents) {
-      data = JSON.parse(e.postData.contents);
-    } else {
-      throw new Error("Payload kosong atau tidak terbaca.");
-    }
-    var ss = SpreadsheetApp.getActiveSpreadsheet(); // atau openById("SHEET_ID");
-    var sh = ss.getSheetByName("Data_Responden");
-    if (!sh) throw new Error("Sheet 'Data_Responden' tidak ditemukan.");
-
-    sh.appendRow([
-      new Date(),
-      data.nama || "",
-      data.instansi || "",
-      data.mapel || "",
-      Number(data.skor) || 0,
-      data.kategori || "",
-      JSON.stringify(data.jawaban || [])
-    ]);
-
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "OK" }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader("Access-Control-Allow-Origin", "*");
-
-  } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ status: "ERROR", message: String(err) }))
-      .setMimeType(ContentService.MimeType.JSON)
-      .setHeader("Access-Control-Allow-Origin", "*");
-  }
-}
-function doOptions(e) {
-  return ContentService.createTextOutput("")
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeader("Access-Control-Allow-Origin", "*")
-    .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
-    .setHeader("Access-Control-Allow-Headers", "Content-Type");
-}
-function doGet(e) {
-  return ContentService.createTextOutput("Web App OK")
-    .setMimeType(ContentService.MimeType.TEXT)
-    .setHeader("Access-Control-Allow-Origin", "*");
-}
-==== -->
 </body>
 </html>
+
 
 
