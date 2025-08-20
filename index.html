@@ -4,52 +4,62 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>PEMETAAN PROFIL POLA PIKIR</title>
+<meta name="color-scheme" content="light only" />
 <style>
-  :root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--muted:#475569;--accent:#2563eb;--good:#16a34a;--warn:#ea580c;--bad:#dc2626;--border:#e2e8f0}
-  body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
-  .wrap{max-width:960px;margin:20px auto;padding:16px}
-  .card{background:var(--card);border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:20px;border:1px solid var(--border)}
+  :root{
+    --bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--accent:#2563eb;
+    --good:#16a34a;--warn:#ea580c;--bad:#dc2626;--border:#e2e8f0
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
+  .wrap{max-width:960px;margin:24px auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:20px}
   h1{margin:0 0 .4em;font-weight:900}
+  .muted{color:#475569}
   .q{padding:12px;border:1px solid var(--border);border-radius:12px;margin:10px 0;background:#fff}
-  .opt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  .opt label{display:flex;gap:6px;align-items:center;border:1px solid var(--border);padding:8px 10px;border-radius:10px;cursor:pointer}
+  .opt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+  .opt label{display:flex;gap:8px;align-items:center;border:1px solid var(--border);padding:10px 12px;border-radius:10px;cursor:pointer}
   .opt input{accent-color:var(--accent)}
+  input[type="text"]{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px}
+  .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:10px 0}
+  .bar{height:100%;width:0;background:var(--accent);transition:width .2s}
   .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
   button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
   .primary{background:var(--accent);color:#fff}
   .soft{background:#e2e8f0}
-  .result{margin-top:16px;padding:14px;border:1px dashed var(--border);border-radius:10px}
-  .score{font-size:2rem;font-weight:900}
-  .badge{padding:6px 10px;border-radius:999px;font-weight:800}
+  .result{margin-top:16px;padding:16px;border:1px dashed var(--border);border-radius:12px;background:#fff}
+  .score{font-size:2rem;font-weight:900;line-height:1}
+  .badge{display:inline-block;margin-top:6px;padding:6px 12px;border-radius:999px;font-weight:800}
   .badge.F{background:#fee2e2;color:var(--bad)}
   .badge.FG{background:#ffedd5;color:var(--warn)}
   .badge.GF{background:#e0f2fe;color:#0369a1}
   .badge.G{background:#dcfce7;color:var(--good)}
-  .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:6px 0}
-  .bar{height:100%;width:0;background:var(--accent);transition:width .2s}
   #qrcode{margin-top:10px}
+  .small{font-size:.92rem}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card">
     <h1>PEMETAAN PROFIL POLA PIKIR</h1>
-    <p><b>Keterangan Opsi Jawaban:</b><br>
-    SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
+
+    <p class="small"><b>Keterangan Opsi Jawaban:</b><br>
+      SS = Sangat Setuju &nbsp;|&nbsp; S = Setuju &nbsp;|&nbsp; TS = Tidak Setuju &nbsp;|&nbsp; STS = Sangat Tidak Setuju
+    </p>
 
     <label><b>Nama Responden:</b></label>
-    <input type="text" id="nama" placeholder="Tuliskan nama Anda" style="width:100%;padding:8px;margin:8px 0" />
+    <input type="text" id="nama" placeholder="Tuliskan nama Anda" autocomplete="name" />
 
-    <label><b>Instansi / Lembaga:</b></label>
-    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" style="width:100%;padding:8px;margin:8px 0" />
+    <label style="margin-top:10px"><b>Instansi / Lembaga:</b></label>
+    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" />
 
-    <label><b>Bidang / Mapel:</b></label>
-    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel" style="width:100%;padding:8px;margin:8px 0" />
+    <label style="margin-top:10px"><b>Bidang / Mapel:</b></label>
+    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel" />
 
     <div class="progress"><div class="bar" id="bar"></div></div>
-    <p id="progressTxt">0/20 terjawab</p>
+    <p id="progressTxt" class="muted small">0/20 terjawab</p>
 
-    <form id="quiz"></form>
+    <form id="quiz" aria-label="Kuesioner Pemetaan Profil Pola Pikir"></form>
 
     <div class="actions">
       <button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
@@ -58,67 +68,115 @@
 
     <div id="result" class="result" style="display:none"></div>
 
-    <h3>Bagikan Link</h3>
-    <input type="text" id="shareUrl" style="width:100%;padding:8px" />
+    <h3 style="margin-top:20px">Bagikan Link</h3>
+    <input type="text" id="shareUrl" readonly />
     <div id="qrcode"></div>
     <button type="button" class="soft" id="downloadQR">Unduh QR sebagai Gambar</button>
   </div>
 </div>
 
 <!-- QRCodeJS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-TQ4vE0C3u3JtSNUzv1Y6e2y7Yj5F4yT8bJ8c7d0wV6I3FhQm0vO1pKQm0yKcP8o8x8x6qk1WZb7mGkGm0jC7VA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF-ZrMtGysoQBC3NK-0fQkaRm8k3BGOncKhi_d4sUd8Ei8ZkvwFe536Qz5-8hyoh4VzQ/exec
-"; // ganti dengan URL Web App Google Apps Script
+/* ==== 1) KONFIGURASI ==== */
+/* Ganti nilai di bawah dengan URL Web App Google Apps Script Anda */
+const SCRIPT_URL = "PASTE_URL_DI_SINI";
 
-const statements=[
-"1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
-"2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
-"3. Anda akan selalu dapat mengubah kemampuan Anda",
-"4. Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
-"5. Anda akan selalu dapat mengubah diri Anda sendiri",
-"6. Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun",
-"7. Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
-"8. Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya",
-"9. Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini",
-"10. Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya",
-"11. Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
-"12. Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
-"13. Saya sengat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
-"14. Saya kurang senang bila ada kritik dan saran dari orang lain.",
-"15. Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar",
-"16. Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda",
-"17. Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda",
-"18. Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah",
-"19. Alasan terpenting mengapa Anda mela-kukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
-"20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
+/* ==== 2) DATA PERTANYAAN & SKOR ==== */
+const statements = [
+ "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
+ "2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
+ "3. Anda akan selalu dapat mengubah kemampuan Anda.",
+ "4. Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
+ "5. Anda akan selalu dapat mengubah diri Anda sendiri.",
+ "6. Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
+ "7. Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
+ "8. Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
+ "9. Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
+ "10. Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
+ "11. Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
+ "12. Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
+ "13. Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
+ "14. Saya kurang senang bila ada kritik dan saran dari orang lain.",
+ "15. Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
+ "16. Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
+ "17. Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
+ "18. Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
+ "19. Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
+ "20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
 ];
-const scoring=[
-[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
-[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
+/* Skema skor: indeks 0..3 = SS,S,TS,STS */
+const scoring = [
+ [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
+ [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
-const labels=["SS","S","TS","STS"];
+const labels = ["SS","S","TS","STS"];
 
-const form=document.getElementById('quiz'),bar=document.getElementById('bar'),progressTxt=document.getElementById('progressTxt'),resultBox=document.getElementById('result');
+/* ==== 3) RENDER FORM ==== */
+const form = document.getElementById('quiz');
+const bar  = document.getElementById('bar');
+const progressTxt = document.getElementById('progressTxt');
+const resultBox = document.getElementById('result');
 
-function render(){form.innerHTML='';statements.forEach((t,i)=>{const q=document.createElement('div');q.className='q';
-q.innerHTML=`<p>${t}</p><div class="opt">${labels.map((lab,j)=>`<label><input type="radio" name="q${i}" value="${j}"/>${lab}</label>`).join('')}</div>`;form.appendChild(q);});}
+function render(){
+  form.innerHTML = '';
+  statements.forEach((t,i)=>{
+    const q = document.createElement('div');
+    q.className = 'q';
+    q.innerHTML = `
+      <p>${t}</p>
+      <div class="opt">
+        ${labels.map((lab,j)=>`
+          <label><input type="radio" name="q${i}" value="${j}" /> ${lab}</label>
+        `).join('')}
+      </div>
+    `;
+    form.appendChild(q);
+  });
+}
 render();
-function getVal(i){const s=form.querySelector(`input[name="q${i}"]:checked`);return s?parseInt(s.value):null;}
-function answered(){let c=0;for(let i=0;i<statements.length;i++)if(getVal(i)!=null)c++;return c;}
-function updateProg(){const c=answered(),t=statements.length;bar.style.width=(c/t*100)+"%";progressTxt.textContent=`${c}/${t} terjawab`;}
-form.addEventListener('change',updateProg);
 
-function compute(){let tot=0;const detail=[];for(let i=0;i<statements.length;i++){const v=getVal(i);if(v==null)return{ok:false,miss:i};const score=scoring[i][v];tot+=score;detail.push({no:i+1,jawaban:labels[v],skor:score});}
-let cat="";if(tot<=20)cat="F";else if(tot<=33)cat="FG";else if(tot<=44)cat="GF";else cat="G";return{ok:true,total:tot,category:cat,detail};}
+function getVal(i){
+  const s = form.querySelector(`input[name="q${i}"]:checked`);
+  return s ? parseInt(s.value) : null;
+}
+function answered(){
+  let c=0; for(let i=0;i<statements.length;i++) if(getVal(i)!=null) c++; return c;
+}
+function updateProg(){
+  const c=answered(), t=statements.length;
+  bar.style.width = (c/t*100) + "%";
+  progressTxt.textContent = `${c}/${t} terjawab`;
+}
+form.addEventListener('change', updateProg);
+updateProg();
+
+/* ==== 4) HITUNG SKOR & KATEGORI ==== */
+function compute(){
+  let tot=0; const detail=[];
+  for(let i=0;i<statements.length;i++){
+    const v=getVal(i);
+    if(v==null) return {ok:false, miss:i};
+    const score = scoring[i][v];
+    tot+=score; detail.push({no:i+1, jawaban:labels[v], skor:score});
+  }
+  let cat="";
+  if(tot<=20) cat="F";
+  else if(tot<=33) cat="FG";
+  else if(tot<=44) cat="GF";
+  else cat="G";
+  return {ok:true, total:tot, category:cat, detail};
+}
+
+/* ==== 5) TAMPILKAN HASIL ==== */
 function showRes(r){
   resultBox.style.display='block';
-  resultBox.innerHTML=`
+  resultBox.innerHTML = `
     <div class="score">${r.total}</div>
     <div class="badge ${r.category}">${r.category}</div>
-    <div style="margin-top:10px;text-align:left">
+    <div style="margin-top:12px;text-align:left">
       <p><b>Keterangan Kategori:</b></p>
-      <ul>
+      <ul class="small" style="margin:0 0 0 18px">
         <li><b>F</b> = Fixed Mindset</li>
         <li><b>FG</b> = Fixed → Growth Mindset</li>
         <li><b>GF</b> = Growth → Fixed Mindset</li>
@@ -128,48 +186,130 @@ function showRes(r){
   `;
 }
 
-document.getElementById('submitBtn').onclick=async()=>{
-  const nama=document.getElementById('nama').value.trim()||"Anonim";
-  const instansi=document.getElementById('instansi').value.trim()||"-";
-  const mapel=document.getElementById('mapel').value.trim()||"-";
-  const r=compute();
-  if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}
-  showRes(r);
+/* ==== 6) KIRIM KE GOOGLE APPS SCRIPT ==== */
+document.getElementById('submitBtn').onclick = async () => {
+  const nama = (document.getElementById('nama').value || "").trim() || "Anonim";
+  const instansi = (document.getElementById('instansi').value || "").trim() || "-";
+  const mapel = (document.getElementById('mapel').value || "").trim() || "-";
 
-  const data={nama:nama,instansi:instansi,mapel:mapel,jawaban:r.detail,skor:r.total,kategori:r.category};
-  const body=new URLSearchParams({payload:JSON.stringify(data)});
+  const r = compute();
+  if(!r.ok){
+    alert("Masih ada pertanyaan yang belum diisi. Mohon lengkapi semua soal.");
+    return;
+  }
+  showRes(r); // tampilkan hasil di layar
+
+  const data = { nama, instansi, mapel, jawaban:r.detail, skor:r.total, kategori:r.category };
+
   try{
-    const res=await fetch(SCRIPT_URL,{method:"POST",body:body});
-    const j=await res.json();
-    if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}
-    else{alert("Gagal menyimpan jawaban.");}
-  }catch(e){alert("Terjadi error saat mengirim jawaban.");console.error(e);}
-};
+    const body = new URLSearchParams({ payload: JSON.stringify(data) }).toString();
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+      body
+    });
 
-document.getElementById('resetBtn').onclick=()=>{form.reset();resultBox.style.display='none';updateProg();};
-updateProg();
-
-// QR Code
-const shareUrl=document.getElementById('shareUrl');shareUrl.value=window.location.href;
-const qrcodeDiv=document.getElementById("qrcode");
-const qr=new QRCode(qrcodeDiv,{text:shareUrl.value,width:180,height:180});
-
-document.getElementById("downloadQR").onclick=()=>{
-  const canvas=qrcodeDiv.querySelector("canvas");
-  const img=qrcodeDiv.querySelector("img");
-  const link=document.createElement("a");
-  link.download="QR-Pemetaan-Pola-Pikir.png";
-  if(canvas){
-    link.href=canvas.toDataURL("image/png");
-    link.click();
-  }else if(img){
-    link.href=img.src;
-    link.click();
-  }else{
-    alert("QR belum berhasil dibuat.");
+    const text = await res.text(); // ambil teks mentah untuk debug bila perlu
+    let j;
+    try {
+      j = JSON.parse(text);
+    } catch (e) {
+      alert("Respon bukan JSON. Cek izin Web App & URL.\nRespon server:\n" + text.slice(0, 600));
+      console.error("Raw response:", text);
+      return;
+    }
+    if (j.status === "OK") {
+      alert("Jawaban berhasil dikirim!");
+    } else {
+      alert("Gagal menyimpan: " + (j.message || "Unknown error"));
+      console.error(j);
+    }
+  } catch(err){
+    alert("Terjadi error jaringan saat mengirim. Cek koneksi & URL Web App.");
+    console.error(err);
   }
 };
+
+/* ==== 7) RESET ==== */
+document.getElementById('resetBtn').onclick = () => {
+  form.reset(); resultBox.style.display='none'; updateProg();
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+/* ==== 8) QR CODE SHARE ==== */
+const shareUrl = document.getElementById('shareUrl');
+shareUrl.value = window.location.href;
+const qrcodeDiv = document.getElementById("qrcode");
+const qr = new QRCode(qrcodeDiv, { text: shareUrl.value, width: 180, height: 180 });
+
+document.getElementById("downloadQR").onclick = () => {
+  const canvas = qrcodeDiv.querySelector("canvas");
+  const img = qrcodeDiv.querySelector("img");
+  const link = document.createElement("a");
+  link.download = "QR-Pemetaan-Pola-Pikir.png";
+  if (canvas && canvas.toDataURL) {
+    link.href = canvas.toDataURL("image/png");
+  } else if (img && img.src) {
+    link.href = img.src;
+  } else {
+    alert("QR belum berhasil dibuat.");
+    return;
+  }
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
 </script>
+
+<!-- ==== 9) OPSIONAL: CONTOH APPS SCRIPT UNTUK SERVER (salin ke Apps Script Anda)
+function doPost(e) {
+  try {
+    var data;
+    if (e && e.parameter && e.parameter.payload) {
+      data = JSON.parse(e.parameter.payload);
+    } else if (e && e.postData && e.postData.contents) {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      throw new Error("Payload kosong atau tidak terbaca.");
+    }
+    var ss = SpreadsheetApp.getActiveSpreadsheet(); // atau openById("SHEET_ID");
+    var sh = ss.getSheetByName("Data_Responden");
+    if (!sh) throw new Error("Sheet 'Data_Responden' tidak ditemukan.");
+
+    sh.appendRow([
+      new Date(),
+      data.nama || "",
+      data.instansi || "",
+      data.mapel || "",
+      Number(data.skor) || 0,
+      data.kategori || "",
+      JSON.stringify(data.jawaban || [])
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "OK" }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+
+  } catch (err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ status: "ERROR", message: String(err) }))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*");
+  }
+}
+function doOptions(e) {
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader("Access-Control-Allow-Origin", "*")
+    .setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+    .setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+function doGet(e) {
+  return ContentService.createTextOutput("Web App OK")
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeader("Access-Control-Allow-Origin", "*");
+}
+==== -->
 </body>
 </html>
-
