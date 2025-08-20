@@ -284,16 +284,18 @@ function compute(){
 function showResult(r){
   const res=document.getElementById("result");
   res.style.display="block";
+  // mapping kategori ke teks lengkap
+  const labelsFull = {
+    F: "F - Fixed Mindset",
+    FG: "FG - Fixed Growth Mindset",
+    GF: "GF - Growth Fixed Mindset",
+    G: "G - Growth Mindset"
+  };
+  
   res.innerHTML=`
     <div class="score">${r.total}</div>
     <div class="badge ${r.category}">${r.category}</div>
-    <p><b>Keterangan:</b><br>
-      F = Fixed Mindset<br>
-      FG = Fixed → Growth Mindset<br>
-      GF = Growth → Fixed Mindset<br>
-      G = Growth Mindset
-    </p>
-  `;
+   ;
 }
 
 /* ==== KIRIM DATA (PERBAIKAN FETCH) ==== */
@@ -357,6 +359,7 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
+
 
 
 
