@@ -34,10 +34,17 @@
 <div class="wrap">
   <div class="card">
     <h1>PEMETAAN PROFIL POLA PIKIR</h1>
-    <p>Isi nama lengkap Anda, jawab 20 pernyataan, lalu klik <b>Lihat Hasil & Kirim</b>. Skor & kategori langsung tampil.</p>
+    <p><b>Keterangan Opsi Jawaban:</b><br>
+    SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
     <label><b>Nama Responden:</b></label>
     <input type="text" id="nama" placeholder="Tuliskan nama Anda" style="width:100%;padding:8px;margin:8px 0" />
+
+    <label><b>Instansi / Lembaga:</b></label>
+    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" style="width:100%;padding:8px;margin:8px 0" />
+
+    <label><b>Bidang / Mapel:</b></label>
+    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel" style="width:100%;padding:8px;margin:8px 0" />
 
     <div class="progress"><div class="bar" id="bar"></div></div>
     <p id="progressTxt">0/20 terjawab</p>
@@ -61,7 +68,7 @@
 <!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF-ZrMtGysoQBC3NK-0fQkaRm8k3BGOncKhi_d4sUd8Ei8ZkvwFe536Qz5-8hyoh4VzQ/exec"; // Ganti dengan URL Web App Google Apps Script Anda
+const SCRIPT_URL = "PASTE_URL_DI_SINI"; // ganti dengan URL Web App Google Apps Script
 
 const statements=[
 "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
@@ -89,7 +96,7 @@ const scoring=[
 [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
 [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
-const labels=["Sangat Setuju","Setuju","Tidak Setuju","Sangat Tidak Setuju"];
+const labels=["SS","S","TS","STS"];
 
 const form=document.getElementById('quiz'),bar=document.getElementById('bar'),progressTxt=document.getElementById('progressTxt'),resultBox=document.getElementById('result');
 
@@ -103,20 +110,39 @@ form.addEventListener('change',updateProg);
 
 function compute(){let tot=0;const detail=[];for(let i=0;i<statements.length;i++){const v=getVal(i);if(v==null)return{ok:false,miss:i};const score=scoring[i][v];tot+=score;detail.push({no:i+1,jawaban:labels[v],skor:score});}
 let cat="";if(tot<=20)cat="F";else if(tot<=33)cat="FG";else if(tot<=44)cat="GF";else cat="G";return{ok:true,total:tot,category:cat,detail};}
-function showRes(r){resultBox.style.display='block';resultBox.innerHTML=`<div class="score">${r.total}</div><div class="badge ${r.category}">${r.category}</div>`;}
+function showRes(r){
+  resultBox.style.display='block';
+  resultBox.innerHTML=`
+    <div class="score">${r.total}</div>
+    <div class="badge ${r.category}">${r.category}</div>
+    <div style="margin-top:10px;text-align:left">
+      <p><b>Keterangan Kategori:</b></p>
+      <ul>
+        <li><b>F</b> = Fixed Mindset</li>
+        <li><b>FG</b> = Fixed → Growth Mindset</li>
+        <li><b>GF</b> = Growth → Fixed Mindset</li>
+        <li><b>G</b> = Growth Mindset</li>
+      </ul>
+    </div>
+  `;
+}
 
-document.getElementById('submitBtn').onclick=async()=>{const nama=document.getElementById('nama').value.trim()||"Anonim";const r=compute();
-if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}showRes(r);
+document.getElementById('submitBtn').onclick=async()=>{
+  const nama=document.getElementById('nama').value.trim()||"Anonim";
+  const instansi=document.getElementById('instansi').value.trim()||"-";
+  const mapel=document.getElementById('mapel').value.trim()||"-";
+  const r=compute();
+  if(!r.ok){alert("Masih ada pertanyaan kosong!");return;}
+  showRes(r);
 
-// Data dikirim via form-urlencoded
-const data={nama:nama,jawaban:r.detail,skor:r.total,kategori:r.category};
-const body=new URLSearchParams({payload:JSON.stringify(data)});
-try{
-  const res=await fetch(SCRIPT_URL,{method:"POST",body:body});
-  const j=await res.json();
-  if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}
-  else{alert("Gagal menyimpan jawaban.");}
-}catch(e){alert("Terjadi error saat mengirim jawaban.");console.error(e);}
+  const data={nama:nama,instansi:instansi,mapel:mapel,jawaban:r.detail,skor:r.total,kategori:r.category};
+  const body=new URLSearchParams({payload:JSON.stringify(data)});
+  try{
+    const res=await fetch(SCRIPT_URL,{method:"POST",body:body});
+    const j=await res.json();
+    if(j.status==="OK"){alert("Jawaban berhasil dikirim!");}
+    else{alert("Gagal menyimpan jawaban.");}
+  }catch(e){alert("Terjadi error saat mengirim jawaban.");console.error(e);}
 };
 
 document.getElementById('resetBtn').onclick=()=>{form.reset();resultBox.style.display='none';updateProg();};
@@ -145,4 +171,3 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
-
