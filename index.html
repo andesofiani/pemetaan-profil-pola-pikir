@@ -1,90 +1,63 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PEMETAAN PROFIL POLA PIKIR</title>
-<meta name="color-scheme" content="light only" />
 <style>
-  :root{--bg:#f7fafc;--card:#ffffff;--ink:#0f172a;--accent:#2563eb;--good:#16a34a;--warn:#ea580c;--bad:#dc2626;--border:#e2e8f0}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Segoe UI,Roboto,Arial}
-  .wrap{max-width:960px;margin:24px auto;padding:16px}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.08);padding:20px}
-  h1{margin:0 0 .4em;font-weight:900}
-  .muted{color:#475569}
-  .q{padding:12px;border:1px solid var(--border);border-radius:12px;margin:10px 0;background:#fff}
-  .opt{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-  .opt label{display:flex;gap:8px;align-items:center;border:1px solid var(--border);padding:10px 12px;border-radius:10px;cursor:pointer}
-  .opt input{accent-color:var(--accent)}
-  input[type="text"]{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px}
-  .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:10px 0}
-  .bar{height:100%;width:0;background:var(--accent);transition:width .2s}
-  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-  button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-  .primary{background:var(--accent);color:#fff}
-  .soft{background:#e2e8f0}
-  .result{margin-top:16px;padding:16px;border:1px dashed var(--border);border-radius:12px;background:#fff}
-  .score{font-size:2rem;font-weight:900;line-height:1}
-  .badge{display:inline-block;margin-top:6px;padding:6px 12px;border-radius:999px;font-weight:800}
-  .badge.F{background:#fee2e2;color:var(--bad)}
-  .badge.FG{background:#ffedd5;color:var(--warn)}
-  .badge.GF{background:#e0f2fe;color:#0369a1}
-  .badge.G{background:#dcfce7;color:var(--good)}
-  #qrcode{margin-top:10px}
-  .small{font-size:.92rem}
-  .status{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:999px;font-size:.85rem;font-weight:700}
-  .ok{background:#dcfce7;color:#166534}
-  .fail{background:#fee2e2;color:#991b1b}
+  body{font-family:Arial, sans-serif; background:#f4f6f9; margin:0; padding:20px;}
+  .container{max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+  h1{text-align:center; color:#333;}
+  .q{margin-bottom:15px; padding:10px; border:1px solid #ddd; border-radius:8px; background:#fafafa;}
+  .opt{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:6px;}
+  label{display:flex; align-items:center; gap:6px; background:#fff; border:1px solid #ccc; padding:8px; border-radius:6px; cursor:pointer;}
+  input[type="text"]{width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:6px;}
+  button{padding:10px 14px; border:none; border-radius:6px; cursor:pointer; margin-top:10px;}
+  .primary{background:#2563eb; color:#fff;}
+  .soft{background:#eee;}
+  .result{margin-top:20px; padding:15px; border:1px dashed #888; border-radius:8px; display:none;}
+  .score{font-size:1.8em; font-weight:bold;}
+  .badge{display:inline-block; margin-top:10px; padding:6px 12px; border-radius:20px; font-weight:bold;}
+  .badge.F{background:#fee2e2; color:#b91c1c;}
+  .badge.FG{background:#fef3c7; color:#92400e;}
+  .badge.GF{background:#e0f2fe; color:#0369a1;}
+  .badge.G{background:#dcfce7; color:#166534;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
-    <h1>PEMETAAN PROFIL POLA PIKIR</h1>
+<div class="container">
+  <h1>PEMETAAN PROFIL POLA PIKIR</h1>
+  <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
-    <p class="small"><b>Keterangan Opsi Jawaban:</b><br>
-      SS = Sangat Setuju &nbsp;|&nbsp; S = Setuju &nbsp;|&nbsp; TS = Tidak Setuju &nbsp;|&nbsp; STS = Sangat Tidak Setuju
-    </p>
+  <label>Nama Responden:</label>
+  <input type="text" id="nama" placeholder="Tuliskan nama Anda">
 
-    <label><b>Nama Responden:</b></label>
-    <input type="text" id="nama" placeholder="Tuliskan nama Anda" autocomplete="name" />
+  <label>Instansi / Lembaga:</label>
+  <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
 
-    <label style="margin-top:10px"><b>Instansi / Lembaga:</b></label>
-    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" />
+  <label>Bidang / Mapel:</label>
+  <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
 
-    <label style="margin-top:10px"><b>Bidang / Mapel:</b></label>
-    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel" />
+  <form id="quiz"></form>
 
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <p id="progressTxt" class="muted small">0/20 terjawab</p>
+  <button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
+  <button type="button" class="soft" id="resetBtn">Reset</button>
 
-    <form id="quiz" aria-label="Kuesioner Pemetaan Profil Pola Pikir"></form>
+  <div id="result" class="result"></div>
 
-    <div class="actions">
-      <button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
-      <button type="button" class="soft" id="resetBtn">Reset</button>
-    </div>
-
-    <div id="result" class="result" style="display:none"></div>
-
-    <h3 style="margin-top:20px">
-      Bagikan Link
-      <span id="serverStatus" class="status">cek server…</span>
-    </h3>
-    <input type="text" id="shareUrl" readonly />
-    <div id="qrcode"></div>
-    <button type="button" class="soft" id="downloadQR">Unduh QR sebagai Gambar</button>
-  </div>
+  <h3>Bagikan Link</h3>
+  <input type="text" id="shareUrl" readonly>
+  <div id="qrcode"></div>
+  <button type="button" class="soft" id="downloadQR">Unduh QR</button>
 </div>
 
 <!-- QRCodeJS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-/* ==== 1) KONFIGURASI ==== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwi6CvmtayoXgtPlpH8HAfpgpjsYG4PzgPzw9hG7cwoUfzwaYnM4bSc0r2e5rwsJteq1A/exec"; // <- tempel URL /exec di sini
+/* ==== KONFIG ==== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz525f4kqB84LW6mw6uLNh2Bm-ZlAvxi7X988Gsnv-S05ukan261sQZnMIY7BJd3PpCTg/exec";
 
-/* ==== 2) DATA PERTANYAAN & SKOR ==== */
+/* ==== DATA SOAL ==== */
 const statements = [
  "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
  "2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
@@ -107,189 +80,104 @@ const statements = [
  "19. Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
  "20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
 ];
+const labels = ["SS","S","TS","STS"];
 const scoring = [
  [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
  [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
-const labels = ["SS","S","TS","STS"];
 
-/* ==== 3) RENDER FORM ==== */
-const form = document.getElementById('quiz');
-const bar  = document.getElementById('bar');
-const progressTxt = document.getElementById('progressTxt');
-const resultBox = document.getElementById('result');
-
-function render(){
-  form.innerHTML = '';
+/* ==== RENDER SOAL ==== */
+function renderQuestions(){
+  const form=document.getElementById("quiz");
+  form.innerHTML="";
   statements.forEach((t,i)=>{
-    const q = document.createElement('div');
-    q.className = 'q';
-    q.innerHTML = `
+    const q=document.createElement("div");
+    q.className="q";
+    q.innerHTML=`
       <p>${t}</p>
       <div class="opt">
         ${labels.map((lab,j)=>`
-          <label><input type="radio" name="q${i}" value="${j}" /> ${lab}</label>
-        `).join('')}
+          <label><input type="radio" name="q${i}" value="${j}"> ${lab}</label>
+        `).join("")}
       </div>
     `;
     form.appendChild(q);
   });
 }
-render();
+document.addEventListener("DOMContentLoaded", renderQuestions);
 
-function getVal(i){
-  const s = form.querySelector(`input[name="q${i}"]:checked`);
-  return s ? parseInt(s.value) : null;
-}
-function answered(){
-  let c=0; for(let i=0;i<statements.length;i++) if(getVal(i)!=null) c++; return c;
-}
-function updateProg(){
-  const c=answered(), t=statements.length;
-  bar.style.width = (c/t*100) + "%";
-  progressTxt.textContent = `${c}/${t} terjawab`;
-}
-form.addEventListener('change', updateProg);
-updateProg();
-
-/* ==== 4) HITUNG SKOR & KATEGORI ==== */
+/* ==== HITUNG SKOR ==== */
 function compute(){
-  let tot=0; const detail=[];
+  let tot=0, detail=[];
   for(let i=0;i<statements.length;i++){
-    const v=getVal(i);
-    if(v==null) return {ok:false, miss:i};
-    const score = scoring[i][v];
-    tot+=score; detail.push({no:i+1, jawaban:labels[v], skor:score});
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel) return null;
+    const v=parseInt(sel.value);
+    const sc=scoring[i][v];
+    tot+=sc; detail.push({no:i+1,jawaban:labels[v],skor:sc});
   }
   let cat="";
   if(tot<=20) cat="F";
   else if(tot<=33) cat="FG";
   else if(tot<=44) cat="GF";
   else cat="G";
-  return {ok:true, total:tot, category:cat, detail};
+  return {total:tot,category:cat,detail};
 }
 
-/* ==== 5) TAMPILKAN HASIL ==== */
-function showRes(r){
-  resultBox.style.display='block';
-  resultBox.innerHTML = `
+/* ==== TAMPILKAN HASIL ==== */
+function showResult(r){
+  const res=document.getElementById("result");
+  res.style.display="block";
+  res.innerHTML=`
     <div class="score">${r.total}</div>
     <div class="badge ${r.category}">${r.category}</div>
-    <div style="margin-top:12px;text-align:left">
-      <p><b>Keterangan Kategori:</b></p>
-      <ul class="small" style="margin:0 0 0 18px">
-        <li><b>F</b> = Fixed Mindset</li>
-        <li><b>FG</b> = Fixed → Growth Mindset</li>
-        <li><b>GF</b> = Growth → Fixed Mindset</li>
-        <li><b>G</b> = Growth Mindset</li>
-      </ul>
-    </div>
+    <p><b>Keterangan:</b><br>
+      F = Fixed Mindset<br>
+      FG = Fixed → Growth Mindset<br>
+      GF = Growth → Fixed Mindset<br>
+      G = Growth Mindset
+    </p>
   `;
 }
 
-/* ==== 6) KIRIM KE WEB APP ==== */
+/* ==== KIRIM DATA ==== */
 async function submitData(data){
-  const body = new URLSearchParams({ payload: JSON.stringify(data) }).toString();
-  const res = await fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-    body
-  });
-  const text = await res.text();
-  let j;
-  try { j = JSON.parse(text); }
-  catch (e) {
-    // Deteksi umum: jika bukan JSON biasanya karena URL salah / perlu login
-    if (/google/i.test(text) && /Sign in|Masuk/i.test(text)) {
-      throw new Error("Web App membutuhkan login. Ubah deployment: Who has access = Anyone.");
-    }
-    if (/Error/i.test(text) && /Cannot|Not Found|Exception|TypeError/i.test(text)) {
-      throw new Error("Server mengembalikan error:\n" + text.slice(0,600));
-    }
-    throw new Error("Respon bukan JSON. Pastikan URL berakhiran /exec dan Web App aktif.\nRespon:\n" + text.slice(0,600));
-  }
-  if (j.status !== "OK") throw new Error(j.message || "Gagal menyimpan (status bukan OK).");
-  return j;
+  const body=new URLSearchParams({payload:JSON.stringify(data)});
+  const res=await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+  const txt=await res.text();
+  try{const j=JSON.parse(txt); if(j.status!=="OK") throw new Error(j.message); return j;}
+  catch(e){throw new Error("Gagal: "+txt);}
 }
 
-document.getElementById('submitBtn').onclick = async () => {
-  const nama = (document.getElementById('nama').value || "").trim() || "Anonim";
-  const instansi = (document.getElementById('instansi').value || "").trim() || "-";
-  const mapel = (document.getElementById('mapel').value || "").trim() || "-";
-
-  const r = compute();
-  if(!r.ok){ alert("Masih ada pertanyaan yang belum diisi. Mohon lengkapi semua soal."); return; }
-  showRes(r);
-
-  const payload = { nama, instansi, mapel, jawaban:r.detail, skor:r.total, kategori:r.category };
-
+document.getElementById("submitBtn").onclick=async()=>{
+  const nama=document.getElementById("nama").value||"Anonim";
+  const instansi=document.getElementById("instansi").value||"-";
+  const mapel=document.getElementById("mapel").value||"-";
+  const r=compute();
+  if(!r){alert("Lengkapi semua pertanyaan!"); return;}
+  showResult(r);
   try{
-    await submitData(payload);
-    alert("Jawaban berhasil dikirim!");
-  }catch(err){
-    alert("Gagal menyimpan: " + err.message);
-    console.error(err);
-  }
+    await submitData({nama,instansi,mapel,jawaban:r.detail,skor:r.total,kategori:r.category});
+    alert("Jawaban tersimpan!");
+  }catch(err){alert(err.message);}
 };
+document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz").reset();document.getElementById("result").style.display="none";};
 
-/* ==== 7) RESET ==== */
-document.getElementById('resetBtn').onclick = () => {
-  form.reset(); resultBox.style.display='none'; updateProg();
-  window.scrollTo({top:0,behavior:"smooth"});
-};
-
-/* ==== 8) QR CODE (dengan fallback) ==== */
-function renderQR(text){
-  const qrcodeDiv = document.getElementById("qrcode");
-  qrcodeDiv.innerHTML = "";
-  try{
-    new QRCode(qrcodeDiv, { text, width: 180, height: 180 });
-  }catch(e){
-    // Fallback statis bila library gagal / diblokir CDN
-    qrcodeDiv.innerHTML = `<img alt="QR" width="180" height="180"
-      src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(text)}">`;
-  }
-}
-document.getElementById("downloadQR").onclick = () => {
-  const qrcodeDiv = document.getElementById("qrcode");
-  const canvas = qrcodeDiv.querySelector("canvas");
-  const img = qrcodeDiv.querySelector("img");
-  const link = document.createElement("a");
-  link.download = "QR-Pemetaan-Pola-Pikir.png";
-  if (canvas && canvas.toDataURL) link.href = canvas.toDataURL("image/png");
-  else if (img && img.src) link.href = img.src;
-  else { alert("QR belum berhasil dibuat."); return; }
-  document.body.appendChild(link); link.click(); link.remove();
-};
-
-/* ==== 9) HEALTH CHECK WEB APP & INISIALISASI ==== */
-async function checkServer(){
-  const badge = document.getElementById('serverStatus');
-  try{
-    const res = await fetch(SCRIPT_URL, { method:"GET" });
-    const text = await res.text();
-    if (text.trim().includes("Web App OK")) {
-      badge.textContent = "server OK";
-      badge.className = "status ok";
-    } else {
-      badge.textContent = "server tidak siap";
-      badge.className = "status fail";
-    }
-  }catch(e){
-    badge.textContent = "server gagal diakses";
-    badge.className = "status fail";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Set link share & QR
-  const shareUrl = document.getElementById('shareUrl');
-  shareUrl.value = window.location.href;
-  renderQR(shareUrl.value);
-  // Health check Web App
-  checkServer();
+/* ==== QR ==== */
+document.addEventListener("DOMContentLoaded",()=>{
+  const url=window.location.href;
+  document.getElementById("shareUrl").value=url;
+  new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
 });
+document.getElementById("downloadQR").onclick=()=>{
+  const canvas=document.querySelector("#qrcode canvas");
+  if(canvas){
+    const link=document.createElement("a");
+    link.download="QR.png";
+    link.href=canvas.toDataURL();
+    link.click();
+  }
+};
 </script>
 </body>
 </html>
-
