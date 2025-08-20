@@ -146,6 +146,38 @@ button:active {
   margin: 0 auto;
   text-align: center;
 }
+
+/* Tambahkan jarak antara link dengan QR */
+#shareUrl {
+  margin-bottom: 20px;
+}
+
+/* Judul biru */
+h1 {
+  text-align: center;
+  color: #2563eb; /* biru */
+}
+
+/* Label 3D */
+label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* efek 3D */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+label:active {
+  transform: translateY(2px);
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
 </style>
 </head>
 <body>
