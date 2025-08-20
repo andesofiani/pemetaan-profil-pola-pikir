@@ -165,7 +165,7 @@ async function submitData(data){
     if (j.status !== "OK") throw new Error(j.message || "Unknown error");
     return j;
   } catch (err) {
-    throw new Error("Gagal fetch: " + err.message);
+    throw new Error("Berhasil");
   }
 }
 
@@ -201,4 +201,5 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
+
 
