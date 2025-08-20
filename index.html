@@ -343,7 +343,7 @@ document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz")
 document.addEventListener("DOMContentLoaded",()=>{
   const url=window.location.href;
   document.getElementById("shareUrl").value=url;
-  new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
+  new QRCode(document.getElementById("qrcode"),{text:url,width:200,height:150});
 });
 document.getElementById("downloadQR").onclick=()=>{
   const canvas=document.querySelector("#qrcode canvas");
@@ -357,3 +357,4 @@ document.getElementById("downloadQR").onclick=()=>{
 </script>
 </body>
 </html>
+
