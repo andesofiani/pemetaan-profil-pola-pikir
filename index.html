@@ -5,179 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PEMETAAN PROFIL POLA PIKIR</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #e6f0fa; /* biru lembut */
-    margin: 0;
-    padding: 20px;
+  body {font-family: Arial, sans-serif; background:#e6f0fa; margin:0; padding:20px;}
+  .container {max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.15);}
+  h1 {text-align:center; color:#2563eb;}
+
+  .form-group {margin-bottom:15px;}
+  .form-group label {display:block; font-weight:bold; margin-bottom:5px;}
+  .form-group input {
+    width:95%; padding:10px; border:1px solid #ccc; border-radius:6px;
+    box-shadow:inset 1px 1px 3px #bbb; font-size:15px;
   }
 
-  .container {
-    max-width: 900px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  .q {margin-bottom:15px; padding:15px; border:1px solid #ddd; border-radius:8px; background:#f9fbff;}
+  .opt {display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:8px;}
+  .opt label {
+    background:#f0f4ff; padding:6px; border-radius:8px; border:1px solid #ccc;
+    cursor:pointer; box-shadow:0 4px #999; text-align:center;
+    font-weight:bold; font-size:11px; transition:all 0.15s ease;
+    display:flex; align-items:center; justify-content:center; gap:6px;
   }
+  .opt label:active {transform:translateY(2px); box-shadow:0 2px #666;}
+  .opt input[type=radio] {width:14px; height:14px; accent-color:#2563eb;}
+  .opt input:checked + span {color:#2563eb; font-weight:bold; animation:bounce 0.2s;}
+  @keyframes bounce {0%{transform:scale(1);} 50%{transform:scale(0.85);} 100%{transform:scale(1);}}
 
-  h1 {
-    text-align: center;
-    color: #333;
-  }
+  button {display:inline-block; padding:10px 14px; border:none; border-radius:6px; cursor:pointer;
+    margin:10px 5px; font-weight:bold; transition:all 0.2s ease; box-shadow:0 4px #999;}
+  button:active {transform:translateY(2px); box-shadow:0 2px #666;}
+  .primary {background:#2563eb; color:#fff;}
+  .soft {background:#f0f0f0; color:#333;}
 
-  .q {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #f9fbff;
-  }
+  .result {margin-top:20px; padding:15px; border:1px dashed #888; border-radius:8px; display:none; text-align:center;}
+  .score {font-size:4em; font-weight:bold; font-family:"Georgia",serif; color:#2563eb; display:inline-block; margin-right:20px;}
+  .badge {display:inline-block; font-size:2em; vertical-align:middle; font-weight:bold; padding:6px 20px; border-radius:10px;}
+  .badge.F{background:#fee2e2;color:#b91c1c;} 
+  .badge.FG{background:#fef3c7;color:#92400e;} 
+  .badge.GF{background:#e0f2fe;color:#0369a1;} 
+  .badge.G{background:#dcfce7;color:#166534;}
 
-  .opt {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 6px;
-  }
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-
-  /* Efek jika aktif (fokus) */
-  input[type="text"]:focus {
-    outline: none;
-    border-color: #80bfff;
-    background: #e6f0fa; /* sama seperti latar */
-    box-shadow: 0 0 5px rgba(0,123,255,0.5);
-  }
-
-  button {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px #999; /* efek 3D */
-  }
-
-  button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px #666;
-  }
-
-  .primary {
-    background: #2563eb;
-    color: #fff;
-  }
-
-  .soft {
-    background: #f0f0f0;
-    color: #333;
-  }
-
-  .result {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px dashed #888;
-    border-radius: 8px;
-    display: none;
-  }
-
-  .score {
-    font-size: 1.8em;
-    font-weight: bold;
-  }
-
-  .badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-  }
-
-  .badge.F { background: #fee2e2; color: #b91c1c; }
-  .badge.FG { background: #fef3c7; color: #92400e; }
-  .badge.GF { background: #e0f2fe; color: #0369a1; }
-  .badge.G { background: #dcfce7; color: #166534; }
-
-/* Centering tombol dan share link */
-button {
-  display: inline-block;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 10px auto;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px #999;
-}
-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px #666;
-}
-#shareUrl {
-  width: 95%;
-  display: block;
-  margin: 0 auto 20px auto;
-  text-align: center;
-}
-
-/* Tambahkan jarak antara link dengan QR */
-#shareUrl {
-  margin-bottom: 20px;
-}
-
-/* Judul biru */
-h1 {
-  text-align: center;
-  color: #2563eb; /* biru */
-}
-
-/* Label 3D */
-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* efek 3D */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-label:active {
-  transform: translateY(2px);
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
+  .share-section {text-align:center; margin-top:30px;}
+  .share-section input {width:90%; margin-bottom:20px; padding:10px; text-align:center;}
+  #qrcode {margin:20px 0;}
 </style>
 </head>
 <body>
@@ -185,64 +53,69 @@ label:active {
   <h1>PEMETAAN PROFIL POLA PIKIR</h1>
   <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
-  <label>NAMA RESPONDEN:</label>
-  <input type="text" id="nama" placeholder="Tuliskan nama Anda">
-
-  <label>INSTANSI / LEMBAGA:</label>
-  <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
-
-  <label>BIDANG / MAPEL:</label>
-  <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
+  <div class="form-group">
+    <label>NAMA RESPONDEN:</label>
+    <input type="text" id="nama" placeholder="Tuliskan nama Anda">
+  </div>
+  <div class="form-group">
+    <label>INSTANSI / LEMBAGA:</label>
+    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
+  </div>
+  <div class="form-group">
+    <label>BIDANG / MAPEL:</label>
+    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
+  </div>
 
   <form id="quiz"></form>
 
-  <div style="text-align:center;"><button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
-  <button type="button" class="soft" id="resetBtn">Reset</button></div>
+  <div style="text-align:center;">
+    <button type="button" class="primary" id="submitBtn">SUBMIT</button>
+    <button type="button" class="soft" id="resetBtn">RESET</button>
+    <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
+  </div>
 
   <div id="result" class="result"></div>
 
-  <div style="text-align:center; margin-top:20px;"><h3>Bagikan Link</h3>
-  <input type="text" id="shareUrl" readonly>
-  <div id="qrcode"></div>
-  <button type="button" class="soft" id="downloadQR">Unduh QR</button></div>
+  <div class="share-section">
+    <h3>Bagikan Link</h3>
+    <input type="text" id="shareUrl" readonly>
+    <div id="qrcode"></div>
+    <button type="button" class="soft" id="downloadQR">Unduh QR</button>
+  </div>
 </div>
 
-<!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-/* ==== KONFIG ==== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz525f4kqB84LW6mw6uLNh2Bm-ZlAvxi7X988Gsnv-S05ukan261sQZnMIY7BJd3PpCTg/exec";
-
-/* ==== DATA SOAL ==== */
-const statements = [
- "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
- "2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
- "3. Anda akan selalu dapat mengubah kemampuan Anda.",
- "4. Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
- "5. Anda akan selalu dapat mengubah diri Anda sendiri.",
- "6. Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
- "7. Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
- "8. Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
- "9. Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
- "10. Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
- "11. Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
- "12. Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
- "13. Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
- "14. Saya kurang senang bila ada kritik dan saran dari orang lain.",
- "15. Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
- "16. Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
- "17. Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
- "18. Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
- "19. Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
- "20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
+const statements=[
+ "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
+ "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
+ "Anda akan selalu dapat mengubah kemampuan Anda.",
+ "Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
+ "Anda akan selalu dapat mengubah diri Anda sendiri.",
+ "Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
+ "Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
+ "Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
+ "Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
+ "Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
+ "Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
+ "Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
+ "Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
+ "Saya kurang senang bila ada kritik dan saran dari orang lain.",
+ "Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
+ "Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
+ "Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
+ "Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
+ "Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
+ "Orang yang benar-benar cerdas, tidak perlu bekerja keras."
 ];
-const labels = ["SS","S","TS","STS"];
-const scoring = [
- [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
- [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
+const labels=["SS","S","TS","STS"];
+const scoring=[
+ [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],
+ [3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
+ [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],
+ [0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
 
-/* ==== RENDER SOAL ==== */
 function renderQuestions(){
   const form=document.getElementById("quiz");
   form.innerHTML="";
@@ -250,115 +123,265 @@ function renderQuestions(){
     const q=document.createElement("div");
     q.className="q";
     q.innerHTML=`
-      <p>${t}</p>
+      <p><b>${i+1}.</b> ${t}</p>
       <div class="opt">
         ${labels.map((lab,j)=>`
-          <label><input type="radio" name="q${i}" value="${j}"> ${lab}</label>
+          <label>
+            <input type="radio" name="q${i}" value="${j}">
+            <span>${lab}</span>
+          </label>
         `).join("")}
       </div>
     `;
     form.appendChild(q);
   });
 }
-document.addEventListener("DOMContentLoaded", renderQuestions);
-
-/* ==== HITUNG SKOR ==== */
-function compute(){
-  let tot=0, detail=[];
-  for(let i=0;i<statements.length;i++){
-    const sel=document.querySelector(`input[name="q${i}"]:checked`);
-    if(!sel) return null;
-    const v=parseInt(sel.value);
-    const sc=scoring[i][v];
-    tot+=sc; detail.push({no:i+1,jawaban:labels[v],skor:sc});
-  }
-  let cat="";
-  if(tot<=20) cat="F";
-  else if(tot<=33) cat="FG";
-  else if(tot<=44) cat="GF";
-  else cat="G";
-  return {total:tot,category:cat,detail};
-}
-
-/* ==== TAMPILKAN HASIL ==== */
-function showResult(r){
-  const res=document.getElementById("result");
-  res.style.display="block";
-  
-  const labelsFull = {
-    F: "F - Fixed Mindset",
-    FG: "FG - Fixed Growth Mindset",
-    GF: "GF - Growth Fixed Mindset",
-    G: "G - Growth Mindset"
-  };
-  
-  res.innerHTML=`
-    <div class="score">${r.total}</div>
-    <div class="badge ${r.category}">${labelsFull[r.category]}</div>
-  `;
-}
-
-/* ==== KIRIM DATA (PERBAIKAN FETCH) ==== */
-async function submitData(data){
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ payload: JSON.stringify(data) })
-    });
-
-    if (!res.ok) throw new Error("HTTP error " + res.status);
-
-    const txt = await res.text();
-    console.log("Raw response:", txt);
-
-    let j;
-    try {
-      j = JSON.parse(txt);
-    } catch (e) {
-      throw new Error("Respon bukan JSON: " + txt);
-    }
-
-    if (j.status !== "OK") throw new Error(j.message || "Unknown error");
-    return j;
-  } catch (err) {
-    throw new Error("Berhasil");
-  }
-}
-
-document.getElementById("submitBtn").onclick=async()=>{
-  const nama=document.getElementById("nama").value||"Anonim";
-  const instansi=document.getElementById("instansi").value||"-";
-  const mapel=document.getElementById("mapel").value||"-";
-  const r=compute();
-  if(!r){alert("Lengkapi semua pertanyaan!"); return;}
-  showResult(r);
-  try{
-    await submitData({nama,instansi,mapel,jawaban:r.detail,skor:r.total,kategori:r.category});
-    alert("Jawaban tersimpan!");
-  }catch(err){alert(err.message);}
-};
-document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz").reset();document.getElementById("result").style.display="none"; 
-document.getElementById("nama").value = ""; document.getElementById("instansi").value = ""; document.getElementById("mapel").value = "";
-};
-
-/* ==== QR ==== */
 document.addEventListener("DOMContentLoaded",()=>{
+  renderQuestions();
   const url=window.location.href;
   document.getElementById("shareUrl").value=url;
   new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
 });
+
 document.getElementById("downloadQR").onclick=()=>{
   const canvas=document.querySelector("#qrcode canvas");
-  if(canvas){
-    const link=document.createElement("a");
-    link.download="QR.png";
-    link.href=canvas.toDataURL();
-    link.click();
-  }
+  const link=document.createElement("a");
+  link.href=canvas.toDataURL("image/png");
+  link.download="QRCode.png";
+  link.click();
 };
+
+function compute(){
+  let tot=0; let answers=[];
+  for(let i=0;i<statements.length;i++){
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel) return null;
+    const sc=scoring[i][parseInt(sel.value)];
+    tot+=sc;
+    answers.push({q:statements[i],opt:labels[sel.value],score:sc,index:i});
+  }
+  let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
+  return {total:tot,category:cat,answers};
+}
+
+function showResult(r){
+  const res=document.getElementById("result");
+  res.style.display="block";
+  const labelsFull={F:"F - Fixed Mindset",FG:"FG - Fixed to Growth",GF:"GF - Growth to Fixed",G:"G - Growth Mindset"};
+  res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
+}
+
+/* =========================================================
+   80 Analisis Unik: analisisPerSoal[soalIndex][skor 0..3]
+   skor 3 = sangat growth, 2 = cukup growth, 1 = cenderung fixed, 0 = fixed
+   ========================================================= */
+const analisisPerSoal = [
+  // 1
+  [
+    "Anda memandang kemampuan sebagai hal yang statis. Tindak lanjut: uji keyakinan ini dengan proyek kecil yang menantang dan catat peningkatannya.",
+    "Anda ragu kemampuan dapat berubah. Tindak lanjut: tetapkan target mingguan dan refleksikan proses belajar, bukan hanya hasil.",
+    "Anda mulai melihat peluang perubahan. Tindak lanjut: perbanyak latihan bertahap dan minta umpan balik spesifik.",
+    "Anda yakin kemampuan bisa berkembang. Tindak lanjut: teruskan dengan tujuan menantang dan evaluasi kemajuan secara rutin."
+  ],
+  // 2
+  [
+    "Anda menolak kemungkinan perubahan kecil. Tindak lanjut: dokumentasikan kemajuan harian untuk membuktikan perubahan terjadi.",
+    "Anda menganggap perubahan mungkin, namun terbatas. Tindak lanjut: perluas zona nyaman dengan mencoba metode baru.",
+    "Anda melihat perubahan realistis. Tindak lanjut: pertahankan kebiasaan belajar konsisten dan ukur dampaknya.",
+    "Anda percaya semua orang dapat berkembang. Tindak lanjut: jadikan rencana belajar sebagai kebiasaan jangka panjang."
+  ],
+  // 3
+  [
+    "Anda menilai kemampuan tidak dapat diubah. Tindak lanjut: lakukan eksperimen belajar 14 hari pada satu keterampilan.",
+    "Anda masih setengah hati menerima perubahan. Tindak lanjut: cari mentor/teman belajar untuk mendorong konsistensi.",
+    "Anda cukup yakin kemampuan bisa tumbuh. Tindak lanjut: naikkan tingkat tantangan secara bertahap.",
+    "Anda yakin kemampuan selalu bisa ditingkatkan. Tindak lanjut: tetapkan sasaran ambisius dan ukur progres obyektif."
+  ],
+  // 4
+  [
+    "Anda merasa diri 'tetap'. Tindak lanjut: identifikasi tiga kebiasaan kecil yang bisa diubah bulan ini.",
+    "Anda mengakui sebagian diri bisa berubah. Tindak lanjut: pilih satu sifat untuk dilatih melalui rutinitas harian.",
+    "Anda memahami identitas bisa berkembang. Tindak lanjut: praktekkan refleksi mingguan untuk melacak perubahan.",
+    "Anda melihat keunikan sebagai titik awal untuk tumbuh. Tindak lanjut: desain proyek yang menonjolkan kekuatan baru."
+  ],
+  // 5
+  [
+    "Anda ragu dapat mengubah diri. Tindak lanjut: mulai dari perubahan mikro (5–10 menit/hari) dan tingkatkan.",
+    "Anda percaya perubahan mungkin, namun belum konsisten. Tindak lanjut: jadwalkan kebiasaan baru dengan pengingat.",
+    "Anda menunjukkan kesiapan berubah. Tindak lanjut: minta rekan memberi akuntabilitas terhadap target Anda.",
+    "Anda yakin diri selalu dapat diperbarui. Tindak lanjut: lakukan evaluasi bulanan untuk menyetel strategi."
+  ],
+  // 6 (seni & musik)
+  [
+    "Anda menganggap seni hanya untuk yang berbakat. Tindak lanjut: ikuti latihan dasar 10 menit/hari selama 30 hari.",
+    "Anda ragu semua orang bisa belajar seni. Tindak lanjut: ambil satu kursus pemula dan catat progres mingguan.",
+    "Anda menyadari seni dapat dipelajari. Tindak lanjut: buat portofolio kecil dari latihan bertahap.",
+    "Anda yakin seni-musik dapat dilatih. Tindak lanjut: tetapkan kurikulum latihan dan target karya per bulan."
+  ],
+  // 7 (olahraga & bakat)
+  [
+    "Anda memusatkan pada bakat bawaan. Tindak lanjut: fokus pada volume latihan dan teknik dasar.",
+    "Anda melihat bakat penting namun latihan kurang. Tindak lanjut: pakai jurnal latihan untuk melihat efek kerja keras.",
+    "Anda menyeimbangkan bakat dan latihan. Tindak lanjut: tingkatkan intensitas latihan secara terukur.",
+    "Anda percaya latihan mengalahkan bakat pasif. Tindak lanjut: gunakan prinsip progresif overload yang aman."
+  ],
+  // 8 (matematika & stereotipe)
+  [
+    "Anda setuju stereotipe kemampuan matematika. Tindak lanjut: tantang diri dengan soal bertahap dan dukungan lingkungan positif.",
+    "Anda sedikit terpengaruh stereotipe. Tindak lanjut: ganti narasi diri dengan ‘saya sedang belajar’.",
+    "Anda menolak stereotipe dan melihat peluang. Tindak lanjut: gunakan sumber belajar adaptif yang sesuai ritme Anda.",
+    "Anda yakin semua bisa belajar matematika. Tindak lanjut: bangun rutinitas latihan singkat namun sering."
+  ],
+  // 9 (usaha)
+  [
+    "Anda meremehkan peran usaha. Tindak lanjut: lakukan latihan fokus 25 menit (pomodoro) secara konsisten.",
+    "Anda melihat usaha penting tapi belum konsisten. Tindak lanjut: buat jadwal dan indikator keberhasilan proses.",
+    "Anda menilai usaha berbanding lurus dengan kemahiran. Tindak lanjut: ukur jam latihan dan hasilkan umpan balik.",
+    "Anda percaya kerasnya usaha menaikkan keahlian. Tindak lanjut: rancang siklus latihan–review–perbaikan."
+  ],
+  // 10 (tipe diri bisa berubah)
+  [
+    "Anda memandang tipe diri tetap. Tindak lanjut: pilih satu perilaku yang ingin diubah dan pantau 21 hari.",
+    "Anda membuka kemungkinan perubahan kecil. Tindak lanjut: cari model peran dan tiru praktiknya.",
+    "Anda cukup yakin tipe diri lentur. Tindak lanjut: cek kemajuan lewat refleksi berbasis data.",
+    "Anda yakin tipe diri berkembang. Tindak lanjut: teruskan eksperimen perilaku baru secara sadar."
+  ],
+  // 11 (hindari hal baru)
+  [
+    "Anda cenderung menghindari hal baru. Tindak lanjut: lakukan ‘tantangan kecil mingguan’ agar terbiasa.",
+    "Anda ragu menghadapi hal baru tetapi bersedia mencoba. Tindak lanjut: pasang target aman yang meningkat perlahan.",
+    "Anda cukup nyaman dengan kebaruan. Tindak lanjut: tambahkan evaluasi risiko–mitigasi sebelum mencoba.",
+    "Anda menyambut hal baru sebagai peluang. Tindak lanjut: rencanakan proyek eksplorasi tiap kuartal."
+  ],
+  // 12 (orang baik/pintar tetap)
+  [
+    "Anda melihat kualitas orang sebagai tetap. Tindak lanjut: cari contoh perubahan orang di sekitar Anda.",
+    "Anda mengakui sebagian orang bisa berubah. Tindak lanjut: diskusikan kisah transformasi untuk mengubah perspektif.",
+    "Anda memahami kualitas berkembang lewat pengalaman. Tindak lanjut: berikan ruang bagi orang lain untuk bertumbuh.",
+    "Anda yakin perubahan sifat itu mungkin. Tindak lanjut: dorong budaya umpan balik yang aman."
+  ],
+  // 13 (menghargai kritik)
+  [
+    "Anda belum nyaman dengan kritik. Tindak lanjut: bedakan kritik terhadap karya vs diri, dan minta contoh konkret.",
+    "Anda menerima kritik terbatas. Tindak lanjut: gunakan format ‘terima–cerna–tindak’ pada tiap masukan.",
+    "Anda cukup terbuka dengan masukan. Tindak lanjut: tindak lanjuti minimal satu saran per siklus kerja.",
+    "Anda sangat menghargai kritik. Tindak lanjut: jadwalkan sesi review rutin dengan rekan/mentor."
+  ],
+  // 14 (kurang senang kritik)
+  [
+    "Anda menolak kritik. Tindak lanjut: latih diri dengan meminta satu masukan spesifik setiap minggu.",
+    "Anda kurang nyaman namun berusaha menerima. Tindak lanjut: tulis rencana aksi singkat pasca umpan balik.",
+    "Anda mulai bisa menempatkan kritik sebagai data. Tindak lanjut: uji saran dan evaluasi hasilnya.",
+    "Anda mengelola kritik secara dewasa. Tindak lanjut: ajarkan praktik feedback sehat pada tim Anda."
+  ],
+  // 15 (kesetaraan kemampuan belajar)
+  [
+    "Anda percaya kemampuan belajar sangat berbeda dan tetap. Tindak lanjut: gunakan strategi diferensiasi untuk mengejar ketertinggalan.",
+    "Anda melihat variasi kemampuan besar namun masih bisa dikejar. Tindak lanjut: fokus pada proses, bukan label.",
+    "Anda menilai semua dapat belajar dengan dukungan tepat. Tindak lanjut: rancang scaffolding sesuai kebutuhan.",
+    "Anda yakin kesetaraan peluang belajar. Tindak lanjut: bangun lingkungan belajar yang adaptif dan inklusif."
+  ],
+  // 16 (belajar vs mengubah kemampuan)
+  [
+    "Anda memisahkan belajar dari perubahan kemampuan. Tindak lanjut: catat dampak belajar pada performa nyata.",
+    "Anda mengakui belajar berguna, tapi ragu mengubah kapasitas. Tindak lanjut: uji coba teknik baru dan ukur hasil.",
+    "Anda melihat belajar mengubah cara kerja. Tindak lanjut: buat eksperimen kecil untuk memperdalam efeknya.",
+    "Anda yakin belajar mengubah kemampuan. Tindak lanjut: buat kurva kemajuan untuk memantau kenaikan."
+  ],
+  // 17 (melakukan berbeda vs kemampuan tetap)
+  [
+    "Anda merasa cara baru tak mengubah kemampuan. Tindak lanjut: bandingkan hasil sebelum–sesudah metode baru.",
+    "Anda ragu perubahan strategi berdampak signifikan. Tindak lanjut: lakukan A/B test sederhana pada tugas Anda.",
+    "Anda percaya cara baru memperluas kapasitas. Tindak lanjut: dokumentasikan insight dan standarisasi praktik baik.",
+    "Anda yakin variasi strategi memperkuat kemampuan. Tindak lanjut: lakukan perbaikan berkelanjutan (continuous improvement)."
+  ],
+  // 18 (semua orang pada dasarnya baik)
+  [
+    "Anda melihat keputusan buruk sebagai sifat tetap. Tindak lanjut: praktikkan empati dan analisis sebab–akibat.",
+    "Anda mengakui faktor situasional, namun masih menilai tetap. Tindak lanjut: gunakan kerangka belajar dari kesalahan.",
+    "Anda menilai perilaku dapat diperbaiki. Tindak lanjut: ciptakan ruang aman untuk koreksi.",
+    "Anda percaya setiap orang bisa bertumbuh. Tindak lanjut: dorong refleksi dan komitmen perbaikan."
+  ],
+  // 19 (motivasi belajar hal baru)
+  [
+    "Motivasi belajar hal baru rendah. Tindak lanjut: hubungkan tugas dengan nilai pribadi dan tujuan jangka panjang.",
+    "Motivasi cukup namun mudah turun. Tindak lanjut: pecah target besar menjadi langkah mikro yang menantang.",
+    "Motivasi baik dan relatif stabil. Tindak lanjut: tetapkan tonggak capaian dan rayakan progres.",
+    "Motivasi sangat tinggi. Tindak lanjut: jaga keseimbangan agar tidak burn-out dan buat peta jalan pembelajaran."
+  ],
+  // 20 (cerdas tak perlu kerja keras)
+  [
+    "Anda percaya kecerdasan mengalahkan kerja keras. Tindak lanjut: lihat bukti nyata bahwa usaha memperlebar kapasitas.",
+    "Anda menilai kerja keras penting, tetapi sering diabaikan. Tindak lanjut: jadwalkan jam latihan fokus tiap hari.",
+    "Anda memadukan kecerdasan dengan ketekunan. Tindak lanjut: tingkatkan kualitas latihan dengan umpan balik ahli.",
+    "Anda menegaskan kerja keras sebagai pengungkit utama. Tindak lanjut: kelola ritme latihan dan evaluasi berkelanjutan."
+  ]
+];
+
+function getAnalisisPerButir(a){
+  const arr = analisisPerSoal[a.index];
+  if(!arr) return "Analisis tidak tersedia.";
+  const kal = arr[a.score];
+  return kal ?? "Analisis tidak tersedia.";
+}
+
+function showAnalysis(r){
+  let newWin=window.open("","_blank");
+  let html=`<html><head><title>Analisis</title>
+  <style>
+    body{font-family:Arial,sans-serif; padding:15px; line-height:1.3;}
+    h2{text-align:center;color:#2563eb;margin-bottom:10px;}
+    .header-table{width:100%; border-collapse:collapse; margin-bottom:8px;}
+    .header-table td{font-size:13px; padding:4px 6px; vertical-align:top;}
+    .header-table .label{text-align:right; font-weight:bold; width:120px;}
+    table{width:100%; border-collapse:collapse; font-size:13px;}
+    th,td{padding:4px 6px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
+    tr:nth-child(even){background:#f9f9f9;} tr:hover{background:#eef6ff;}
+    th{background:#2563eb;color:white;}
+    .btn-print{margin-top:10px; display:block; padding:8px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;}
+    @media print{.btn-print{display:none;} body{margin:0;} @page{margin:1cm;}}
+  </style>
+  </head><body>
+  <h2>Analisis Pemetaan Profil Pola Pikir</h2>
+  <table class="header-table">
+    <tr>
+      <td class="label">Nama</td><td>: ${document.getElementById("nama").value}</td>
+      <td style="font-weight:bold;">Total:</td><td>${r.total}</td>
+      <td style="font-weight:bold;">Kategori:</td><td>${r.category}</td>
+    </tr>
+    <tr>
+      <td class="label">Instansi</td><td>: ${document.getElementById("instansi").value}</td>
+      <td style="font-weight:bold;">Interpretasi:</td>
+      <td colspan="3">${
+        r.category=="G"?"Growth Mindset sangat baik—Anda konsisten melihat tantangan sebagai peluang belajar.":
+        r.category=="GF"?"Cenderung Growth—dasar positif sudah ada, tinggal memperkuat konsistensi di area tertentu.":
+        r.category=="FG"?"Cenderung Fixed—namun mulai terbuka; fokuskan pada pengalaman belajar yang terstruktur.":
+        "Fixed Mindset dominan—perlu perubahan cara pandang terhadap usaha, proses, dan umpan balik."
+      }</td>
+    </tr>
+    <tr>
+      <td class="label">Bidang/Mapel</td><td>: ${document.getElementById("mapel").value}</td>
+      <td style="font-weight:bold;">Motivasi:</td>
+      <td colspan="3">Kemampuan berkembang lewat proses: tetapkan target jelas, latihan konsisten, dan rayakan progres kecil.</td>
+    </tr>
+  </table>
+  <table>
+    <tr><th>Pernyataan</th><th>Jawaban</th><th>Analisis & Tindak Lanjut</th></tr>`;
+  
+  r.answers.forEach(a=>{
+    html+=`<tr><td>${a.q}</td><td>${a.opt}</td><td>${getAnalisisPerButir(a)}</td></tr>`;
+  });
+  
+  html+=`</table>
+  <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+  </body></html>`;
+  newWin.document.write(html);
+  newWin.document.close();
+}
+
+document.getElementById("submitBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showResult(r);};
+document.getElementById("analisisBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);};
+document.getElementById("resetBtn").onclick=()=>{location.reload();};
 </script>
 </body>
 </html>
-
