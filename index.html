@@ -5,179 +5,46 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PEMETAAN PROFIL POLA PIKIR</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #e6f0fa; /* biru lembut */
-    margin: 0;
-    padding: 20px;
+  body {font-family: Arial, sans-serif; background:#e6f0fa; margin:0; padding:20px;}
+  .container {max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.15);}
+  h1 {text-align:center; color:#2563eb;}
+
+  .form-group {margin-bottom:15px;}
+  .form-group label {display:block; font-weight:bold; margin-bottom:5px;}
+  .form-group input {
+    width:95%; padding:10px; border:1px solid #ccc; border-radius:6px;
+    box-shadow:inset 1px 1px 3px #bbb; font-size:15px;
   }
 
-  .container {
-    max-width: 900px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  .q {margin-bottom:15px; padding:15px; border:1px solid #ddd; border-radius:8px; background:#f9fbff;}
+  .opt {display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:8px;}
+  .opt label {
+    background:#f0f4ff; padding:6px; border-radius:8px; border:1px solid #ccc;
+    cursor:pointer; box-shadow:0 4px #999; text-align:center;
+    font-weight:bold; font-size:11px; transition:all 0.15s ease;
+    display:flex; align-items:center; justify-content:center; gap:6px;
   }
+  .opt input[type=radio] {width:14px; height:14px; accent-color:#2563eb;}
+  .opt input:checked + span {color:#2563eb; font-weight:bold; animation:bounce 0.2s;}
+  @keyframes bounce {0%{transform:scale(1);} 50%{transform:scale(0.85);} 100%{transform:scale(1);}}
 
-  h1 {
-    text-align: center;
-    color: #333;
-  }
+  button {display:inline-block; padding:10px 14px; border:none; border-radius:6px; cursor:pointer;
+    margin:10px 5px; font-weight:bold; transition:all 0.2s ease; box-shadow:0 4px #999;}
+  button:active {transform:translateY(2px); box-shadow:0 2px #666;}
+  .primary {background:#2563eb; color:#fff;}
+  .soft {background:#f0f0f0; color:#333;}
 
-  .q {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #f9fbff;
-  }
+  .result {margin-top:20px; padding:15px; border:1px dashed #888; border-radius:8px; display:none; text-align:center;}
+  .score {font-size:4em; font-weight:bold; font-family:"Georgia",serif; color:#2563eb; display:inline-block; margin-right:20px;}
+  .badge {display:inline-block; font-size:2em; vertical-align:middle; font-weight:bold; padding:6px 20px; border-radius:10px;}
+  .badge.F{background:#fee2e2;color:#b91c1c;} 
+  .badge.FG{background:#fef3c7;color:#92400e;} 
+  .badge.GF{background:#e0f2fe;color:#0369a1;} 
+  .badge.G{background:#dcfce7;color:#166534;}
 
-  .opt {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 6px;
-  }
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-
-  /* Efek jika aktif (fokus) */
-  input[type="text"]:focus {
-    outline: none;
-    border-color: #80bfff;
-    background: #e6f0fa; /* sama seperti latar */
-    box-shadow: 0 0 5px rgba(0,123,255,0.5);
-  }
-
-  button {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 10px;
-    font-weight: bold;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px #999; /* efek 3D */
-  }
-
-  button:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px #666;
-  }
-
-  .primary {
-    background: #2563eb;
-    color: #fff;
-  }
-
-  .soft {
-    background: #f0f0f0;
-    color: #333;
-  }
-
-  .result {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px dashed #888;
-    border-radius: 8px;
-    display: none;
-  }
-
-  .score {
-    font-size: 1.8em;
-    font-weight: bold;
-  }
-
-  .badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: bold;
-  }
-
-  .badge.F { background: #fee2e2; color: #b91c1c; }
-  .badge.FG { background: #fef3c7; color: #92400e; }
-  .badge.GF { background: #e0f2fe; color: #0369a1; }
-  .badge.G { background: #dcfce7; color: #166534; }
-
-/* Centering tombol dan share link */
-button {
-  display: inline-block;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 10px auto;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px #999;
-}
-button:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px #666;
-}
-#shareUrl {
-  width: 95%;
-  display: block;
-  margin: 0 auto 20px auto;
-  text-align: center;
-}
-
-/* Tambahkan jarak antara link dengan QR */
-#shareUrl {
-  margin-bottom: 20px;
-}
-
-/* Judul biru */
-h1 {
-  text-align: center;
-  color: #2563eb; /* biru */
-}
-
-/* Label 3D */
-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 6px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: bold;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* efek 3D */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-label:active {
-  transform: translateY(2px);
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
+  .share-section {text-align:center; margin-top:30px;}
+  .share-section input {width:90%; margin-bottom:20px; padding:10px; text-align:center;}
+  #qrcode {margin:20px 0;}
 </style>
 </head>
 <body>
@@ -185,64 +52,69 @@ label:active {
   <h1>PEMETAAN PROFIL POLA PIKIR</h1>
   <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
-  <label>NAMA RESPONDEN:</label>
-  <input type="text" id="nama" placeholder="Tuliskan nama Anda">
-
-  <label>INSTANSI / LEMBAGA:</label>
-  <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
-
-  <label>BIDANG / MAPEL:</label>
-  <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
+  <div class="form-group">
+    <label>NAMA RESPONDEN:</label>
+    <input type="text" id="nama" placeholder="Tuliskan nama Anda">
+  </div>
+  <div class="form-group">
+    <label>INSTANSI / LEMBAGA:</label>
+    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
+  </div>
+  <div class="form-group">
+    <label>BIDANG / MAPEL:</label>
+    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
+  </div>
 
   <form id="quiz"></form>
 
-  <div style="text-align:center;"><button type="button" class="primary" id="submitBtn">Lihat Hasil & Kirim</button>
-  <button type="button" class="soft" id="resetBtn">Reset</button></div>
+  <div style="text-align:center;">
+    <button type="button" class="primary" id="submitBtn">SUBMIT</button>
+    <button type="button" class="soft" id="resetBtn">RESET</button>
+    <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
+  </div>
 
   <div id="result" class="result"></div>
 
-  <div style="text-align:center; margin-top:20px;"><h3>Bagikan Link</h3>
-  <input type="text" id="shareUrl" readonly>
-  <div id="qrcode"></div>
-  <button type="button" class="soft" id="downloadQR">Unduh QR</button></div>
+  <div class="share-section">
+    <h3>Bagikan Link</h3>
+    <input type="text" id="shareUrl" readonly>
+    <div id="qrcode"></div>
+    <button type="button" class="soft" id="downloadQR">Unduh QR</button>
+  </div>
 </div>
 
-<!-- QRCodeJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-/* ==== KONFIG ==== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz525f4kqB84LW6mw6uLNh2Bm-ZlAvxi7X988Gsnv-S05ukan261sQZnMIY7BJd3PpCTg/exec";
-
-/* ==== DATA SOAL ==== */
-const statements = [
- "1. Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
- "2. Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
- "3. Anda akan selalu dapat mengubah kemampuan Anda.",
- "4. Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
- "5. Anda akan selalu dapat mengubah diri Anda sendiri.",
- "6. Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
- "7. Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
- "8. Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
- "9. Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
- "10. Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
- "11. Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
- "12. Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
- "13. Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
- "14. Saya kurang senang bila ada kritik dan saran dari orang lain.",
- "15. Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
- "16. Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
- "17. Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
- "18. Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
- "19. Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
- "20. Orang yang benar-benar cerdas, tidak perlu bekerja keras."
+const statements=[
+ "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
+ "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
+ "Anda akan selalu dapat mengubah kemampuan Anda.",
+ "Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
+ "Anda akan selalu dapat mengubah diri Anda sendiri.",
+ "Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
+ "Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
+ "Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
+ "Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
+ "Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
+ "Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
+ "Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
+ "Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
+ "Saya kurang senang bila ada kritik dan saran dari orang lain.",
+ "Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
+ "Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
+ "Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
+ "Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
+ "Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
+ "Orang yang benar-benar cerdas, tidak perlu bekerja keras."
 ];
-const labels = ["SS","S","TS","STS"];
-const scoring = [
- [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
- [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
+const labels=["SS","S","TS","STS"];
+const scoring=[
+ [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],
+ [3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
+ [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],
+ [0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
 
-/* ==== RENDER SOAL ==== */
 function renderQuestions(){
   const form=document.getElementById("quiz");
   form.innerHTML="";
@@ -250,114 +122,116 @@ function renderQuestions(){
     const q=document.createElement("div");
     q.className="q";
     q.innerHTML=`
-      <p>${t}</p>
+      <p><b>${i+1}.</b> ${t}</p>
       <div class="opt">
         ${labels.map((lab,j)=>`
-          <label><input type="radio" name="q${i}" value="${j}"> ${lab}</label>
+          <label>
+            <input type="radio" name="q${i}" value="${j}">
+            <span>${lab}</span>
+          </label>
         `).join("")}
       </div>
     `;
     form.appendChild(q);
   });
 }
-document.addEventListener("DOMContentLoaded", renderQuestions);
-
-/* ==== HITUNG SKOR ==== */
-function compute(){
-  let tot=0, detail=[];
-  for(let i=0;i<statements.length;i++){
-    const sel=document.querySelector(`input[name="q${i}"]:checked`);
-    if(!sel) return null;
-    const v=parseInt(sel.value);
-    const sc=scoring[i][v];
-    tot+=sc; detail.push({no:i+1,jawaban:labels[v],skor:sc});
-  }
-  let cat="";
-  if(tot<=20) cat="F";
-  else if(tot<=33) cat="FG";
-  else if(tot<=44) cat="GF";
-  else cat="G";
-  return {total:tot,category:cat,detail};
-}
-
-/* ==== TAMPILKAN HASIL ==== */
-function showResult(r){
-  const res=document.getElementById("result");
-  res.style.display="block";
-  
-  const labelsFull = {
-    F: "F - Fixed Mindset",
-    FG: "FG - Fixed Growth Mindset",
-    GF: "GF - Growth Fixed Mindset",
-    G: "G - Growth Mindset"
-  };
-  
-  res.innerHTML=`
-    <div class="score">${r.total}</div>
-    <div class="badge ${r.category}">${labelsFull[r.category]}</div>
-  `;
-}
-
-/* ==== KIRIM DATA (PERBAIKAN FETCH) ==== */
-async function submitData(data){
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "cors",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ payload: JSON.stringify(data) })
-    });
-
-    if (!res.ok) throw new Error("HTTP error " + res.status);
-
-    const txt = await res.text();
-    console.log("Raw response:", txt);
-
-    let j;
-    try {
-      j = JSON.parse(txt);
-    } catch (e) {
-      throw new Error("Respon bukan JSON: " + txt);
-    }
-
-    if (j.status !== "OK") throw new Error(j.message || "Unknown error");
-    return j;
-  } catch (err) {
-    throw new Error("Berhasil");
-  }
-}
-
-document.getElementById("submitBtn").onclick=async()=>{
-  const nama=document.getElementById("nama").value||"Anonim";
-  const instansi=document.getElementById("instansi").value||"-";
-  const mapel=document.getElementById("mapel").value||"-";
-  const r=compute();
-  if(!r){alert("Lengkapi semua pertanyaan!"); return;}
-  showResult(r);
-  try{
-    await submitData({nama,instansi,mapel,jawaban:r.detail,skor:r.total,kategori:r.category});
-    alert("Jawaban tersimpan!");
-  }catch(err){alert(err.message);}
-};
-document.getElementById("resetBtn").onclick=()=>{document.getElementById("quiz").reset();document.getElementById("result").style.display="none"; 
-document.getElementById("nama").value = ""; document.getElementById("instansi").value = ""; document.getElementById("mapel").value = "";
-};
-
-/* ==== QR ==== */
 document.addEventListener("DOMContentLoaded",()=>{
+  renderQuestions();
   const url=window.location.href;
   document.getElementById("shareUrl").value=url;
   new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
 });
+
 document.getElementById("downloadQR").onclick=()=>{
   const canvas=document.querySelector("#qrcode canvas");
-  if(canvas){
-    const link=document.createElement("a");
-    link.download="QR.png";
-    link.href=canvas.toDataURL();
-    link.click();
-  }
+  const link=document.createElement("a");
+  link.href=canvas.toDataURL("image/png");
+  link.download="QRCode.png";
+  link.click();
 };
+
+function compute(){
+  let tot=0; let answers=[];
+  for(let i=0;i<statements.length;i++){
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel) return null;
+    const sc=scoring[i][parseInt(sel.value)];
+    tot+=sc;
+    answers.push({q:statements[i],opt:labels[sel.value],score:sc});
+  }
+  let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
+  return {total:tot,category:cat,answers};
+}
+
+function showResult(r){
+  const res=document.getElementById("result");
+  res.style.display="block";
+  const labelsFull={F:"F - Fixed Mindset",FG:"FG - Fixed to Growth",GF:"GF - Growth to Fixed",G:"G - Growth Mindset"};
+  res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
+}
+
+function showAnalysis(r){
+  let newWin=window.open("","_blank");
+  let html=`<html><head><title>Analisis</title>
+  <style>
+    body{font-family:Arial,sans-serif; padding:15px; line-height:1.3;}
+    h2{text-align:center;color:#2563eb;margin-bottom:10px;}
+    .header-table{width:100%; border-collapse:collapse; margin-bottom:8px;}
+    .header-table td{font-size:13px; padding:4px 6px; vertical-align:top;}
+    .header-table .label{text-align:right; font-weight:bold; width:120px;}
+    table{width:100%; border-collapse:collapse; font-size:13px;}
+    th,td{padding:4px 6px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
+    tr:nth-child(even){background:#f9f9f9;} tr:hover{background:#eef6ff;}
+    th{background:#2563eb;color:white;}
+    .btn-print{margin-top:10px; display:block; padding:8px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;}
+    @media print{.btn-print{display:none;} body{margin:0;} @page{margin:1cm;}}
+  </style>
+  </head><body>
+  <h2>Analisis Pemetaan Profil Pola Pikir</h2>
+  <table class="header-table">
+    <tr>
+      <td class="label">Nama</td><td>: ${document.getElementById("nama").value}</td>
+      <td style="font-weight:bold;">Total:</td><td>${r.total}</td>
+      <td style="font-weight:bold;">Kategori:</td><td>${r.category}</td>
+    </tr>
+    <tr>
+      <td class="label">Instansi</td><td>: ${document.getElementById("instansi").value}</td>
+      <td style="font-weight:bold;">Interpretasi:</td>
+      <td colspan="3">${
+        r.category=="G"?"Growth Mindset sangat baik":
+        r.category=="GF"?"Cenderung Growth, masih ada area tetap":
+        r.category=="FG"?"Cenderung Fixed, mulai terbuka":
+        "Cenderung Fixed Mindset"
+      }</td>
+    </tr>
+    <tr>
+      <td class="label">Bidang/Mapel</td><td>: ${document.getElementById("mapel").value}</td>
+      <td style="font-weight:bold;">Motivasi:</td>
+      <td colspan="3">Kemampuan selalu bisa ditingkatkan dengan usaha & keterbukaan.</td>
+    </tr>
+  </table>
+  <table>
+    <tr><th>Pernyataan</th><th>Jawaban</th><th>Analisis & Tindak Lanjut</th></tr>`;
+  
+  r.answers.forEach(a=>{
+    let deskripsi="";
+    if(a.score>=3) deskripsi="Respon Anda menunjukkan pola pikir berkembang yang kuat. Pertahankan dengan terus membuka diri pada tantangan baru.";
+    else if(a.score==2) deskripsi="Anda cukup terbuka, namun masih ada ruang untuk memperkuat keyakinan akan potensi diri.";
+    else if(a.score==1) deskripsi="Respon Anda mengindikasikan keraguan. Disarankan berlatih refleksi diri dan menerima umpan balik.";
+    else deskripsi="Ada kecenderungan pola pikir tetap. Perlu kesadaran bahwa kemampuan dapat ditingkatkan melalui usaha konsisten.";
+    html+=`<tr><td>${a.q}</td><td>${a.opt}</td><td>${deskripsi}</td></tr>`;
+  });
+  
+  html+=`</table>
+  <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+  </body></html>`;
+  newWin.document.write(html);
+  newWin.document.close();
+}
+
+document.getElementById("submitBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showResult(r);};
+document.getElementById("analisisBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);};
+document.getElementById("resetBtn").onclick=()=>{location.reload();};
 </script>
 </body>
 </html>
