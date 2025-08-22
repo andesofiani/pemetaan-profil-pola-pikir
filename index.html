@@ -316,7 +316,13 @@ function showAnalysis(r){
     body{font-family:Arial,sans-serif; padding:15px; line-height:1.35;}
     h2{text-align:center;color:#2563eb;margin-bottom:10px;}
     .header-table{width:100%; border-collapse:collapse; margin-bottom:8px;}
-    .header-table td{font-size:13px; padding:4px 6px; vertical-align:top;}
+    .header-table td{font-size:13px; padding:4px 6px; vertical-align:top; white-space:nowrap;}
+    .header-table td:nth-child(2),
+    .header-table td:nth-child(4),
+    .header-table td:nth-child(6) {
+      white-space:normal;         /* biarkan kolom isi bisa wrap kalau terlalu panjang */
+      word-break:break-word;      /* pecah kata panjang supaya tidak melebar ke kanan */
+}
     .header-table .label{text-align:right; font-weight:bold; width:120px;}
     table{width:100%; border-collapse:collapse; font-size:13px;}
     th,td{padding:6px 8px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
@@ -435,3 +441,4 @@ document.getElementById("resetBtn").onclick = ()=>{ location.reload(); };
 </script>
 </body>
 </html>
+
