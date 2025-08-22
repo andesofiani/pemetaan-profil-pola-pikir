@@ -38,9 +38,9 @@
   .result {margin-top:20px; padding:15px; border:1px dashed #888; border-radius:8px; display:none; text-align:center;}
   .score {font-size:4em; font-weight:bold; font-family:"Georgia",serif; color:#2563eb; display:inline-block; margin-right:20px;}
   .badge {display:inline-block; font-size:2em; vertical-align:middle; font-weight:bold; padding:6px 20px; border-radius:10px;}
-  .badge.F{background:#fee2e2;color:#b91c1c;} 
-  .badge.FG{background:#fef3c7;color:#92400e;} 
-  .badge.GF{background:#e0f2fe;color:#0369a1;} 
+  .badge.F{background:#fee2e2;color:#b91c1c;}
+  .badge.FG{background:#fef3c7;color:#92400e;}
+  .badge.GF{background:#e0f2fe;color:#0369a1;}
   .badge.G{background:#dcfce7;color:#166534;}
 
   .share-section {text-align:center; margin-top:30px;}
@@ -55,7 +55,7 @@
 
   <div class="form-group">
     <label>NAMA RESPONDEN:</label>
-    <input type="text" id="nama" placeholder="Tuliskan nama Anda">
+    <input type="text" id="nama" placeholder="Tuliskan nama Anda" required>
   </div>
   <div class="form-group">
     <label>INSTANSI / LEMBAGA:</label>
@@ -84,8 +84,14 @@
   </div>
 </div>
 
+<!-- QRCode -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+/* ===================== CONFIG ===================== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec"; // <--- Ganti dengan URL Web App GAS (Deploy → New deployment)
+const SHEET_DATE_LOCALE_OFFSET_MIN = 0; // biarkan 0 (timestamp dibuat di server). Opsi jika ingin kirim offset klien.
+
+/* ================== MASTER DATA =================== */
 const statements=[
  "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
  "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
@@ -116,6 +122,7 @@ const scoring=[
  [0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
 ];
 
+/* ============== RENDER & UTILITIES ============== */
 function renderQuestions(){
   const form=document.getElementById("quiz");
   form.innerHTML="";
@@ -156,9 +163,10 @@ function compute(){
   for(let i=0;i<statements.length;i++){
     const sel=document.querySelector(`input[name="q${i}"]:checked`);
     if(!sel) return null;
-    const sc=scoring[i][parseInt(sel.value)];
+    const selVal=parseInt(sel.value,10);
+    const sc=scoring[i][selVal];
     tot+=sc;
-    answers.push({q:statements[i],opt:labels[sel.value],score:sc,index:i});
+    answers.push({index:i, q:statements[i], opt:labels[selVal], score:sc});
   }
   let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
   return {total:tot,category:cat,answers};
@@ -167,190 +175,166 @@ function compute(){
 function showResult(r){
   const res=document.getElementById("result");
   res.style.display="block";
-  const labelsFull={F:"F - Fixed Mindset",FG:"FG - Fixed to Growth",GF:"GF - Growth to Fixed",G:"G - Growth Mindset"};
+  const labelsFull={F:"F - Fixed Mindset",FG:"FG - Fixed → Growth",GF:"GF - Growth → Fixed",G:"G - Growth Mindset"};
   res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
 }
 
-/* =========================================================
-   80 Analisis Unik: analisisPerSoal[soalIndex][skor 0..3]
-   skor 3 = sangat growth, 2 = cukup growth, 1 = cenderung fixed, 0 = fixed
-   ========================================================= */
+/* ================== ANALISIS CETAK ================== */
 const analisisPerSoal = [
-  // 1
   [
     "Anda memandang kemampuan sebagai hal yang statis. Tindak lanjut: uji keyakinan ini dengan proyek kecil yang menantang dan catat peningkatannya.",
-    "Anda ragu kemampuan dapat berubah. Tindak lanjut: tetapkan target mingguan dan refleksikan proses belajar, bukan hanya hasil.",
-    "Anda mulai melihat peluang perubahan. Tindak lanjut: perbanyak latihan bertahap dan minta umpan balik spesifik.",
-    "Anda yakin kemampuan bisa berkembang. Tindak lanjut: teruskan dengan tujuan menantang dan evaluasi kemajuan secara rutin."
+    "Anda ragu kemampuan dapat berubah. Tindak lanjut: tetapkan target mingguan dan refleksikan proses belajar.",
+    "Anda mulai melihat peluang perubahan. Tindak lanjut: minta umpan balik spesifik dan perbanyak latihan bertahap.",
+    "Anda yakin kemampuan bisa berkembang. Tindak lanjut: teruskan tujuan menantang dan evaluasi kemajuan rutin."
   ],
-  // 2
   [
-    "Anda menolak kemungkinan perubahan kecil. Tindak lanjut: dokumentasikan kemajuan harian untuk membuktikan perubahan terjadi.",
-    "Anda menganggap perubahan mungkin, namun terbatas. Tindak lanjut: perluas zona nyaman dengan mencoba metode baru.",
-    "Anda melihat perubahan realistis. Tindak lanjut: pertahankan kebiasaan belajar konsisten dan ukur dampaknya.",
-    "Anda percaya semua orang dapat berkembang. Tindak lanjut: jadikan rencana belajar sebagai kebiasaan jangka panjang."
+    "Anda menolak kemungkinan perubahan kecil. Tindak lanjut: dokumentasikan kemajuan harian untuk melihat bukti.",
+    "Perubahan mungkin namun terasa terbatas. Tindak lanjut: perluas zona nyaman dengan metode baru.",
+    "Perubahan realistis. Tindak lanjut: konsisten dan ukur dampak kebiasaan belajar.",
+    "Semua orang dapat berkembang. Tindak lanjut: jadikan rencana belajar kebiasaan jangka panjang."
   ],
-  // 3
   [
-    "Anda menilai kemampuan tidak dapat diubah. Tindak lanjut: lakukan eksperimen belajar 14 hari pada satu keterampilan.",
-    "Anda masih setengah hati menerima perubahan. Tindak lanjut: cari mentor/teman belajar untuk mendorong konsistensi.",
-    "Anda cukup yakin kemampuan bisa tumbuh. Tindak lanjut: naikkan tingkat tantangan secara bertahap.",
-    "Anda yakin kemampuan selalu bisa ditingkatkan. Tindak lanjut: tetapkan sasaran ambisius dan ukur progres obyektif."
+    "Anda menilai kemampuan tidak dapat diubah. Tindak lanjut: eksperimen 14 hari pada satu keterampilan.",
+    "Masih setengah hati. Tindak lanjut: cari mentor/partner belajar.",
+    "Cukup yakin kemampuan bisa tumbuh. Tindak lanjut: naikkan tantangan bertahap.",
+    "Yakin kemampuan bisa ditingkatkan. Tindak lanjut: tetapkan sasaran ambisius & ukur progres."
   ],
-  // 4
   [
-    "Anda merasa diri 'tetap'. Tindak lanjut: identifikasi tiga kebiasaan kecil yang bisa diubah bulan ini.",
-    "Anda mengakui sebagian diri bisa berubah. Tindak lanjut: pilih satu sifat untuk dilatih melalui rutinitas harian.",
-    "Anda memahami identitas bisa berkembang. Tindak lanjut: praktekkan refleksi mingguan untuk melacak perubahan.",
-    "Anda melihat keunikan sebagai titik awal untuk tumbuh. Tindak lanjut: desain proyek yang menonjolkan kekuatan baru."
+    "Anda merasa diri 'tetap'. Tindak lanjut: ubah 3 kebiasaan kecil bulan ini.",
+    "Sebagian diri bisa berubah. Tindak lanjut: latih satu sifat melalui rutinitas.",
+    "Identitas berkembang. Tindak lanjut: refleksi mingguan untuk melacak perubahan.",
+    "Keunikan = titik awal tumbuh. Tindak lanjut: proyek yang menonjolkan kekuatan baru."
   ],
-  // 5
   [
-    "Anda ragu dapat mengubah diri. Tindak lanjut: mulai dari perubahan mikro (5–10 menit/hari) dan tingkatkan.",
-    "Anda percaya perubahan mungkin, namun belum konsisten. Tindak lanjut: jadwalkan kebiasaan baru dengan pengingat.",
-    "Anda menunjukkan kesiapan berubah. Tindak lanjut: minta rekan memberi akuntabilitas terhadap target Anda.",
-    "Anda yakin diri selalu dapat diperbarui. Tindak lanjut: lakukan evaluasi bulanan untuk menyetel strategi."
+    "Ragu dapat mengubah diri. Tindak lanjut: mulai perubahan mikro 5–10 menit/hari.",
+    "Perubahan mungkin namun belum konsisten. Tindak lanjut: pasang pengingat kebiasaan.",
+    "Siap berubah. Tindak lanjut: minta akuntabilitas dari rekan.",
+    "Selalu dapat diperbarui. Tindak lanjut: evaluasi bulanan dan setel strategi."
   ],
-  // 6 (seni & musik)
   [
-    "Anda menganggap seni hanya untuk yang berbakat. Tindak lanjut: ikuti latihan dasar 10 menit/hari selama 30 hari.",
-    "Anda ragu semua orang bisa belajar seni. Tindak lanjut: ambil satu kursus pemula dan catat progres mingguan.",
-    "Anda menyadari seni dapat dipelajari. Tindak lanjut: buat portofolio kecil dari latihan bertahap.",
-    "Anda yakin seni-musik dapat dilatih. Tindak lanjut: tetapkan kurikulum latihan dan target karya per bulan."
+    "Seni hanya untuk berbakat. Tindak lanjut: latihan dasar 10 m/hari selama 30 hari.",
+    "Ragu semua bisa belajar seni. Tindak lanjut: kursus pemula + catat progres.",
+    "Seni dapat dipelajari. Tindak lanjut: buat portofolio kecil.",
+    "Seni-musik bisa dilatih. Tindak lanjut: kurikulum latihan & target karya/bulan."
   ],
-  // 7 (olahraga & bakat)
   [
-    "Anda memusatkan pada bakat bawaan. Tindak lanjut: fokus pada volume latihan dan teknik dasar.",
-    "Anda melihat bakat penting namun latihan kurang. Tindak lanjut: pakai jurnal latihan untuk melihat efek kerja keras.",
-    "Anda menyeimbangkan bakat dan latihan. Tindak lanjut: tingkatkan intensitas latihan secara terukur.",
-    "Anda percaya latihan mengalahkan bakat pasif. Tindak lanjut: gunakan prinsip progresif overload yang aman."
+    "Fokus pada bakat bawaan. Tindak lanjut: volume latihan & teknik dasar.",
+    "Bakat penting, latihan kurang. Tindak lanjut: jurnal latihan.",
+    "Seimbang bakat–latihan. Tindak lanjut: tingkatkan intensitas terukur.",
+    "Latihan > bakat pasif. Tindak lanjut: prinsip progresif overload yang aman."
   ],
-  // 8 (matematika & stereotipe)
   [
-    "Anda setuju stereotipe kemampuan matematika. Tindak lanjut: tantang diri dengan soal bertahap dan dukungan lingkungan positif.",
-    "Anda sedikit terpengaruh stereotipe. Tindak lanjut: ganti narasi diri dengan ‘saya sedang belajar’.",
-    "Anda menolak stereotipe dan melihat peluang. Tindak lanjut: gunakan sumber belajar adaptif yang sesuai ritme Anda.",
-    "Anda yakin semua bisa belajar matematika. Tindak lanjut: bangun rutinitas latihan singkat namun sering."
+    "Setuju stereotipe matematika. Tindak lanjut: latihan bertahap + lingkungan positif.",
+    "Sedikit terpengaruh stereotipe. Tindak lanjut: ganti narasi diri dengan ‘saya sedang belajar’.",
+    "Menolak stereotipe. Tindak lanjut: sumber belajar adaptif.",
+    "Semua bisa matematika. Tindak lanjut: rutinitas singkat namun sering."
   ],
-  // 9 (usaha)
   [
-    "Anda meremehkan peran usaha. Tindak lanjut: lakukan latihan fokus 25 menit (pomodoro) secara konsisten.",
-    "Anda melihat usaha penting tapi belum konsisten. Tindak lanjut: buat jadwal dan indikator keberhasilan proses.",
-    "Anda menilai usaha berbanding lurus dengan kemahiran. Tindak lanjut: ukur jam latihan dan hasilkan umpan balik.",
-    "Anda percaya kerasnya usaha menaikkan keahlian. Tindak lanjut: rancang siklus latihan–review–perbaikan."
+    "Meremehkan peran usaha. Tindak lanjut: pomodoro 25 menit konsisten.",
+    "Usaha penting namun belum konsisten. Tindak lanjut: jadwal + indikator proses.",
+    "Usaha ↗ kemahiran. Tindak lanjut: ukur jam latihan & feedback.",
+    "Kerja keras menaikkan keahlian. Tindak lanjut: siklus latihan–review–perbaikan."
   ],
-  // 10 (tipe diri bisa berubah)
   [
-    "Anda memandang tipe diri tetap. Tindak lanjut: pilih satu perilaku yang ingin diubah dan pantau 21 hari.",
-    "Anda membuka kemungkinan perubahan kecil. Tindak lanjut: cari model peran dan tiru praktiknya.",
-    "Anda cukup yakin tipe diri lentur. Tindak lanjut: cek kemajuan lewat refleksi berbasis data.",
-    "Anda yakin tipe diri berkembang. Tindak lanjut: teruskan eksperimen perilaku baru secara sadar."
+    "Tipe diri tetap. Tindak lanjut: ubah satu perilaku 21 hari.",
+    "Perubahan kecil mungkin. Tindak lanjut: cari role model.",
+    "Tipe diri lentur. Tindak lanjut: refleksi berbasis data.",
+    "Tipe diri berkembang. Tindak lanjut: eksperimen perilaku baru rutin."
   ],
-  // 11 (hindari hal baru)
   [
-    "Anda cenderung menghindari hal baru. Tindak lanjut: lakukan ‘tantangan kecil mingguan’ agar terbiasa.",
-    "Anda ragu menghadapi hal baru tetapi bersedia mencoba. Tindak lanjut: pasang target aman yang meningkat perlahan.",
-    "Anda cukup nyaman dengan kebaruan. Tindak lanjut: tambahkan evaluasi risiko–mitigasi sebelum mencoba.",
-    "Anda menyambut hal baru sebagai peluang. Tindak lanjut: rencanakan proyek eksplorasi tiap kuartal."
+    "Menghindari hal baru. Tindak lanjut: tantangan kecil mingguan.",
+    "Ragu tapi bersedia coba. Tindak lanjut: target aman meningkat perlahan.",
+    "Cukup nyaman dengan kebaruan. Tindak lanjut: evaluasi risiko–mitigasi.",
+    "Menyambut kebaruan. Tindak lanjut: proyek eksplorasi tiap kuartal."
   ],
-  // 12 (orang baik/pintar tetap)
   [
-    "Anda melihat kualitas orang sebagai tetap. Tindak lanjut: cari contoh perubahan orang di sekitar Anda.",
-    "Anda mengakui sebagian orang bisa berubah. Tindak lanjut: diskusikan kisah transformasi untuk mengubah perspektif.",
-    "Anda memahami kualitas berkembang lewat pengalaman. Tindak lanjut: berikan ruang bagi orang lain untuk bertumbuh.",
-    "Anda yakin perubahan sifat itu mungkin. Tindak lanjut: dorong budaya umpan balik yang aman."
+    "Kualitas orang dianggap tetap. Tindak lanjut: cari contoh perubahan orang.",
+    "Sebagian bisa berubah. Tindak lanjut: diskusikan kisah transformasi.",
+    "Kualitas berkembang lewat pengalaman. Tindak lanjut: beri ruang bertumbuh.",
+    "Perubahan sifat mungkin. Tindak lanjut: budaya umpan balik yang aman."
   ],
-  // 13 (menghargai kritik)
   [
-    "Anda belum nyaman dengan kritik. Tindak lanjut: bedakan kritik terhadap karya vs diri, dan minta contoh konkret.",
-    "Anda menerima kritik terbatas. Tindak lanjut: gunakan format ‘terima–cerna–tindak’ pada tiap masukan.",
-    "Anda cukup terbuka dengan masukan. Tindak lanjut: tindak lanjuti minimal satu saran per siklus kerja.",
-    "Anda sangat menghargai kritik. Tindak lanjut: jadwalkan sesi review rutin dengan rekan/mentor."
+    "Belum nyaman dengan kritik. Tindak lanjut: minta contoh konkret.",
+    "Menerima kritik terbatas. Tindak lanjut: terima–cerna–tindak.",
+    "Cukup terbuka. Tindak lanjut: eksekusi minimal satu saran/siklus.",
+    "Sangat menghargai kritik. Tindak lanjut: review rutin dengan mentor."
   ],
-  // 14 (kurang senang kritik)
   [
-    "Anda menolak kritik. Tindak lanjut: latih diri dengan meminta satu masukan spesifik setiap minggu.",
-    "Anda kurang nyaman namun berusaha menerima. Tindak lanjut: tulis rencana aksi singkat pasca umpan balik.",
-    "Anda mulai bisa menempatkan kritik sebagai data. Tindak lanjut: uji saran dan evaluasi hasilnya.",
-    "Anda mengelola kritik secara dewasa. Tindak lanjut: ajarkan praktik feedback sehat pada tim Anda."
+    "Menolak kritik. Tindak lanjut: minta satu masukan spesifik/minggu.",
+    "Kurang nyaman tapi mencoba. Tindak lanjut: rencana aksi singkat.",
+    "Menempatkan kritik sebagai data. Tindak lanjut: uji saran & evaluasi.",
+    "Kelola kritik dewasa. Tindak lanjut: ajarkan praktik feedback sehat."
   ],
-  // 15 (kesetaraan kemampuan belajar)
   [
-    "Anda percaya kemampuan belajar sangat berbeda dan tetap. Tindak lanjut: gunakan strategi diferensiasi untuk mengejar ketertinggalan.",
-    "Anda melihat variasi kemampuan besar namun masih bisa dikejar. Tindak lanjut: fokus pada proses, bukan label.",
-    "Anda menilai semua dapat belajar dengan dukungan tepat. Tindak lanjut: rancang scaffolding sesuai kebutuhan.",
-    "Anda yakin kesetaraan peluang belajar. Tindak lanjut: bangun lingkungan belajar yang adaptif dan inklusif."
+    "Kemampuan belajar berbeda & tetap. Tindak lanjut: diferensiasi strategi.",
+    "Variasi besar tapi bisa dikejar. Tindak lanjut: fokus pada proses.",
+    "Semua dapat belajar dengan dukungan. Tindak lanjut: scaffolding adaptif.",
+    "Kesetaraan peluang belajar. Tindak lanjut: lingkungan inklusif."
   ],
-  // 16 (belajar vs mengubah kemampuan)
   [
-    "Anda memisahkan belajar dari perubahan kemampuan. Tindak lanjut: catat dampak belajar pada performa nyata.",
-    "Anda mengakui belajar berguna, tapi ragu mengubah kapasitas. Tindak lanjut: uji coba teknik baru dan ukur hasil.",
-    "Anda melihat belajar mengubah cara kerja. Tindak lanjut: buat eksperimen kecil untuk memperdalam efeknya.",
-    "Anda yakin belajar mengubah kemampuan. Tindak lanjut: buat kurva kemajuan untuk memantau kenaikan."
+    "Belajar ≠ perubahan kemampuan. Tindak lanjut: catat dampak belajar.",
+    "Belajar berguna, ragu ubah kapasitas. Tindak lanjut: uji teknik baru.",
+    "Belajar mengubah cara kerja. Tindak lanjut: eksperimen kecil.",
+    "Belajar mengubah kemampuan. Tindak lanjut: kurva kemajuan."
   ],
-  // 17 (melakukan berbeda vs kemampuan tetap)
   [
-    "Anda merasa cara baru tak mengubah kemampuan. Tindak lanjut: bandingkan hasil sebelum–sesudah metode baru.",
-    "Anda ragu perubahan strategi berdampak signifikan. Tindak lanjut: lakukan A/B test sederhana pada tugas Anda.",
-    "Anda percaya cara baru memperluas kapasitas. Tindak lanjut: dokumentasikan insight dan standarisasi praktik baik.",
-    "Anda yakin variasi strategi memperkuat kemampuan. Tindak lanjut: lakukan perbaikan berkelanjutan (continuous improvement)."
+    "Cara baru tak ubah kemampuan. Tindak lanjut: bandingkan sebelum–sesudah.",
+    "Ragu dampak signifikan. Tindak lanjut: A/B test sederhana.",
+    "Cara baru memperluas kapasitas. Tindak lanjut: dokumentasikan & standarisasi.",
+    "Variasi strategi memperkuat kemampuan. Tindak lanjut: continuous improvement."
   ],
-  // 18 (semua orang pada dasarnya baik)
   [
-    "Anda melihat keputusan buruk sebagai sifat tetap. Tindak lanjut: praktikkan empati dan analisis sebab–akibat.",
-    "Anda mengakui faktor situasional, namun masih menilai tetap. Tindak lanjut: gunakan kerangka belajar dari kesalahan.",
-    "Anda menilai perilaku dapat diperbaiki. Tindak lanjut: ciptakan ruang aman untuk koreksi.",
-    "Anda percaya setiap orang bisa bertumbuh. Tindak lanjut: dorong refleksi dan komitmen perbaikan."
+    "Keputusan buruk dilihat sebagai sifat tetap. Tindak lanjut: empati & analisis sebab–akibat.",
+    "Akui faktor situasi tapi masih menilai tetap. Tindak lanjut: belajar dari kesalahan.",
+    "Perilaku dapat diperbaiki. Tindak lanjut: ruang aman untuk koreksi.",
+    "Setiap orang bisa bertumbuh. Tindak lanjut: refleksi & komitmen perbaikan."
   ],
-  // 19 (motivasi belajar hal baru)
   [
-    "Motivasi belajar hal baru rendah. Tindak lanjut: hubungkan tugas dengan nilai pribadi dan tujuan jangka panjang.",
-    "Motivasi cukup namun mudah turun. Tindak lanjut: pecah target besar menjadi langkah mikro yang menantang.",
-    "Motivasi baik dan relatif stabil. Tindak lanjut: tetapkan tonggak capaian dan rayakan progres.",
-    "Motivasi sangat tinggi. Tindak lanjut: jaga keseimbangan agar tidak burn-out dan buat peta jalan pembelajaran."
+    "Motivasi hal baru rendah. Tindak lanjut: hubungkan tugas dengan nilai pribadi.",
+    "Motivasi cukup tapi fluktuatif. Tindak lanjut: target mikro menantang.",
+    "Motivasi baik & stabil. Tindak lanjut: tonggak capaian & rayakan.",
+    "Motivasi sangat tinggi. Tindak lanjut: jaga keseimbangan & roadmap."
   ],
-  // 20 (cerdas tak perlu kerja keras)
   [
-    "Anda percaya kecerdasan mengalahkan kerja keras. Tindak lanjut: lihat bukti nyata bahwa usaha memperlebar kapasitas.",
-    "Anda menilai kerja keras penting, tetapi sering diabaikan. Tindak lanjut: jadwalkan jam latihan fokus tiap hari.",
-    "Anda memadukan kecerdasan dengan ketekunan. Tindak lanjut: tingkatkan kualitas latihan dengan umpan balik ahli.",
-    "Anda menegaskan kerja keras sebagai pengungkit utama. Tindak lanjut: kelola ritme latihan dan evaluasi berkelanjutan."
+    "Percaya ‘cerdas’ > kerja keras. Tindak lanjut: lihat bukti dampak usaha.",
+    "Nilai kerja keras namun sering abai. Tindak lanjut: jadwal latihan fokus harian.",
+    "Padukan kecerdasan & ketekunan. Tindak lanjut: feedback ahli.",
+    "Kerja keras = pengungkit utama. Tindak lanjut: ritme & evaluasi berkelanjutan."
   ]
 ];
 
 function getAnalisisPerButir(a){
   const arr = analisisPerSoal[a.index];
   if(!arr) return "Analisis tidak tersedia.";
-  const kal = arr[a.score];
-  return kal ?? "Analisis tidak tersedia.";
+  return arr[a.score] ?? "Analisis tidak tersedia.";
 }
 
 function showAnalysis(r){
   let newWin=window.open("","_blank");
   let html=`<html><head><title>Analisis</title>
   <style>
-    body{font-family:Arial,sans-serif; padding:15px; line-height:1.3;}
+    body{font-family:Arial,sans-serif; padding:15px; line-height:1.35;}
     h2{text-align:center;color:#2563eb;margin-bottom:10px;}
     .header-table{width:100%; border-collapse:collapse; margin-bottom:8px;}
     .header-table td{font-size:13px; padding:4px 6px; vertical-align:top;}
     .header-table .label{text-align:right; font-weight:bold; width:120px;}
     table{width:100%; border-collapse:collapse; font-size:13px;}
-    th,td{padding:4px 6px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
+    th,td{padding:6px 8px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
     tr:nth-child(even){background:#f9f9f9;} tr:hover{background:#eef6ff;}
     th{background:#2563eb;color:white;}
-    .btn-print{margin-top:10px; display:block; padding:8px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;}
-    @media print{.btn-print{display:none;} body{margin:0;} @page{margin:1cm;}}
+    .btn-print{margin-top:10px; display:block; padding:10px 14px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;}
+    @media print{.btn-print{display:none;} body{margin:0;} @page{margin:1.5cm; size:A4;}}
   </style>
   </head><body>
   <h2>Analisis Pemetaan Profil Pola Pikir</h2>
   <table class="header-table">
     <tr>
-      <td class="label">Nama</td><td>: ${document.getElementById("nama").value}</td>
+      <td class="label">Nama</td><td>: ${document.getElementById("nama").value || "-"}</td>
       <td style="font-weight:bold;">Total:</td><td>${r.total}</td>
       <td style="font-weight:bold;">Kategori:</td><td>${r.category}</td>
     </tr>
     <tr>
-      <td class="label">Instansi</td><td>: ${document.getElementById("instansi").value}</td>
+      <td class="label">Instansi</td><td>: ${document.getElementById("instansi").value || "-"}</td>
       <td style="font-weight:bold;">Interpretasi:</td>
       <td colspan="3">${
         r.category=="G"?"Growth Mindset sangat baik—Anda konsisten melihat tantangan sebagai peluang belajar.":
@@ -360,18 +344,16 @@ function showAnalysis(r){
       }</td>
     </tr>
     <tr>
-      <td class="label">Bidang/Mapel</td><td>: ${document.getElementById("mapel").value}</td>
+      <td class="label">Bidang/Mapel</td><td>: ${document.getElementById("mapel").value || "-"}</td>
       <td style="font-weight:bold;">Motivasi:</td>
       <td colspan="3">Kemampuan berkembang lewat proses: tetapkan target jelas, latihan konsisten, dan rayakan progres kecil.</td>
     </tr>
   </table>
   <table>
     <tr><th>Pernyataan</th><th>Jawaban</th><th>Analisis & Tindak Lanjut</th></tr>`;
-  
   r.answers.forEach(a=>{
     html+=`<tr><td>${a.q}</td><td>${a.opt}</td><td>${getAnalisisPerButir(a)}</td></tr>`;
   });
-  
   html+=`</table>
   <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
   </body></html>`;
@@ -379,9 +361,77 @@ function showAnalysis(r){
   newWin.document.close();
 }
 
-document.getElementById("submitBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showResult(r);};
-document.getElementById("analisisBtn").onclick=()=>{const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);};
-document.getElementById("resetBtn").onclick=()=>{location.reload();};
+/* ================== SUBMIT → GOOGLE SHEET ================== */
+function buildPayload(){
+  const nama = (document.getElementById("nama").value || "").trim();
+  const instansi = (document.getElementById("instansi").value || "").trim();
+  const mapel = (document.getElementById("mapel").value || "").trim();
+
+  const r = compute();
+  if(!r){ return {ok:false, message:"Lengkapi semua 20 pertanyaan terlebih dahulu."}; }
+
+  // kolom yang dikirim ke server (timestamp akan dibuat di Apps Script)
+  const payload = {
+    nama, instansi, mapel,
+    skor: r.total,
+    kategori: r.category,
+    jawaban: r.answers   // server akan simpan sebagai JSON string
+  };
+  return {ok:true, data:payload, result:r};
+}
+
+async function submitToSheet(){
+  const submitBtn = document.getElementById("submitBtn");
+  const pack = buildPayload();
+  if(!pack.ok) { alert(pack.message); return; }
+
+  try{
+    submitBtn.disabled = true;
+    const oldText = submitBtn.textContent;
+    submitBtn.textContent = "MENGIRIM...";
+
+    // Hindari preflight (OPTIONS) → gunakan x-www-form-urlencoded (simple request)
+    const body = new URLSearchParams({ payload: JSON.stringify(pack.data) });
+
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+      body
+    });
+
+    // Jika server mengembalikan JSON, coba baca. Jika tidak, tetap anggap sukses jika status 200.
+    let ok = res.ok;
+    let msg = "Terkirim. Terima kasih!";
+    try {
+      const t = await res.text();
+      if (t) {
+        const j = JSON.parse(t);
+        ok = j.status === "ok";
+        msg = j.message || msg;
+      }
+    } catch(_) {}
+
+    if(ok){
+      showResult(pack.result);
+      alert(msg);
+    } else {
+      alert("Gagal mengirim. Coba lagi atau hubungi admin.");
+    }
+    submitBtn.textContent = oldText;
+    submitBtn.disabled = false;
+  } catch(err){
+    submitBtn.disabled = false;
+    submitBtn.textContent = "SUBMIT";
+    alert("Terjadi kesalahan jaringan: " + err.message);
+  }
+}
+
+/* ================== HOOK BUTTONS ================== */
+document.getElementById("submitBtn").onclick = submitToSheet;
+document.getElementById("analisisBtn").onclick = ()=>{
+  const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);
+};
+document.getElementById("resetBtn").onclick = ()=>{ location.reload(); };
 </script>
 </body>
 </html>
