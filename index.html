@@ -46,9 +46,150 @@
   .share-section {text-align:center; margin-top:30px;}
   .share-section input {width:90%; margin-bottom:20px; padding:10px; text-align:center;}
   #qrcode {margin:20px 0;}
+
+  /* === PRINT TEMPLATE === */
+#printTemplate { display:none; }
+@media print {
+  body { 
+    background:#fff; 
+    padding:0; 
+    font-family:Arial,sans-serif; 
+  }
+  .container, .btns, #result, .share-section { display:none !important; }
+
+  #printTemplate { 
+    display:block; 
+    padding:25px; 
+    font-size:10pt; 
+    color:#333;
+    background:linear-gradient(145deg,#fffdf9,#fff5eb); /* nuansa lembut */
+    border-radius:12px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.15); /* efek 3D */
+  }
+
+  #printTemplate h2 {
+    text-align:center; 
+    margin-bottom:18px; 
+    color:#b45309;
+    font-size:15pt;
+    text-shadow:1px 1px 2px rgba(0,0,0,0.15);
+  }
+
+  /* Tabel identitas */
+  #printTemplate .identitas {
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 2px;
+    margin-bottom:8px;
+    font-size:10pt;
+  }
+  #printTemplate .identitas td {
+    padding:4px 8px;
+    background:#fff;
+    border-radius:6px;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);
+  }
+  #printTemplate .identitas .label {
+    width:160px;
+    font-weight:bold;
+    background:#fff8f0;
+  }
+
+  /* === TABEL HASIL 3D === */
+  #printTemplate .hasil {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 10pt;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow:
+      0 4px 6px rgba(0,0,0,0.15),
+      0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  #printTemplate .hasil th,
+  #printTemplate .hasil td {
+    border: 1px solid rgba(0,0,0,0.08); /* border tipis transparan */
+  }
+
+  #printTemplate .hasil th {
+    background: linear-gradient(to bottom, #ffcc99, #ff9933);
+    color: #000; /* hitam */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding: 8px 6px;
+    text-align: center;
+    border-bottom: 3px solid #d65c00; /* lebih tebal */
+    box-shadow: inset 0 -3px 4px rgba(255,255,255,0.25);
+  }
+
+  /* garis tebal antar header kolom */
+  #printTemplate .hasil th + th {
+    border-left: 2px solid #cc5200;
+  }
+
+  #printTemplate .hasil td {
+    padding: 6px 6px;
+    text-align: center;
+    background: linear-gradient(to bottom, #ffffff, #fdf6f0);
+  }
+
+  #printTemplate .hasil tr:nth-child(even) td {
+    background: linear-gradient(to bottom, #fffaf5, #fbeee4);
+  }
+
+  #printTemplate .hasil tr:hover td {
+    background: #ffe5cc;
+    box-shadow: inset 0 0 6px rgba(255,140,0,0.3);
+  }
+  
+  /* Lebar kolom */
+  #printTemplate .hasil th:nth-child(1),
+  #printTemplate .hasil td:nth-child(1) {
+    width: 25px; /* No */
+  }
+
+  #printTemplate .hasil th:nth-child(2),
+  #printTemplate .hasil td:nth-child(2) {
+    width: auto; /* Pernyataan lebih lebar */
+    text-align: center;
+    padding-left: 12px;
+  }
+
+  #printTemplate .hasil th:nth-child(3),
+  #printTemplate .hasil th:nth-child(4),
+  #printTemplate .hasil th:nth-child(5),
+  #printTemplate .hasil th:nth-child(6),
+  #printTemplate .hasil td:nth-child(3),
+  #printTemplate .hasil td:nth-child(4),
+  #printTemplate .hasil td:nth-child(5),
+  #printTemplate .hasil td:nth-child(6) {
+    width: 30px; /* SS, S, TS, STS lebih kecil */
+  }
+
+  /* Ringkasan Skor */
+  #printTemplate .summary {
+    font-size:12pt; 
+    font-weight:bold;
+    color:#000; /* hitam */
+    background:linear-gradient(90deg,#ffd9b3,#ff9966);
+    padding:6px 14px;
+    border-radius:6px;
+    text-align:center;
+    margin-top:8px;
+    display:inline-block;
+    box-shadow:0 6px 10px rgba(0,0,0,0.2);
+  }
+
+  @page { size:A4; margin:0 1.0cm 1.0cm 0.5cm; }
+}
 </style>
 </head>
 <body>
+
 <div class="container">
   <h1>PEMETAAN PROFIL POLA PIKIR</h1>
   <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
@@ -68,20 +209,42 @@
 
   <form id="quiz"></form>
 
-  <div style="text-align:center;">
+  <div class="btns" style="text-align:center;">
     <button type="button" class="primary" id="submitBtn">SUBMIT</button>
     <button type="button" class="soft" id="resetBtn">RESET</button>
     <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
+    <button type="button" class="soft" id="cetakBtn">CETAK</button>
   </div>
-
   <div id="result" class="result"></div>
-
   <div class="share-section">
     <h3>Bagikan Link</h3>
     <input type="text" id="shareUrl" readonly>
     <div id="qrcode"></div>
     <button type="button" class="soft" id="downloadQR">Unduh QR</button>
   </div>
+</div>
+
+<!-- TEMPLATE CETAK -->
+<div id="printTemplate">
+  <h2>Pemetaan Profil Pola Pikir</h2>
+
+  <table class="identitas">
+    <tr><td class="label">Nama Responden</td><td>: <span id="pnama">-</span></td></tr>
+    <tr><td class="label">Instansi/Lembaga</td><td>: <span id="pinstansi">-</span></td></tr>
+    <tr><td class="label">Bidang/Mapel</td><td>: <span id="pmapel">-</span></td></tr>
+  </table>
+
+  <table class="hasil">
+  <thead>
+    <tr>
+      <th>No.</th><th>Pernyataan</th>
+      <th>SS</th><th>S</th><th>TS</th><th>STS</th>
+    </tr>
+  <thead>
+    <tbody id="printTableBody"></tbody>
+  </table>
+
+  <p id="printKategori" class="summary"></p>
 </div>
 
 <!-- QRCode -->
@@ -133,22 +296,98 @@ function renderQuestions(){
       <p><b>${i+1}.</b> ${t}</p>
       <div class="opt">
         ${labels.map((lab,j)=>`
-          <label>
-            <input type="radio" name="q${i}" value="${j}">
-            <span>${lab}</span>
-          </label>
+          <label><input type="radio" name="q${i}" value="${j}">${lab}</label>
         `).join("")}
-      </div>
-    `;
+      </div>`;
     form.appendChild(q);
+  });
+}
+function renderPrintTable(){
+  const tbody=document.getElementById("printTableBody");
+  tbody.innerHTML="";
+  statements.forEach((t,i)=>{
+    tbody.innerHTML+=`
+      <tr id="row${i}">
+        <td>${i+1}</td><td style="text-align:left">${t}</td>
+        <td class="ss"></td><td class="s"></td><td class="ts"></td><td class="sts"></td>
+      </tr>`;
   });
 }
 document.addEventListener("DOMContentLoaded",()=>{
   renderQuestions();
+  renderPrintTable();
   const url=window.location.href;
   document.getElementById("shareUrl").value=url;
   new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
 });
+
+function computeScore(){
+  let tot=0; let answers=[];
+  for(let i=0;i<statements.length;i++){
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(!sel) return null;
+    const selVal=parseInt(sel.value,10);
+    const sc=scoring[i][selVal];
+    tot+=sc;
+    answers.push({index:i, q:statements[i], opt:labels[selVal], score:sc});
+  }
+  let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
+  return {total:tot,category:cat,answers};
+}
+
+function fillPrintTemplate(){
+  for(let i=0;i<statements.length;i++){
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(sel){
+      const row=document.getElementById(`row${i}`);
+      row.querySelector(".ss").innerHTML="";
+      row.querySelector(".s").innerHTML="";
+      row.querySelector(".ts").innerHTML="";
+      row.querySelector(".sts").innerHTML="";
+      if(sel.value=="0") row.querySelector(".ss").innerHTML="✔";
+      if(sel.value=="1") row.querySelector(".s").innerHTML="✔";
+      if(sel.value=="2") row.querySelector(".ts").innerHTML="✔";
+      if(sel.value=="3") row.querySelector(".sts").innerHTML="✔";
+    }
+  }
+  const hasil = computeScore();
+  if(hasil){
+    document.getElementById("pnama").textContent=document.getElementById("nama").value;
+    document.getElementById("pinstansi").textContent=document.getElementById("instansi").value;
+    document.getElementById("pmapel").textContent=document.getElementById("mapel").value;
+
+    const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth Mindset)",GF:"GF (Growth→Fixed Mindset)",G:"G (Growth Mindset)"};
+    document.getElementById("printKategori").innerHTML=
+      `Hasil Skor: ${hasil.total} - ${labelsFull[hasil.category]}`;
+  }
+}
+
+/* ============== BUTTON ACTIONS ============== */
+document.getElementById("submitBtn").onclick=()=>{
+  const hasil=computeScore();
+  if(!hasil){ alert("Lengkapi semua jawaban!"); return; }
+  alert("Jawaban disimpan. Siap dianalisis/dicetak.");
+};
+document.getElementById("analisisBtn").onclick=()=>{
+  const hasil=computeScore();
+  if(!hasil){ alert("Lengkapi semua jawaban!"); return; }
+  document.getElementById("result").style.display="block";
+  document.getElementById("result").innerHTML=`<h2>Skor Anda: ${hasil.total}</h2><p>Kategori: <b>${hasil.category}</b></p>`;
+};
+document.getElementById("resetBtn").onclick=()=>{ location.reload(); };
+document.getElementById("cetakBtn").onclick=()=>{
+  const hasil=computeScore();
+  if(!hasil){ alert("Lengkapi semua jawaban dulu sebelum cetak!"); return; }
+  fillPrintTemplate();
+  window.print();
+};
+document.getElementById("downloadQR").onclick=()=>{
+  const canvas=document.querySelector("#qrcode canvas");
+  const link=document.createElement("a");
+  link.href=canvas.toDataURL("image/png");
+  link.download="QRCode.png";
+  link.click();
+};
 
 document.getElementById("downloadQR").onclick=()=>{
   const canvas=document.querySelector("#qrcode canvas");
@@ -158,7 +397,7 @@ document.getElementById("downloadQR").onclick=()=>{
   link.click();
 };
 
-function compute(){
+function computeScore2(){
   let tot=0; let answers=[];
   for(let i=0;i<statements.length;i++){
     const sel=document.querySelector(`input[name="q${i}"]:checked`);
@@ -175,7 +414,7 @@ function compute(){
 function showResult(r){
   const res=document.getElementById("result");
   res.style.display="block";
-  const labelsFull={F:"F - Fixed Mindset",FG:"FG - Fixed → Growth",GF:"GF - Growth → Fixed",G:"G - Growth Mindset"};
+  const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth)",GF:"GF (Growth→Fixed)",G:"G (Growth Mindset)"};
   res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
 }
 
@@ -373,7 +612,7 @@ function buildPayload(){
   const instansi = (document.getElementById("instansi").value || "").trim();
   const mapel = (document.getElementById("mapel").value || "").trim();
 
-  const r = compute();
+  const r = computeScore();
   if(!r){ return {ok:false, message:"Lengkapi semua 20 pertanyaan terlebih dahulu."}; }
 
   // kolom yang dikirim ke server (timestamp akan dibuat di Apps Script)
@@ -435,10 +674,9 @@ async function submitToSheet(){
 /* ================== HOOK BUTTONS ================== */
 document.getElementById("submitBtn").onclick = submitToSheet;
 document.getElementById("analisisBtn").onclick = ()=>{
-  const r=compute(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);
+  const r=computeScore2(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);
 };
 document.getElementById("resetBtn").onclick = ()=>{ location.reload(); };
 </script>
 </body>
 </html>
-
