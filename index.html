@@ -1,424 +1,268 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PEMETAAN PROFIL POLA PIKIR</title>
-<style>
-  body {font-family: Arial, sans-serif; background:#e6f0fa; margin:0; padding:20px;}
-  .container {max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.15);}
-  h1 {text-align:center; color:#2563eb;}
-
-  .form-group {margin-bottom:15px;}
-  .form-group label {display:block; font-weight:bold; margin-bottom:5px;}
-  .form-group input {
-    width:95%; padding:10px; border:1px solid #ccc; border-radius:6px;
-    box-shadow:inset 1px 1px 3px #bbb; font-size:15px;
-  }
-
-  .q {margin-bottom:15px; padding:15px; border:1px solid #ddd; border-radius:8px; background:#f9fbff;}
-  .opt {display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-top:8px;}
-  .opt label {
-    background:#f0f4ff; padding:6px; border-radius:8px; border:1px solid #ccc;
-    cursor:pointer; box-shadow:0 4px #999; text-align:center;
-    font-weight:bold; font-size:11px; transition:all 0.15s ease;
-    display:flex; align-items:center; justify-content:center; gap:6px;
-  }
-  .opt label:active {transform:translateY(2px); box-shadow:0 2px #666;}
-  .opt input[type=radio] {width:14px; height:14px; accent-color:#2563eb;}
-  .opt input:checked + span {color:#2563eb; font-weight:bold; animation:bounce 0.2s;}
-  @keyframes bounce {0%{transform:scale(1);} 50%{transform:scale(0.85);} 100%{transform:scale(1);}}
-
-  button {display:inline-block; padding:10px 14px; border:none; border-radius:6px; cursor:pointer;
-    margin:10px 5px; font-weight:bold; transition:all 0.2s ease; box-shadow:0 4px #999;}
-  button:active {transform:translateY(2px); box-shadow:0 2px #666;}
-  .primary {background:#2563eb; color:#fff;}
-  .soft {background:#f0f0f0; color:#333;}
-
-  .result {margin-top:20px; padding:15px; border:1px dashed #888; border-radius:8px; display:none; text-align:center;}
-  .score {font-size:4em; font-weight:bold; font-family:"Georgia",serif; color:#2563eb; display:inline-block; margin-right:20px;}
-  .badge {display:inline-block; font-size:2em; vertical-align:middle; font-weight:bold; padding:6px 20px; border-radius:10px;}
-  .badge.F{background:#fee2e2;color:#b91c1c;}
-  .badge.FG{background:#fef3c7;color:#92400e;}
-  .badge.GF{background:#e0f2fe;color:#0369a1;}
-  .badge.G{background:#dcfce7;color:#166534;}
-
-  .share-section {text-align:center; margin-top:30px;}
-  .share-section input {width:90%; margin-bottom:20px; padding:10px; text-align:center;}
-  #qrcode {margin:20px 0;}
-
-  /* === PRINT TEMPLATE === */
-#printTemplate { display:none; }
-@media print {
-  body { 
-    background:#fff; 
-    padding:0; 
-    font-family:Arial,sans-serif; 
-  }
-  .container, .btns, #result, .share-section { display:none !important; }
-
-  #printTemplate { 
-    display:block; 
-    padding:25px; 
-    font-size:9pt; 
-    color:#333;
-    background:linear-gradient(145deg,#fffdf9,#fff5eb); /* nuansa lembut */
-    border-radius:12px;
-    box-shadow:0 8px 18px rgba(0,0,0,0.15); /* efek 3D */
-  }
-
-  #printTemplate h2 {
-    text-align:center; 
-    margin-bottom:16px; 
-    color:#b45309;
-    font-size:12pt;
-    text-shadow:1px 1px 2px rgba(0,0,0,0.15);
-  }
-
-  /* Tabel identitas */
-  #printTemplate .identitas {
-    width:100%;
-    border-collapse:separate;
-    border-spacing:0 2px;
-    margin-bottom:8px;
-    font-size:10pt;
-  }
-  #printTemplate .identitas td {
-    padding:4px 8px;
-    background:#fff;
-    border-radius:6px;
-    box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);
-  }
-  #printTemplate .identitas .label {
-    width:160px;
-    font-weight:bold;
-    background:#fff8f0;
-  }
-
-  /* === TABEL HASIL 3D === */
-  #printTemplate .hasil {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 9.5pt;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow:
-      0 4px 6px rgba(0,0,0,0.15),
-      0 8px 20px rgba(0,0,0,0.1);
-  }
-
-  #printTemplate .hasil th,
-  #printTemplate .hasil td {
-    border: 1px solid rgba(0,0,0,0.08); /* border tipis transparan */
-  }
-
-  #printTemplate .hasil th {
-    background: linear-gradient(to bottom, #ffcc99, #ff9933);
-    color: #000; /* hitam */
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    padding: 8px 6px;
-    text-align: center;
-    border-bottom: 3px solid #d65c00; /* lebih tebal */
-    box-shadow: inset 0 -3px 4px rgba(255,255,255,0.25);
-  }
-
-  /* garis tebal antar header kolom */
-  #printTemplate .hasil th + th {
-    border-left: 2px solid #cc5200;
-  }
-
-  #printTemplate .hasil td {
-    padding: 6px 6px;
-    text-align: center;
-    background: linear-gradient(to bottom, #ffffff, #fdf6f0);
-  }
-
-  #printTemplate .hasil tr:nth-child(even) td {
-    background: linear-gradient(to bottom, #fffaf5, #fbeee4);
-  }
-
-  #printTemplate .hasil tr:hover td {
-    background: #ffe5cc;
-    box-shadow: inset 0 0 6px rgba(255,140,0,0.3);
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PEMETAAN PROFIL POLA PIKIR — dengan Label Donat</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#e6f0fa;margin:0;padding:20px}
+    .container{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+    h1{text-align:center;color:#2563eb}
+    .form-group{margin-bottom:15px}
+    .form-group label{display:block;font-weight:700;margin-bottom:5px}
+    .form-group input{width:95%;padding:10px;border:1px solid #ccc;border-radius:6px;box-shadow:inset 1px 1px 3px #bbb;font-size:15px}
+    .q{margin-bottom:15px;padding:15px;border:1px solid #ddd;border-radius:8px;background:#f9fbff}
+    .opt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+    .opt label{background:#f0f4ff;padding:6px;border-radius:8px;border:1px solid #ccc;cursor:pointer;box-shadow:0 4px #999;text-align:center;font-weight:700;font-size:11px;transition:all .15s ease;display:flex;align-items:center;justify-content:center;gap:6px}
+    .opt label:active{transform:translateY(2px);box-shadow:0 2px #666}
+    .opt input[type=radio]{width:14px;height:14px;accent-color:#2563eb}
+    .opt input:checked+span{color:#2563eb;font-weight:700;animation:bounce .2s}
+    @keyframes bounce{0%{transform:scale(1)}50%{transform:scale(.85)}100%{transform:scale(1)}}
+    button{display:inline-block;padding:10px 14px;border:none;border-radius:6px;cursor:pointer;margin:10px 5px;font-weight:700;transition:all .2s ease;box-shadow:0 4px #999}
+    button:active{transform:translateY(2px);box-shadow:0 2px #666}
+    .primary{background:#2563eb;color:#fff}
+    .soft{background:#f0f0f0;color:#333}
+    .result{margin-top:20px;padding:15px;border:1px dashed #888;border-radius:8px;display:none;text-align:center}
+    .score{font-size:4em;font-weight:700;font-family:Georgia,serif;color:#2563eb;display:inline-block;margin-right:20px}
+    .badge{display:inline-block;font-size:2em;vertical-align:middle;font-weight:700;padding:6px 20px;border-radius:10px}
+    .badge.F{background:#fee2e2;color:#b91c1c}
+    .badge.FG{background:#fef3c7;color:#92400e}
+    .badge.GF{background:#e0f2fe;color:#0369a1}
+    .badge.G{background:#dcfce7;color:#166534}
+    .share-section{text-align:center;margin-top:30px}
+    .share-section input{width:90%;margin-bottom:20px;padding:10px;text-align:center}
+    #loginForm{margin-bottom:20px}
+    .chart-container{width:250px;height:250px;margin:20px auto}
+    #qrcode{display:flex;justify-content:center;margin:20px 0}
+    #chartArea{display:none;margin-top:24px;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#fafcff}
+    #chartHeader{text-align:center;margin-bottom:10px}
+    .chartsGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .chartBox{background:#e6f0fa;padding:10px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+    canvas{width:100%!important;height:auto!important}
+    #instansiFilter{padding:8px 10px;border:1px solid #ccc;border-radius:8px;margin:0 auto 15px auto;text-align:center;font-size:9pt;display:block}
+    #printTemplate{display:none}
+    @media print{body{background:#fff;padding:0;font-family:Arial,sans-serif}.container,.btns,#result,.share-section{display:none!important}#printTemplate{display:block;padding:25px;font-size:9pt;color:#333;background:linear-gradient(145deg,#fffdf9,#fff5eb);border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.15)}#printTemplate h2{text-align:center;margin-bottom:16px;color:#b45309;font-size:12pt;text-shadow:1px 1px 2px rgba(0,0,0,.15)}#printTemplate .identitas{width:100%;border-collapse:separate;border-spacing:0 2px;margin-bottom:8px;font-size:10pt}#printTemplate .identitas td{padding:4px 8px;background:#fff;border-radius:6px;box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}#printTemplate .identitas .label{width:160px;font-weight:700;background:#fff8f0}#printTemplate .hasil{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:9.5pt;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 6px rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.1)}#printTemplate .hasil th,#printTemplate .hasil td{border:1px solid rgba(0,0,0,.08)}#printTemplate .hasil th{background:linear-gradient(180deg,#ffcc99,#ff9933);color:#000;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:8px 6px;text-align:center;border-bottom:3px solid #d65c00;box-shadow:inset 0 -3px 4px rgba(255,255,255,.25)}#printTemplate .hasil th+th{border-left:2px solid #cc5200}#printTemplate .hasil td{padding:6px 6px;text-align:center;background:linear-gradient(180deg,#fff,#fdf6f0)}#printTemplate .hasil tr:nth-child(even) td{background:linear-gradient(180deg,#fffaf5,#fbeee4)}#printTemplate .hasil tr:hover td{background:#ffe5cc;box-shadow:inset 0 0 6px rgba(255,140,0,.3)}#printTemplate .hasil th:nth-child(1),#printTemplate .hasil td:nth-child(1){width:25px}#printTemplate .hasil th:nth-child(2),#printTemplate .hasil td:nth-child(2){width:auto;text-align:center;padding-left:12px}#printTemplate .hasil th:nth-child(3),#printTemplate .hasil th:nth-child(4),#printTemplate .hasil th:nth-child(5),#printTemplate .hasil th:nth-child(6),#printTemplate .hasil td:nth-child(3),#printTemplate .hasil td:nth-child(4),#printTemplate .hasil td:nth-child(5),#printTemplate .hasil td:nth-child(6){width:30px}#printTemplate .summary{font-size:10pt;font-weight:700;color:#000;background:linear-gradient(90deg,#ffd9b3,#ff9966);padding:6px 14px;border-radius:6px;text-align:center;margin-top:8px;display:inline-block;box-shadow:0 6px 10px rgba(0,0,0,.2)}@page{size:A4;margin:0 1cm 1cm .5cm}}
   
-  /* Lebar kolom */
-  #printTemplate .hasil th:nth-child(1),
-  #printTemplate .hasil td:nth-child(1) {
-    width: 25px; /* No */
-  }
+/* --- Styling angka total responden --- */
+    #totalResponden {
+      color: #0d47a1;        /* biru tua */
+      font-weight: bold;     /* tebal */
+      font-size: 2.2em;      /* agak besar */
+      text-shadow: 2px 2px 2px rgba(0,0,0,0.3); /* bayangan modern */
+    }
+/* === Tambahan supaya judul naik === */
+    .chartBox h4 {
+      margin-top: 6px;   /* naikkan 10px */
+      margin-bottom: 4px;  /* jarak tipis dengan grafik */
+      font-weight: bold;
+    }
+    .blue-text {
+      color: #1e3a8a;      /* biru tua */
+      font-weight: bold;
+    }
+  </style>
 
-  #printTemplate .hasil th:nth-child(2),
-  #printTemplate .hasil td:nth-child(2) {
-    width: auto; /* Pernyataan lebih lebar */
-    text-align: center;
-    padding-left: 12px;
-  }
-
-  #printTemplate .hasil th:nth-child(3),
-  #printTemplate .hasil th:nth-child(4),
-  #printTemplate .hasil th:nth-child(5),
-  #printTemplate .hasil th:nth-child(6),
-  #printTemplate .hasil td:nth-child(3),
-  #printTemplate .hasil td:nth-child(4),
-  #printTemplate .hasil td:nth-child(5),
-  #printTemplate .hasil td:nth-child(6) {
-    width: 30px; /* SS, S, TS, STS lebih kecil */
-  }
-
-  /* Ringkasan Skor */
-  #printTemplate .summary {
-    font-size:10pt; 
-    font-weight:bold;
-    color:#000; /* hitam */
-    background:linear-gradient(90deg,#ffd9b3,#ff9966);
-    padding:6px 14px;
-    border-radius:6px;
-    text-align:center;
-    margin-top:8px;
-    display:inline-block;
-    box-shadow:0 6px 10px rgba(0,0,0,0.2);
-  }
-
-  @page { size:A4; margin:0 1.0cm 1.0cm 0.5cm; }
-}
-</style>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+  <div class="container">
+    <h1>PEMETAAN PROFIL POLA PIKIR</h1>
+    <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
-<div class="container">
-  <h1>PEMETAAN PROFIL POLA PIKIR</h1>
-  <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
+    <div class="form-group">
+      <label>NAMA RESPONDEN:</label>
+      <input type="text" id="nama" placeholder="Tuliskan nama Anda" required />
+    </div>
+    <div class="form-group">
+      <label>INSTANSI / LEMBAGA:</label>
+      <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" />
+    </div>
+    <div class="form-group">
+      <label>BIDANG / MAPEL:</label>
+      <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda" />
+    </div>
 
-  <div class="form-group">
-    <label>NAMA RESPONDEN:</label>
-    <input type="text" id="nama" placeholder="Tuliskan nama Anda" required>
+    <form id="quiz"></form>
+
+    <div class="btns" style="text-align:center">
+      <button type="button" class="primary" id="submitBtn">SUBMIT</button>
+      <button type="button" class="soft" id="resetBtn">RESET</button>
+      <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
+      <button type="button" class="soft" id="cetakBtn">CETAK TANPA ANALISIS</button>
+      <button type="button" class="primary" id="loginBtn">GRAFIK</button>
+    </div>
+    <div id="result" class="result"></div>
+
+    <!-- === Area Grafik (muncul setelah login) === -->
+    <div id="chartArea">
+      <div id="chartHeader"><h3>ANALISA GRAFIK</h3></div>
+      <div class="chartsGrid">
+        <div class="chartBox">
+          <select id="instansiFilter"></select>
+          <canvas id="pieChartInstansi"></canvas>
+        </div>
+        <div class="chartBox">
+          <h4 style="text-align:center">
+            Akumulasi <span id="totalResponden" class="blue-text">0</span> Responden
+          </h4>
+          <canvas id="pieChartSheet"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="share-section">
+      <h3>Bagikan Link</h3>
+      <input type="text" id="shareUrl" readonly />
+      <div id="qrcode"></div>
+      <button type="button" class="soft" id="downloadQR">Unduh QR</button>
+    </div>
   </div>
-  <div class="form-group">
-    <label>INSTANSI / LEMBAGA:</label>
-    <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda">
+
+  <!-- TEMPLATE CETAK -->
+  <div id="printTemplate">
+    <h2>PEMETAAN POLA PIKIR</h2>
+    <table class="identitas">
+      <tr><td class="label">Nama Responden</td><td>: <span id="pnama">-</span></td></tr>
+      <tr><td class="label">Instansi/Lembaga</td><td>: <span id="pinstansi">-</span></td></tr>
+      <tr><td class="label">Bidang/Mapel</td><td>: <span id="pmapel">-</span></td></tr>
+    </table>
+
+    <table class="hasil">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Pernyataan</th>
+          <th>SS</th>
+          <th>S</th>
+          <th>TS</th>
+          <th>STS</th>
+        </tr>
+      </thead>
+      <tbody id="printTableBody"></tbody>
+    </table>
+    <p id="printKategori" class="summary"></p>
   </div>
-  <div class="form-group">
-    <label>BIDANG / MAPEL:</label>
-    <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda">
-  </div>
 
-  <form id="quiz"></form>
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-3d"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-  <div class="btns" style="text-align:center;">
-    <button type="button" class="primary" id="submitBtn">SUBMIT</button>
-    <button type="button" class="soft" id="resetBtn">RESET</button>
-    <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
-    <button type="button" class="soft" id="cetakBtn">CETAK TANPA ANALISIS</button>
-  </div>
-  <div id="result" class="result"></div>
-  <div class="share-section">
-    <h3>Bagikan Link</h3>
-    <input type="text" id="shareUrl" readonly>
-    <div id="qrcode"></div>
-    <button type="button" class="soft" id="downloadQR">Unduh QR</button>
-  </div>
-</div>
+  <script>
+    /* ===================== CONFIG ===================== */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec";
+    const SHEET_URL = "https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet2";
+    
+    /* ================== MASTER DATA =================== */
+    const statements=[
+      "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
+      "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
+      "Anda akan selalu dapat mengubah kemampuan Anda.",
+      "Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
+      "Anda akan selalu dapat mengubah diri Anda sendiri.",
+      "Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
+      "Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
+      "Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
+      "Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
+      "Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
+      "Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
+      "Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
+      "Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
+      "Saya kurang senang bila ada kritik dan saran dari orang lain.",
+      "Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
+      "Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
+      "Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
+      "Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
+      "Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
+      "Orang yang benar-benar cerdas, tidak perlu bekerja keras."
+    ];
+    const labels=["SS","S","TS","STS"];
+    const scoring=[[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]];
 
-<!-- TEMPLATE CETAK -->
-<div id="printTemplate">
-  <h2>Pemetaan Profil Pola Pikir</h2>
-
-  <table class="identitas">
-    <tr><td class="label">Nama Responden</td><td>: <span id="pnama">-</span></td></tr>
-    <tr><td class="label">Instansi/Lembaga</td><td>: <span id="pinstansi">-</span></td></tr>
-    <tr><td class="label">Bidang/Mapel</td><td>: <span id="pmapel">-</span></td></tr>
-  </table>
-
-  <table class="hasil">
-  <thead>
-    <tr>
-      <th>No.</th><th>Pernyataan</th>
-      <th>SS</th><th>S</th><th>TS</th><th>STS</th>
-    </tr>
-  <thead>
-    <tbody id="printTableBody"></tbody>
-  </table>
-
-  <p id="printKategori" class="summary"></p>
-</div>
-
-<!-- QRCode -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-/* ===================== CONFIG ===================== */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec"; // <--- Ganti dengan URL Web App GAS (Deploy → New deployment)
-const SHEET_DATE_LOCALE_OFFSET_MIN = 0; // biarkan 0 (timestamp dibuat di server). Opsi jika ingin kirim offset klien.
-
-/* ================== MASTER DATA =================== */
-const statements=[
- "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
- "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
- "Anda akan selalu dapat mengubah kemampuan Anda.",
- "Anda adalah seseorang yang unik, tidak banyak yang dapat dilakukan untuk mengubahnya.",
- "Anda akan selalu dapat mengubah diri Anda sendiri.",
- "Kemampuan dalam bidang seni dan musik dapat dipelajari oleh siapapun.",
- "Hanya sedikit orang yang benar-benar mahir dalam olahraga, Anda harus membawa bakat ini sejak lahir.",
- "Matematika lebih mudah dipelajari oleh pria atau seseorang yang berada dalam lingkungan yang menyukainya.",
- "Makin keras Anda mengerjakan sesuatu makin mahir Anda dalam hal ini.",
- "Tidak peduli tipe apapun Anda saat ini, Anda akan selalu dapat mengubahnya.",
- "Mencoba sesuatu yang baru akan sangat menyulitkan Anda sehingga Anda ingin menghindarinya.",
- "Sebagian orang baik dan pintar, sebagian lagi tidak. Tidak banyak yang dapat berubah.",
- "Saya sangat menghargai kritik dan saran dari siapapun juga terkait dengan kinerja saya saat ini.",
- "Saya kurang senang bila ada kritik dan saran dari orang lain.",
- "Semua orang yang tanpa cacat-otak atau cacat-lahir memiliki kemampuan yang sama dalam belajar.",
- "Anda bisa mempelajari sesuatu yang baru, tapi Anda tidak bisa mengubah kemampuan Anda.",
- "Anda dapat melakukan sesuatu secara berbeda, tapi sebenarnya Anda tetap tidak dapat mengubah kemampuan Anda.",
- "Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
- "Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
- "Orang yang benar-benar cerdas, tidak perlu bekerja keras."
-];
-const labels=["SS","S","TS","STS"];
-const scoring=[
- [0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],
- [3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],
- [0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],
- [0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]
-];
-
-/* ============== RENDER & UTILITIES ============== */
-function renderQuestions(){
-  const form=document.getElementById("quiz");
-  form.innerHTML="";
-  statements.forEach((t,i)=>{
-    const q=document.createElement("div");
-    q.className="q";
-    q.innerHTML=`
-      <p><b>${i+1}.</b> ${t}</p>
-      <div class="opt">
-        ${labels.map((lab,j)=>`
-          <label><input type="radio" name="q${i}" value="${j}">${lab}</label>
-        `).join("")}
-      </div>`;
-    form.appendChild(q);
-  });
-}
-function renderPrintTable(){
-  const tbody=document.getElementById("printTableBody");
-  tbody.innerHTML="";
-  statements.forEach((t,i)=>{
-    tbody.innerHTML+=`
-      <tr id="row${i}">
-        <td>${i+1}</td><td style="text-align:left">${t}</td>
-        <td class="ss"></td><td class="s"></td><td class="ts"></td><td class="sts"></td>
-      </tr>`;
-  });
-}
-document.addEventListener("DOMContentLoaded",()=>{
-  renderQuestions();
-  renderPrintTable();
-  const url=window.location.href;
-  document.getElementById("shareUrl").value=url;
-  new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
-});
-
-function computeScore(){
-  let tot=0; let answers=[];
-  for(let i=0;i<statements.length;i++){
-    const sel=document.querySelector(`input[name="q${i}"]:checked`);
-    if(!sel) return null;
-    const selVal=parseInt(sel.value,10);
-    const sc=scoring[i][selVal];
-    tot+=sc;
-    answers.push({index:i, q:statements[i], opt:labels[selVal], score:sc});
-  }
-  let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
-  return {total:tot,category:cat,answers};
-}
-
-function fillPrintTemplate(){
-  for(let i=0;i<statements.length;i++){
-    const sel=document.querySelector(`input[name="q${i}"]:checked`);
-    if(sel){
-      const row=document.getElementById(`row${i}`);
-      row.querySelector(".ss").innerHTML="";
-      row.querySelector(".s").innerHTML="";
-      row.querySelector(".ts").innerHTML="";
-      row.querySelector(".sts").innerHTML="";
-      if(sel.value=="0") row.querySelector(".ss").innerHTML="✔";
-      if(sel.value=="1") row.querySelector(".s").innerHTML="✔";
-      if(sel.value=="2") row.querySelector(".ts").innerHTML="✔";
-      if(sel.value=="3") row.querySelector(".sts").innerHTML="✔";
+    /* ============== RENDER & UTILITIES ============== */
+    function renderQuestions(){
+      const form=document.getElementById("quiz");
+      form.innerHTML="";
+      statements.forEach((t,i)=>{
+        const q=document.createElement("div");
+        q.className="q";
+        q.innerHTML=`
+          <p><b>${i+1}.</b> ${t}</p>
+          <div class="opt">
+            ${labels.map((lab,j)=>`<label><input type="radio" name="q${i}" value="${j}"><span>${lab}</span></label>`).join("")}
+          </div>`;
+        form.appendChild(q);
+      });
     }
-  }
-  const hasil = computeScore();
-  if(hasil){
-    document.getElementById("pnama").textContent=document.getElementById("nama").value;
-    document.getElementById("pinstansi").textContent=document.getElementById("instansi").value;
-    document.getElementById("pmapel").textContent=document.getElementById("mapel").value;
+    function renderPrintTable(){
+      const tbody=document.getElementById("printTableBody");
+      tbody.innerHTML="";
+      statements.forEach((t,i)=>{
+        tbody.innerHTML+=`
+          <tr id="row${i}">
+            <td>${i+1}</td><td style="text-align:left">${t}</td>
+            <td class="ss"></td><td class="s"></td><td class="ts"></td><td class="sts"></td>
+          </tr>`;
+      });
+    }
+    document.addEventListener("DOMContentLoaded",()=>{
+      renderQuestions();
+      renderPrintTable();
+      const url=window.location.href;
+      document.getElementById("shareUrl").value=url;
+      new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
+    });
 
-    const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth Mindset)",GF:"GF (Growth→Fixed Mindset)",G:"G (Growth Mindset)"};
-    document.getElementById("printKategori").innerHTML=
-      `Hasil Skor: ${hasil.total} - ${labelsFull[hasil.category]}`;
-  }
-}
+    /* ============== SKOR & CETAK ============== */
+    function computeScore(){
+      let tot=0; let answers=[];
+      for(let i=0;i<statements.length;i++){
+        const sel=document.querySelector(`input[name="q${i}"]:checked`);
+        if(!sel) return null;
+        const selVal=parseInt(sel.value,10);
+        const sc=scoring[i][selVal];
+        tot+=sc;
+        answers.push({index:i,q:statements[i],opt:labels[selVal],score:sc});
+      }
+      let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
+      return {total:tot,category:cat,answers};
+    }
 
-/* ============== BUTTON ACTIONS ============== */
-document.getElementById("submitBtn").onclick=()=>{
-  const hasil=computeScore();
-  if(!hasil){ alert("Lengkapi semua jawaban!"); return; }
-  alert("Jawaban disimpan. Siap dianalisis/dicetak.");
-};
-document.getElementById("analisisBtn").onclick=()=>{
-  const hasil=computeScore();
-  if(!hasil){ alert("Lengkapi semua jawaban!"); return; }
-  document.getElementById("result").style.display="block";
-  document.getElementById("result").innerHTML=`<h2>Skor Anda: ${hasil.total}</h2><p>Kategori: <b>${hasil.category}</b></p>`;
-};
-document.getElementById("resetBtn").onclick=()=>{ location.reload(); };
-document.getElementById("cetakBtn").onclick=()=>{
-  const hasil=computeScore();
-  if(!hasil){ alert("Lengkapi semua jawaban dulu sebelum cetak!"); return; }
-  fillPrintTemplate();
-  window.print();
-};
-document.getElementById("downloadQR").onclick=()=>{
-  const canvas=document.querySelector("#qrcode canvas");
-  const link=document.createElement("a");
-  link.href=canvas.toDataURL("image/png");
-  link.download="QRCode.png";
-  link.click();
-};
+    function fillPrintTemplate(){
+      for(let i=0;i<statements.length;i++){
+        const sel=document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel){
+          const row=document.getElementById(`row${i}`);
+          row.querySelector(".ss").innerHTML="";
+          row.querySelector(".s").innerHTML="";
+          row.querySelector(".ts").innerHTML="";
+          row.querySelector(".sts").innerHTML="";
+          if(sel.value=="0") row.querySelector(".ss").innerHTML="✔";
+          if(sel.value=="1") row.querySelector(".s").innerHTML="✔";
+          if(sel.value=="2") row.querySelector(".ts").innerHTML="✔";
+          if(sel.value=="3") row.querySelector(".sts").innerHTML="✔";
+        }
+      }
+      const hasil = computeScore();
+      if(hasil){
+        document.getElementById("pnama").textContent=document.getElementById("nama").value;
+        document.getElementById("pinstansi").textContent=document.getElementById("instansi").value;
+        document.getElementById("pmapel").textContent=document.getElementById("mapel").value;
+        const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth Mindset)",GF:"GF (Growth→Fixed Mindset)",G:"G (Growth Mindset)"};
+        document.getElementById("printKategori").innerHTML=`SKOR: ${hasil.total} KATEGORI: ${labelsFull[hasil.category]}`;
+      }
+    }
 
-document.getElementById("downloadQR").onclick=()=>{
-  const canvas=document.querySelector("#qrcode canvas");
-  const link=document.createElement("a");
-  link.href=canvas.toDataURL("image/png");
-  link.download="QRCode.png";
-  link.click();
-};
+    function showResult(r){
+      const res=document.getElementById("result");
+      res.style.display="block";
+      const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth)",GF:"GF (Growth→Fixed)",G:"G (Growth Mindset)"};
+      res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
+    }
 
-function computeScore2(){
-  let tot=0; let answers=[];
-  for(let i=0;i<statements.length;i++){
-    const sel=document.querySelector(`input[name="q${i}"]:checked`);
-    if(!sel) return null;
-    const selVal=parseInt(sel.value,10);
-    const sc=scoring[i][selVal];
-    tot+=sc;
-    answers.push({index:i, q:statements[i], opt:labels[selVal], score:sc});
-  }
-  let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
-  return {total:tot,category:cat,answers};
-}
-
-function showResult(r){
-  const res=document.getElementById("result");
-  res.style.display="block";
-  const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth)",GF:"GF (Growth→Fixed)",G:"G (Growth Mindset)"};
-  res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
-}
-
-/* ================== ANALISIS CETAK ================== */
+    /* ================== ANALISIS CETAK (ringkas) ================== */
 const analisisPerSoal = [
   [
     "Anda memandang kemampuan sebagai hal yang statis. Tindak lanjut: uji keyakinan ini dengan proyek kecil yang menantang dan catat peningkatannya.",
@@ -548,7 +392,7 @@ function getAnalisisPerButir(a){
   return arr[a.score] ?? "Analisis tidak tersedia.";
 }
 
-function showAnalysis(r){
+    function showAnalysis(r){
   let newWin=window.open("","_blank");
   let html=`<html><head><title>Analisis</title>
   <style>
@@ -606,78 +450,436 @@ function showAnalysis(r){
   newWin.document.close();
 }
 
-/* ================== SUBMIT → GOOGLE SHEET ================== */
-function buildPayload(){
-  const nama = (document.getElementById("nama").value || "").trim();
-  const instansi = (document.getElementById("instansi").value || "").trim();
-  const mapel = (document.getElementById("mapel").value || "").trim();
 
-  const r = computeScore();
-  if(!r){ return {ok:false, message:"Lengkapi semua 20 pertanyaan terlebih dahulu."}; }
-
-  // kolom yang dikirim ke server (timestamp akan dibuat di Apps Script)
-  const payload = {
-    nama, instansi, mapel,
-    skor: r.total,
-    kategori: r.category,
-    jawaban: r.answers   // server akan simpan sebagai JSON string
-  };
-  return {ok:true, data:payload, result:r};
-}
-
-async function submitToSheet(){
-  const submitBtn = document.getElementById("submitBtn");
-  const pack = buildPayload();
-  if(!pack.ok) { alert(pack.message); return; }
-
-  try{
-    submitBtn.disabled = true;
-    const oldText = submitBtn.textContent;
-    submitBtn.textContent = "MENGIRIM...";
-
-    // Hindari preflight (OPTIONS) → gunakan x-www-form-urlencoded (simple request)
-    const body = new URLSearchParams({ payload: JSON.stringify(pack.data) });
-
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-      body
-    });
-
-    // Jika server mengembalikan JSON, coba baca. Jika tidak, tetap anggap sukses jika status 200.
-    let ok = res.ok;
-    let msg = "Terkirim. Terima kasih!";
-    try {
-      const t = await res.text();
-      if (t) {
-        const j = JSON.parse(t);
-        ok = j.status === "ok";
-        msg = j.message || msg;
-      }
-    } catch(_) {}
-
-    if(ok){
-      showResult(pack.result);
-      alert(msg);
-    } else {
-      alert("Gagal mengirim. Coba lagi atau hubungi admin.");
+    /* ================== SUBMIT → SHEET + LOKAL ================== */
+    function buildPayload(){
+      const nama=(document.getElementById("nama").value||"").trim();
+      const instansi=(document.getElementById("instansi").value||"").trim()||"(Tanpa Instansi)";
+      const mapel=(document.getElementById("mapel").value||"").trim();
+      const r=computeScore();
+      if(!r) return {ok:false,message:"Lengkapi semua 20 pertanyaan terlebih dahulu."};
+      return {ok:true,data:{nama,instansi,mapel,skor:r.total,kategori:r.category,jawaban:r.answers},result:r};
     }
-    submitBtn.textContent = oldText;
-    submitBtn.disabled = false;
-  } catch(err){
-    submitBtn.disabled = false;
-    submitBtn.textContent = "SUBMIT";
-    alert("Terjadi kesalahan jaringan: " + err.message);
+    // --- Fungsi submit asli ---
+    async function submitToSheet(){
+      const btn = document.getElementById("submitBtn");
+      const pack=buildPayload();
+
+      if(!pack.ok){
+        Swal.fire("Peringatan", pack.message, "warning");
+        return;
+      }
+
+      // Ubah tombol jadi PROSES...
+      btn.disabled = true;
+      btn.textContent = "PROSES...";
+      
+      try{
+        const body=new URLSearchParams({payload:JSON.stringify(pack.data)});
+        await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+        accumulateLocal(pack.data.instansi,pack.data.kategori);
+        showResult(pack.result);
+        Swal.fire("Berhasil","Data berhasil diproses, silakan cek hasilnya!","success");
+  }catch(e){
+    Swal.fire("Error","Gagal mengirim data. Silakan coba lagi.","error");
+  }finally{
+    // Kembalikan tombol ke SUBMIT
+    btn.disabled = false;
+    btn.textContent = "SUBMIT";
   }
 }
 
-/* ================== HOOK BUTTONS ================== */
-document.getElementById("submitBtn").onclick = submitToSheet;
-document.getElementById("analisisBtn").onclick = ()=>{
-  const r=computeScore2(); if(!r){alert("Lengkapi semua pertanyaan!"); return;} showAnalysis(r);
+    // --- Binding tombol dengan SweetAlert2 ---
+    document.getElementById("submitBtn").onclick = async ()=>{
+  const pack=buildPayload();
+  if(!pack.ok){
+    Swal.fire("Peringatan", pack.message, "warning");
+    return;
+  }
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true; 
+  btn.textContent="PROSES...";
+
+  try{
+    const body=new URLSearchParams({payload:JSON.stringify(pack.data)});
+    await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+    accumulateLocal(pack.data.instansi, pack.data.kategori);
+    showResult(pack.result);
+
+    Swal.fire("Berhasil","Data berhasil diproses!","success");
+  }catch(e){
+    Swal.fire("Error","Gagal mengirim data!","error");
+  }
+
+  btn.disabled=false;
+  btn.textContent="SUBMIT";
 };
-document.getElementById("resetBtn").onclick = ()=>{ location.reload(); };
-</script>
+
+    document.getElementById("analisisBtn").onclick = ()=>{
+  const r=computeScore();
+  if(!r){
+    Swal.fire("Peringatan","Lengkapi semua pertanyaan dulu sebelum analisis!","warning");
+    return;
+  }
+  Swal.fire({
+    title:"Analisis Siap",
+    text:"Hasil analisis akan ditampilkan di jendela baru.",
+    icon:"info",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      showAnalysis(r);
+    }
+  });
+};
+
+    document.getElementById("resetBtn").onclick = ()=>{
+  Swal.fire({
+    title:"Reset Form",
+    text:"Apakah Anda yakin ingin mereset semua jawaban?",
+    icon:"warning",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      location.reload();
+    }
+  });
+};
+
+    document.getElementById("cetakBtn").onclick = ()=>{
+  const r=computeScore();
+  if(!r){
+    Swal.fire("Peringatan","Lengkapi semua pertanyaan dulu sebelum cetak!","warning");
+    return;
+  }
+  Swal.fire({
+    title:"Cetak Data",
+    text:"Apakah Anda yakin ingin mencetak tanpa analisis?",
+    icon:"question",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      fillPrintTemplate();
+      window.print();
+    }
+  });
+};
+
+    /* ========== GRAFIK ========== */
+document.getElementById("loginBtn").onclick=()=>{
+  Swal.fire({
+    title:"Masukkan Password",
+    input:"password",
+    inputPlaceholder:"Password grafik",
+    showCancelButton:true,
+    confirmButtonText:"Lihat Grafik",
+    cancelButtonText:"Batal",
+    footer:'<small><b>Khusus Fasilitator</b> untuk melihat dan menganalisis grafik,<br>hub. <b>Kang Andes</b></small>'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      if(result.value==="13a"){
+        document.getElementById("chartArea").style.display="block";
+        loadLocalInstansiChart();
+        loadSheetChart();
+        populateInstansiDropdown(); // ← isi dropdown di sini
+        Swal.fire("Berhasil","Grafik ditampilkan!","success");
+      }else{
+        Swal.fire("Salah","Password tidak benar!","error");
+      }
+    }
+  });
+};
+
+function getMidnightExpiry(){
+  const now = new Date();
+  // konversi ke WIB (UTC+7)
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const wib = new Date(utc + (7 * 3600 * 1000));
+
+  // set ke pukul 24:00 WIB (besok jam 00:00 WIB)
+  wib.setHours(24,0,0,0);
+
+  return wib.getTime();
+}
+
+function accumulateLocal(instansi, kategori){
+  const key = "agg_instansi", expKey = "agg_instansi_expire";
+  const now = Date.now();
+  const exp = localStorage.getItem(expKey);
+
+  // reset otomatis jika sudah melewati pukul 24:00 WIB
+  if(!exp || now > parseInt(exp, 10)){
+    localStorage.removeItem(key);
+    localStorage.setItem(expKey, getMidnightExpiry());
+  }
+
+  const all = JSON.parse(localStorage.getItem(key) || "{}");
+
+  if(!all[instansi]) all[instansi] = {F:0, FG:0, GF:0, G:0, responden:0};
+  all[instansi][kategori] = (all[instansi][kategori] || 0) + 1;
+  all[instansi].responden++;
+
+  localStorage.setItem(key, JSON.stringify(all));
+}
+
+function loadLocalInstansiChart(){
+  const key = "agg_instansi", expKey = "agg_instansi_expire";
+  const now = Date.now();
+  const exp = localStorage.getItem(expKey);
+
+  // jika sudah expired → reset data grafik
+  if(!exp || now > parseInt(exp, 10)){
+    localStorage.removeItem(key);
+    localStorage.setItem(expKey, getMidnightExpiry());
+  }
+
+  const all = JSON.parse(localStorage.getItem(key) || "{}");
+  const instansiList = Object.keys(all);
+
+  if(instansiList.length === 0){
+    document.getElementById("pieChartInstansi").getContext("2d").clearRect(0,0,400,400);
+    return;
+  }
+
+  // siapkan data untuk chart
+  const labels = instansiList;
+  const data = instansiList.map(i => all[i].responden);
+
+  new Chart(document.getElementById("pieChartInstansi"), {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: ["#f87171","#facc15","#38bdf8","#4ade80","#a78bfa","#f472b6","#fb923c"]
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          color: '#111',
+          font: {weight:'bold', size:16},
+          formatter: (val, ctx) => ctx.chart.data.labels[ctx.dataIndex]+": "+val
+        }
+      }
+    }
+  });
+}
+    /* ================== GRAFIK (dengan LABEL kategori + jumlah) ================== */
+    
+    // Registrasi plugin datalabels agar aktif
+    Chart.register(ChartDataLabels);
+ // Registrasi datalabels
+    Chart.register(ChartDataLabels);
+
+    // === Plugin gambar tengah donat ===
+    const centerImagePlugin = {
+      id: 'centerImagePlugin',
+      beforeDraw(chart) {
+        if (chart.config.type !== 'doughnut') return;
+
+        const { ctx, chartArea: { left, right, top, bottom }, width, height } = chart;
+
+        const centerX = (left + right) / 2;
+        const centerY = (top + bottom) / 2;
+
+        // hitung diameter dalam berdasarkan cutout
+        let cutout = chart.config.options.cutout;
+        if (typeof cutout === "string" && cutout.includes("%")) {
+          cutout = parseInt(cutout) / 100;
+        } else {
+          cutout = 0.6; // default kalau tidak ada
+        }
+        const innerDiameter = Math.min(width, height) * cutout;
+
+        // load gambar sekali saja
+        if (!chart.$centerImage) {
+          const img = new Image();
+	  img.src = "https://raw.githubusercontent.com/andesofiani/pemetaan-profil-pola-pikir/refs/heads/main/KerangkaPM.png";
+          chart.$centerImage = img;
+        }
+
+        const image = chart.$centerImage;
+        if (!image.complete) {
+          image.onload = () => chart.draw();
+          return;
+        }
+
+        const size = innerDiameter * 0.95; // isi 95% dari lubang donat
+        ctx.save();
+        ctx.drawImage(image, centerX - size / 2, centerY - size / 2, size, size);
+        ctx.restore();
+      }
+    };
+    Chart.register(centerImagePlugin);
+
+    const doughnutBaseOptions = {
+  responsive: true,
+  plugins: {
+    legend: { position: "bottom" },
+    datalabels: {
+      display: 'auto',
+      anchor: 'center',
+      align: 'center',
+      color: '#111',
+      font: { weight: 'bold', size: 14 },
+      formatter: (value, ctx) => {
+        const total = ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+        if (!value || !total) return "";
+        const pct = (value * 100 / total).toFixed(1) + "%";
+        const label = ctx.chart.data.labels[ctx.dataIndex];
+        return label + "\n" + pct;   // ← 2 baris: label di atas, persen di bawah
+      }
+    }
+  },
+  // Efek 3D plugin
+  plugins3d: {
+    enabled: true,
+    alpha: 35,
+    beta: 35,
+    depth: 75,
+    viewDistance: 75,
+    shadow: true,
+    highlight: true
+  },
+  cutout: "75%"
+};
+
+    let chartInstansi, chartSheet;
+
+    function renderInstansiChart(obj){
+      if(!obj) obj={F:0,FG:0,GF:0,G:0};
+      const ctx=document.getElementById("pieChartInstansi").getContext("2d");
+      if(chartInstansi) chartInstansi.destroy();
+      chartInstansi=new Chart(ctx,{
+        type:"doughnut",
+        data:{
+          labels:["F","FG","GF","G"],
+          datasets:[{
+            data:[obj.F,obj.FG,obj.GF,obj.G],
+            backgroundColor:["#f87171","#facc15","#38bdf8","#4ade80"],
+            borderWidth:2,
+            borderColor:'#fff'
+          }]
+        },
+        options:doughnutBaseOptions
+      });
+    }
+    
+    function renderSheetChart(obj, grandTotal){
+  const ctx=document.getElementById("pieChartSheet").getContext("2d");
+  if(chartSheet) chartSheet.destroy();
+  chartSheet=new Chart(ctx,{
+    type:"doughnut",
+    data:{
+      labels:["F","FG","GF","G"],
+      datasets:[{
+        data:[obj.F,obj.FG,obj.GF,obj.G],
+        backgroundColor:["#f87171","#facc15","#38bdf8","#4ade80"],
+        borderWidth:2,
+        borderColor:'#fff'
+      }]
+    },
+    options:doughnutBaseOptions
+  });
+
+  // update jumlah responden total di judul
+  document.getElementById("totalResponden").textContent = grandTotal;
+}
+
+    async function loadSheetChart(){
+      try{
+        const res=await fetch(SHEET_URL,{cache:"no-store"});
+        const rows=await res.json();
+
+        const totalCat={F:0,FG:0,GF:0,G:0};
+        let grandTotal=0;
+
+        rows.forEach(row=>{
+          const kat = (row["Kategori"]||"").toUpperCase().trim();
+          const jml = parseFloat(String(row["Jumlah"]).replace(",","."))||0;
+          if(totalCat.hasOwnProperty(kat)) {
+            totalCat[kat]+=jml;
+            grandTotal+=jml;
+          }
+        });
+
+        renderSheetChart(totalCat, grandTotal);
+      }catch(e){
+        console.error(e);
+        renderSheetChart({F:0,FG:0,GF:0,G:0}, 0);
+      }
+    }
+
+    function loadLocalInstansiChart(){
+  const agg=JSON.parse(localStorage.getItem("agg_instansi")||"{}");
+  const filter=document.getElementById("instansiFilter");
+  filter.innerHTML="";
+
+  const names=Object.keys(agg);
+
+  // Tambahkan opsi permanen "Semua Instansi"
+  const allOpt=document.createElement("option");
+  allOpt.value="ALL";
+  allOpt.textContent="Semua Instansi";
+  filter.appendChild(allOpt);
+
+  if(names.length===0){
+    const opt=document.createElement("option");
+    opt.value=""; 
+    opt.textContent="(Belum ada data)";
+    filter.appendChild(opt);
+    renderInstansiChart({F:0,FG:0,GF:0,G:0}); 
+    return;
+  }
+
+  names.forEach(nm=>{
+    const opt=document.createElement("option");
+    opt.value=nm; 
+    opt.textContent=`${nm} (${agg[nm].responden} resp.)`; 
+    filter.appendChild(opt);
+  });
+
+  // default tampil Semua Instansi (gabungan)
+  filter.value="ALL";
+  renderInstansiChart(sumAllInstansi(agg));
+
+  filter.onchange=()=>{
+    const val=filter.value;
+    if(val==="ALL"){
+      renderInstansiChart(sumAllInstansi(agg));
+    }else if(agg[val]){
+      renderInstansiChart(agg[val]);
+    }
+  };
+}
+
+// fungsi bantu untuk menjumlah semua instansi
+function sumAllInstansi(agg){
+  const total={F:0,FG:0,GF:0,G:0};
+  Object.values(agg).forEach(v=>{
+    total.F+=v.F||0;
+    total.FG+=v.FG||0;
+    total.GF+=v.GF||0;
+    total.G+=v.G||0;
+  });
+  return total;
+}
+
+    // QR download
+    document.getElementById("downloadQR").onclick=()=>{
+      const canvas=document.querySelector("#qrcode canvas");
+      const link=document.createElement("a");
+      link.href=canvas.toDataURL("image/png");
+      link.download="QRCode.png";
+      link.click();
+    };
+  </script>
 </body>
 </html>
-
