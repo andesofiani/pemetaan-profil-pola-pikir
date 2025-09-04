@@ -1,852 +1,162 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>
-   PEMETAAN PROFIL POLA PIKIR — 3 Paket
-  </title>
-<style>
-   body{font-family:Arial,sans-serif;background:#e6f0fa;margin:0;padding:20px}
-.container {
-  max-width: 980px;
-  margin: auto;
-  background: linear-gradient(145deg, #ffffff, #f3f4f6);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 10px 10px 30px rgba(0,0,0,0.15),
-              -10px -10px 30px rgba(255,255,255,0.9);
-}
-h1 {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 900;
-  margin: 10px 0 20px;
-  color: #1e3a8a;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
-  letter-spacing: 1px;
-}
-
-/* Kotak container tombol */
-.btn-container {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:15px;
-  margin:25px auto;
-  padding:20px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#f8fafc,#e0e7ff);
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
-  max-width:900px;
-}
-
-/* Style tombol */
-.btn {
-  flex:1;
-  min-width:160px;
-  padding:12px 18px;
-  font-size:14px;
-  font-weight:bold;
-  color:white;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  transition:transform 0.2s, box-shadow 0.2s;
-  box-shadow:0 4px 8px rgba(0,0,0,0.2);
-}
-.btn:hover {
-  transform:translateY(-2px);
-  box-shadow:0 6px 14px rgba(0,0,0,0.25);
-}
-
-/* Warna tombol */
-.primary { background:linear-gradient(135deg,#2563eb,#1e3a8a); }
-.danger { background:linear-gradient(135deg,#ef4444,#b91c1c); }
-.info { background:linear-gradient(135deg,#0ea5e9,#0369a1); }
-.warning { background:linear-gradient(135deg,#f59e0b,#b45309); }
-.success { background:linear-gradient(135deg,#22c55e,#15803d); }
-
-    .paket-btns{text-align:center;margin:10px 0 10px 0}
-    .paket-btns button {
-  padding: 12px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
-  box-shadow: 5px 5px 12px rgba(0,0,0,0.2),
-              -5px -5px 12px rgba(255,255,255,0.8);
-  transition: all 0.3s ease;
-}
-
-.paket-btns button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 8px 8px 18px rgba(0,0,0,0.25),
-              -4px -4px 10px rgba(255,255,255,0.7);
-}
-
-    .paket-dasar{background:#38bdf8;color:#fff}
-    .paket-menengah{background:#2563eb;color:#fff}
-    .paket-profesional{background:#a78bfa;color:#fff}
-    .form-group{margin-top: 20px; margin-bottom:12px}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PEMETAAN PROFIL POLA PIKIR</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#e6f0fa;margin:0;padding:20px}
+    .container{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+    h1{text-align:center;color:#2563eb}
+    .form-group{margin-bottom:15px}
     .form-group label{display:block;font-weight:700;margin-bottom:5px}
-    .form-group input{width:98%;padding:10px;border:1px solid #ccc;border-radius:6px;box-shadow:inset 1px 1px 3px #bbb;font-size:15px}
+    .form-group input{width:95%;padding:10px;border:1px solid #ccc;border-radius:6px;box-shadow:inset 1px 1px 3px #bbb;font-size:15px}
     .q{margin-bottom:15px;padding:15px;border:1px solid #ddd;border-radius:8px;background:#f9fbff}
     .opt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
-    .opt label{background:#f0f4ff;padding:6px;border-radius:8px;border:1px solid #ccc;cursor:pointer;box-shadow:0 2px #aaa;text-align:center;font-weight:700;font-size:11px}
+    .opt label{background:#f0f4ff;padding:6px;border-radius:8px;border:1px solid #ccc;cursor:pointer;box-shadow:0 4px #999;text-align:center;font-weight:700;font-size:11px;transition:all .15s ease;display:flex;align-items:center;justify-content:center;gap:6px}
+    .opt label:active{transform:translateY(2px);box-shadow:0 2px #666}
     .opt input[type=radio]{width:14px;height:14px;accent-color:#2563eb}
-    .opt input:checked+span{color:#2563eb;font-weight:700}
-     @keyframes bounce {
-       0%   { transform: scale(1); }
-       30%  { transform: scale(1.2); }
-       50%  { transform: scale(0.9); }
-       70%  { transform: scale(1.1); }
-       100% { transform: scale(1); }
-     }
-     .opt label:hover,
-     .opt label:focus-within {
-       animation: bounce 0.5s;
-     }
-     .opt input:checked + span {
-       animation: bounce 0.5s;
-       display: inline-block;
-    }
+    .opt input:checked+span{color:#2563eb;font-weight:700;animation:bounce .2s}
+    @keyframes bounce{0%{transform:scale(1)}50%{transform:scale(.85)}100%{transform:scale(1)}}
     button{display:inline-block;padding:10px 14px;border:none;border-radius:6px;cursor:pointer;margin:10px 5px;font-weight:700;transition:all .2s ease;box-shadow:0 4px #999}
     button:active{transform:translateY(2px);box-shadow:0 2px #666}
-    button{padding:10px 14px;border:none;border-radius:6px;cursor:pointer;margin:10px 5px;font-weight:700;box-shadow:0 4px #999}    
-    .btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
-    .btns button{display:inline-block;padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 3px #999}
     .primary{background:#2563eb;color:#fff}
     .soft{background:#f0f0f0;color:#333}
-    .result{margin-top:12px;padding:12px;border:1px dashed #888;border-radius:8px;display:none;text-align:center}
-    .score{font-size:3em;font-weight:700;color:#2563eb;display:inline-block;margin-right:14px}
-    .badge{display:inline-block;font-size:1.3em;vertical-align:middle;font-weight:700;padding:6px 18px;border-radius:10px}
+    .result{margin-top:20px;padding:15px;border:1px dashed #888;border-radius:8px;display:none;text-align:center}
+    .score{font-size:4em;font-weight:700;font-family:Georgia,serif;color:#2563eb;display:inline-block;margin-right:20px}
+    .badge{display:inline-block;font-size:2em;vertical-align:middle;font-weight:700;padding:6px 20px;border-radius:10px}
     .badge.F{background:#fee2e2;color:#b91c1c}
     .badge.FG{background:#fef3c7;color:#92400e}
     .badge.GF{background:#e0f2fe;color:#0369a1}
     .badge.G{background:#dcfce7;color:#166534}
-    .analysis{margin-top:20px;padding:10px;background:#f9fafc;border-radius:8px;display:none}
-    .analysis h3{margin-bottom:10px;color:#333}
-    .analysis-item{margin-bottom:10px;padding:8px;border-bottom:1px solid #eee}
-    .analysis-item:last-child{border-bottom:none}
-    .hint {
-  font-size: 16px;
-  font-weight: bold;
-  color: #dc2626;
-  text-align: center;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.6);
-  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.1),
-              inset -2px -2px 6px rgba(255,255,255,0.7);
-  backdrop-filter: blur(8px);
-}
-
     .share-section{text-align:center;margin-top:30px}
     .share-section input{width:90%;margin-bottom:20px;padding:10px;text-align:center}
     #loginForm{margin-bottom:20px}
     .chart-container{width:250px;height:250px;margin:20px auto}
     #qrcode{display:flex;justify-content:center;margin:20px 0}
     #chartArea{display:none;margin-top:24px;padding:16px;border:1px solid #e5e7eb;border-radius:10px;background:#fafcff}
-    .chartHeader{text-align:center;margin-bottom:10px}
-    .chartsHeader h2{color:#1e3a8a;margin:0;font-weight:800}
+    #chartHeader{text-align:center;margin-bottom:10px}
     .chartsGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
     .chartBox{background:#e6f0fa;padding:10px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
     canvas{width:100%!important;height:auto!important}
     #instansiFilter{padding:8px 10px;border:1px solid #ccc;border-radius:8px;margin:0 auto 15px auto;text-align:center;font-size:9pt;display:block}
     #printTemplate{display:none}
     @media print{body{background:#fff;padding:0;font-family:Arial,sans-serif}.container,.btns,#result,.share-section{display:none!important}#printTemplate{display:block;padding:25px;font-size:9pt;color:#333;background:linear-gradient(145deg,#fffdf9,#fff5eb);border-radius:12px;box-shadow:0 8px 18px rgba(0,0,0,.15)}#printTemplate h2{text-align:center;margin-bottom:16px;color:#b45309;font-size:12pt;text-shadow:1px 1px 2px rgba(0,0,0,.15)}#printTemplate .identitas{width:100%;border-collapse:separate;border-spacing:0 2px;margin-bottom:8px;font-size:10pt}#printTemplate .identitas td{padding:4px 8px;background:#fff;border-radius:6px;box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}#printTemplate .identitas .label{width:160px;font-weight:700;background:#fff8f0}#printTemplate .hasil{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:9.5pt;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 6px rgba(0,0,0,.15),0 8px 20px rgba(0,0,0,.1)}#printTemplate .hasil th,#printTemplate .hasil td{border:1px solid rgba(0,0,0,.08)}#printTemplate .hasil th{background:linear-gradient(180deg,#ffcc99,#ff9933);color:#000;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:8px 6px;text-align:center;border-bottom:3px solid #d65c00;box-shadow:inset 0 -3px 4px rgba(255,255,255,.25)}#printTemplate .hasil th+th{border-left:2px solid #cc5200}#printTemplate .hasil td{padding:6px 6px;text-align:center;background:linear-gradient(180deg,#fff,#fdf6f0)}#printTemplate .hasil tr:nth-child(even) td{background:linear-gradient(180deg,#fffaf5,#fbeee4)}#printTemplate .hasil tr:hover td{background:#ffe5cc;box-shadow:inset 0 0 6px rgba(255,140,0,.3)}#printTemplate .hasil th:nth-child(1),#printTemplate .hasil td:nth-child(1){width:25px}#printTemplate .hasil th:nth-child(2),#printTemplate .hasil td:nth-child(2){width:auto;text-align:center;padding-left:12px}#printTemplate .hasil th:nth-child(3),#printTemplate .hasil th:nth-child(4),#printTemplate .hasil th:nth-child(5),#printTemplate .hasil th:nth-child(6),#printTemplate .hasil td:nth-child(3),#printTemplate .hasil td:nth-child(4),#printTemplate .hasil td:nth-child(5),#printTemplate .hasil td:nth-child(6){width:30px}#printTemplate .summary{font-size:10pt;font-weight:700;color:#000;background:linear-gradient(90deg,#ffd9b3,#ff9966);padding:6px 14px;border-radius:6px;text-align:center;margin-top:8px;display:inline-block;box-shadow:0 6px 10px rgba(0,0,0,.2)}@page{size:A4;margin:0 1cm 1cm .5cm}}
-    .blue-text { color: #1e3a8a; font-weight: 900; font-size: 22px; }
-    .legendBox{display:flex;justify-content:center;gap:20px;margin-top:15px;font-weight:bold}
-    .legendItem{display:flex;align-items:center;gap:6px}
-    .legendColor{width:18px;height:18px;border-radius:4px}
-    #judulUtama{text-align:center; font-size:24px; font-weight:700; margin-bottom:20px; color:#1e3a8a;}
-    #akumulasiTitle {text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 10px;}
-   
-    h1{text-align:center; font-size:28px; font-weight:700; margin:5px 0 15px; color:#1e3a8a;}
-    h2{text-align:center; margin-bottom:20px;}
-    .chart-container{display:flex; justify-content:space-around; flex-wrap:wrap; gap:20px; align-items:flex-start;}
-    .chart-box{flex:1 1 45%; background:#fff; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
-    .chart-box:nth-child(2){padding-top:60px;}
-    .blue-text{color:#1d4ed8; font-weight:bold;}
-    .instansi-title{font-weight:700; font-size:16px; color:#1e3a8a; margin:0 0 8px; text-align:center;}
-    #instansiFilter{display:block; margin:0 auto 12px auto; padding:6px 10px; border-radius:8px;}
-    #akumulasiChart,#instansiChart{width:100%;height:400px;}
-#keteranganOpsi {
-  display:none;
-  margin:15px auto;
-  padding:10px;
-  background:#f0f9ff;
-  border:1px solid #cce7ff;
-  border-radius:8px;
-  text-align:center;
-  font-weight:bold;
-  color:#1e3a8a;
-  max-width: 600px auto; /* supaya tidak terlalu lebar */
-}
   
-/* Animasi elegan */
-.qr-section {
-  text-align: center;
-  margin-top: 25px;
-  animation: fadeIn 1.2s ease-in-out;
-}
-
-.qr-section a {
-  color: #1e3a8a;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.qr-section a:hover {
-  text-decoration: underline;
-}
-
-#qrcodeCanvas {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 12px;
-  max-width: 25%;
-  height: auto;
-}
-
-#qrcodeCanvas:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(30, 58, 138, 0.6); /* glowing biru */
-}
-
-.qr-credit {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 18px;
-  font-family: 'Georgia', serif;
-  color: #1e3a8a;
-  letter-spacing: 0.5px;
-  animation: fadeInUp 1.5s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-
+/* --- Styling angka total responden --- */
+    #totalResponden {
+      color: #0d47a1;        /* biru tua */
+      font-weight: bold;     /* tebal */
+      font-size: 2.2em;      /* agak besar */
+      text-shadow: 2px 2px 2px rgba(0,0,0,0.3); /* bayangan modern */
+    }
+/* === Tambahan supaya judul naik === */
+    .chartBox h4 {
+      margin-top: 6px;   /* naikkan 10px */
+      margin-bottom: 4px;  /* jarak tipis dengan grafik */
+      font-weight: bold;
+    }
+    .blue-text {
+      color: #1e3a8a;      /* biru tua */
+      font-weight: bold;
+    }
   </style>
-<!-- pastikan Chart.js di-load lebih dulu -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-</script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js">
-</script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-<div class="container">
-<h1>
-    PEMETAAN PROFIL POLA PIKIR
-   </h1>
-<div class="paket-btns">
-<button class="paket-dasar" onclick="setPaket('dasar')">
-     Paket Dasar
-    </button>
-<button class="paket-menengah" onclick="setPaket('menengah')">
-     Paket Menengah
-    </button>
-<button class="paket-profesional" onclick="setPaket('profesional')">
-     Paket Profesional
-    </button>
-</div>
-<div class="hint">
-    Pilih paket terlebih dahulu, lalu jawab semua pertanyaan dan tekan
-    <b>
-     SUBMIT
-    </b>
-    .
-   </div>
-<div class="form-group">
-<label>
-     NAMA RESPONDEN:
-    </label>
-<input id="nama" placeholder="Tuliskan nama Anda" required="" type="text"/>
-</div>
-<div class="form-group">
-<label>
-     INSTANSI / LEMBAGA:
-    </label>
-<input id="instansi" list="instansiList" placeholder="Tuliskan instansi/lembaga Anda" type="text"/>
-<datalist id="instansiList">
-</datalist>
-</div>
-<div class="form-group">
-<label>
-     BIDANG / MAPEL:
-    </label>
-<input id="mapel" placeholder="Tuliskan bidang atau mapel Anda" type="text"/>
-</div>
-<div id="keteranganOpsi">
-    Keterangan Opsi: SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju
-   </div>
-<form id="quiz">
-</form>
-<div class="btn-container">
-<button class="btn primary" id="submitBtn" type="button">
-     SUBMIT
-    </button>
-<button class="btn danger" id="resetBtn" type="button">
-     RESET
-    </button>
-<button class="btn info" id="analisisBtn" type="button">
-     ANALISIS
-    </button>
-<button class="btn success" id="grafikBtn" type="button">
-     GRAFIK
-    </button>
-<button class="btn warning" id="cetakTanpaAnalisisBtn" type="button">
-     CETAK TANPA ANALISIS
-    </button>
-<!-- Hasil Skor & Kategori -->
-</div>
-<div class="result" id="result">
-</div>
-<div class="analysis" id="analysisBox">
-</div>
-<!-- Area Grafik -->
-<div id="chartArea">
-<div class="chartsHeader">
-<h2>
-      ANALISA GRAFIK
-     </h2>
-</div>
-<div class="chartsGrid">
-<div class="chartBox">
-<select id="instansiFilter">
-<option>
-        Semua Instansi
-       </option>
-</select>
-<div id="instansiChart" style="height:400px">
-</div>
-<div class="legendBox">
-<div class="legendItem">
-<div class="legendColor" style="background:#f87171">
-</div>
-        F
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#facc15">
-</div>
-        FG
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#4ade80">
-</div>
-        GF
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#60a5fa">
-</div>
-        G
-       </div>
-</div>
-</div>
-<div class="chartBox">
-<h4 id="akumulasiTitle">
-</h4>
-<div id="akumulasiChart" style="height:400px">
-</div>
-<div class="legendBox">
-<div class="legendItem">
-<div class="legendColor" style="background:#f87171">
-</div>
-        F
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#facc15">
-</div>
-        FG
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#4ade80">
-</div>
-        GF
-       </div>
-<div class="legendItem">
-<div class="legendColor" style="background:#60a5fa">
-</div>
-        G
-       </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Bagikan Link + QR -->
-<div style="text-align:center; margin-top:20px;">
-<!-- QR Code -->
-<canvas id="qrcodeCanvas">
-</canvas>
-<br/>
-<button class="btn info" id="downloadQR" style="margin-top:5px;">
-     Unduh QR
-    </button>
+  <div class="container">
+    <h1>PEMETAAN PROFIL POLA PIKIR</h1>
+    <p><b>Keterangan Opsi:</b> SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju</p>
 
-<!-- Tulisan Dipersembahkan -->
-<p style="margin-top:30px; font-weight:bold; font-size:16px; font-family:'Arial Narrow', serif; color:#1e3a8a;">
-     Dipersembahkan oleh: Ande Sofiani SMKN 1 Bojonggede Kabupaten Bogor
-     <br/>
-     Untuk Pendidikan Indonesia
-    </p>
-<p style="font-weight:bold; font-size:12px; margin-bottom:2px;">
-     Bagikan Link :
-     <a href="https://andesofiani.github.io/pemetaan-profil-pola-pikir/" target="_blank">
-      https://andesofiani.github.io/pemetaan-profil-pola-pikir/
-     </a>
-<!-- Email Kontak -->
-<p style="margin-top:1px; font-size:11px; font-weight:bold; color:#374151; font-family:'Segoe UI', sans-serif;">
-     ✉️ Email: 
-     <a href="mailto:andesofiani40@guru.smk.belajar.id" style="color:#1e3a8a; text-decoration:none;">
-       andesofiani40@guru.smk.belajar.id
-     </a>
-</p>
-<script>
-   let currentPaket = null;
+    <div class="form-group">
+      <label>NAMA RESPONDEN:</label>
+      <input type="text" id="nama" placeholder="Tuliskan nama Anda" required />
+    </div>
+    <div class="form-group">
+      <label>INSTANSI / LEMBAGA:</label>
+      <input type="text" id="instansi" placeholder="Tuliskan instansi/lembaga Anda" />
+    </div>
+    <div class="form-group">
+      <label>BIDANG / MAPEL:</label>
+      <input type="text" id="mapel" placeholder="Tuliskan bidang atau mapel Anda" />
+    </div>
 
-// === Autocomplete Instansi per Paket ===
-const instansiOptions = {
-  dasar: [
-  'SDN KOTABATU 03', 'SDN KOTABATU 05', 'SDN KOTABATU 07', 'SDN KP. SAWAH 01', 'SDN KUBANG 02',
-  'SDN LEBAKWANGI 02', 'SDN LEUWEUNGKOLOT 02', 'SDN LEUWIBATU 02', 'SDN LEUWIBATU 03', 'SDN LEUWIBATU 04',
-  'SDN LEUWIHALANG', 'SDN LEUWISADENG', 'SDN MALAHPAR', 'SDN MEGAMENDUNG 04', 'SDN MUARAJAYA',
-  'SDN NANGGELENG', 'SDN NEGLA BUANA', 'SDN NEGLASARI 03', 'SDN PABANGBON 02', 'SDN PAGELARAN 01',
-  'SDN PANDANSARI 01', 'SDN PANGARAKAN 02', 'SDN PARAKAN 02', 'SDN PARUNGPANJANG 02', 'SDN PASIRANGIN 05',
-  'SDN PASIRMADANG 02', 'SDN PASIRMADANG 03', 'SDN PASIRMUNCANG 02', 'SDN RABAK', 'SDN RANCABUNGUR 01',
-  'SDN SAMPAY', 'SDN SASANAWIYATA 01', 'SDN SATUS', 'SDN SELAAWI', 'SDN SIBANTENG 02',
-  'SDN SIRNABAKTI', 'SDN SITU SARI 02', 'SDN SROGOL 03', 'SDN SUKAHATI 03', 'SDN SUKAJAYA 02',
-  'SDN SUKAJAYA 03', 'SDN SUKALUYU 03', 'SDN SUKAMAHI', 'SDN SUKAMAJU', 'SDN SUKAMAJU 01',
-  'SDN SUKANAGARA 01', 'SDN SUKANEGARA 02', 'SDN SUKASARI 01', 'SDN SUKASIRNA 01', 'SDN SUKASIRNA 04',
-  'SDN SUKAWANGI 03', 'SDN TAJURHALANG 05', 'SDN TAMANSARI 04', 'SDN TANGGULUN', 'SDN TANJUNGSARI',
-  'SDN TARIKOLOT', 'SDN TENJO 01', 'SDN TENJO 02', 'SDN TENJOLAYA', 'SDN WANAHERANG 03',
-  'SDN BABAKAN 03', 'SDN BABAKAN SADENG 01', 'SDN BABAKAN SADENG 02', 'SDN BAGOANG 02', 'SDN BANTARKARET 02',
-  'SDN BATUTULIS', 'SDN BENGLE', 'SDN BOJONG 02', 'SDN BOJONGKIHARIB', 'SDN BOJONGKONENG 05',
-  'SDN BOJONGRANGKAS 01', 'SDN BUNISARI', 'SDN CEMPLANG 02', 'SDN CIADEG 03', 'SDN CIADEG 06',
-  'SDN CIARUTEUN ILIR 04', 'SDN CIARUTEUN UDIK 03', 'SDN CIASIHAN 01', 'SDN CIBATOK 05', 'SDN CIBATOK 06',
-  'SDN CIGOMBONG 05', 'SDN CIGOWONG 03', 'SDN CIGUHA', 'SDN CIHIDEUNG UDIK 01', 'SDN CIJUJUNG 03 KEC. CIBUNGBULANG',
-  'SDN CIJUJUNG 03 KEC. SUKARAJA', 'SDN CIKARET 01', 'SDN CIKURAY', 'SDN CILEUKSA 02', 'SDN CILEUNGSI 01',
-  'SDN CIMANDIRASA', 'SDN CIMANGGU 01', 'SDN CIPEUNDEUY 01', 'SDN CIPINING', 'SDN CIPOPOKOL',
-  'SDN CIRIMEKAR 02', 'SDN CISARUA 01', 'SDN CISARUA 02', 'SDN CISAUK', 'SDN CITARINGGUL 01',
-  'SDN DUKUH 05', 'SDN GOROWONG 01', 'SDN GOROWONG 05', 'SDN KADUSEWU', 'SDN KALONG 03',
-  'SDN KAREHKEL 02', 'SDN KARYASARI 01', 'SDN KARYASARI 03', 'SDN LEBAKPARI', 'SDN LEGOK DADAP',
-  'SDN LEUWILIANG 01', 'SDN LEUWILIANG 02', 'SDN LEUWILIANG 04', 'SDN MEKARWANGI', 'SDN MULYASARI',
-  'SDN MUNCANG', 'SDN NAGRAK 06', 'SDN NEGLASARI 02', 'SDN NEGLASARI 04', 'SDN NEGLASARI KEC. JASINGA',
-  'SDN NEGLASARI KEC. TANJUNGSARI', 'SDN NUNGGAHERANG 01', 'SDN NYALINDUNG', 'SDN PABANGBON 01', 'SDN PAKANSARI 04',
-  'SDN PALASARI 01', 'SDN PANGARAKAN 01', 'SDN PANYARANG', 'SDN PARAKANMUNCANG 02', 'SDN PARIGI',
-  'SDN PARUNG 02', 'SDN PASIRTENGAH 01', 'SDN PERINTIS', 'SDN PERUMNAS BP', 'SDN PURASARI 02',
-  'SDN RUMPIN 03', 'SDN SADENG 01', 'SDN SALUYU', 'SDN SIDAMULYA', 'SDN SINARSARI',
-  'SDN SIRNAGALIH 03', 'SDN SITU UDIK', 'SDN SUKAJADI', 'SDN SUKAKARYA', 'SDN SUKAMANAH 01',
-  'SDN SUKARAJA 01', 'SDN SUKARAJA 03', 'SDN TAPOS 03', 'SDN TELUKPINANG 03', 'SDN TLAJUNG UDIK 05',
-  'SDN TLAJUNG UDIK 06', 'SDN WARGAJAYA', 'SDN WATES', 'SD PLUS DAARUL FUDLOLA', 'SD RHEMA ENCARA SCHOOL',
-  'SD S AN NAJAH', 'SD S ANANDA', 'SD S LABS SCHOOL KAIZEN', 'SD TAHFIDZ AR-RASYID', 'SD TAZKIA GLOBAL ISLAMIC SCHOOL',
-  'SDIP NUR ALIF', 'SDIT AL FITYAN SCHOOL BOGOR', 'SDIT AL GHANIYUL MARTUA', 'SDIT BAITUSSALAM', 'SDIT GREEN BHAKTI INSANI',
-  'SDIT NAHWA NUR', 'SDIT PUTRA PAKUAN', 'SDIT UMMUL QURO', 'SDN 4 WANAHERANG', 'SDN 5 CICADAS',
-  'SDN BABAKAN 01', 'SDN BABAKAN 03', 'SDN BARENGKOK 01', 'SDN CIARUTEUN ILIR 05', 'SDN CIBITUNG KULON 05',
-  'SDN CIDOKOM 02', 'SDN CIPINANG 01', 'SDN CITRA INDAH SUKAMAJU', 'SDN DAGO 05', 'SDN GADOG 04',
-  'SDN KALONGSAWAH 02', 'SDN NAGRAK 05', 'SDN NEGLASARI', 'SDN PABUARAN', 'SDN PALASARI 03',
-  'SDN PASIR JAWA 01', 'SDN PUTATNUTUG 02', 'SDN SUKAASIH 01', 'SDN SUKAMANAH 03', 'SDN SUKASARI 03',
-  'SDN TANJUNGSARI 01', 'SDS INSAN PERTIWI', 'SDS IQRO KAIRO', 'SDS ISLAM TERPADU AMALIA', 'SDS NASIONAL PLUS PELITA INSANI',
-  'SDS NURUL ISLAM', 'SDTIARA SCHOOL II', 'SLB AL-FAJRI', 'SLB AYAH BUNDA', 'SLB BINA SEJAHTERA',
-  'SLB MEKAR SARI 1', 'SLB NEGERI BOGOR', 'SMP AL - FALAH LULUT', 'SMP AL ASHRIYAH NURUL IMAN', 'SMP AL AZHAR SYIFA BUDI CIBINONG',
-  'SMP AL- FAATHIR', 'SMP AL FALAH TLAJUNG', 'SMP AL HIDAYAH', 'SMP AL MINHAJ TAMANSARI', 'SMP Al-AqSyar',
-  'SMP AL-WAFI ISLAMIC BOARDING SCHOOL', 'SMP AN NAHL ISLAMIC SCHOOL', 'SMP ANGKASA BOGOR', 'SMP AR-RASYID', 'SMP BUNDA',
-  'SMP CIKAL CENDEKIA', 'SMP CIPTA CENDIKIA', 'SMP CITRA NUSA', 'SMP DARUL FIKRI NANGGUNG', 'SMP DJOJOREDJO PUTAT NUTUG',
-  'SMP FITRAH ISLAMIC WORLD ACADEMY', 'SMP GIRI TARUNA', 'SMP GLOBAL INSANI SCHOOL', 'SMP INSAN TELADAN', 'SMP ISLAM AL ANSHOR',
-  'SMP ISLAM AL HIKMAH', 'SMP ISLAM ASY-SYUHADA', 'SMP ISLAM BOEDI OETOMO', 'SMP ISLAM IMAM SYAFII', 'SMP ISLAM IZZATUL MADANI',
-  'SMP ISLAM MIFTAHUL HUDA', 'SMP ISLAM NURUL IHSAN', 'SMP ISLAM PARUNG', 'SMP ISLAM PLUS DAARUL JANNAH', 'SMP ISLAM SIROJUL ATHFAL',
-  'SMP ISLAM TERPADU AL MUTTAQIEN', 'SMP ISLAM TERPADU AL-FITYAN BSB', 'SMP ISLAM TERPADU ASY SYIFA QOLBU', 'SMP IT AL KAHFI', 'SMP IT AL MADINAH',
-  'SMP IT AL UTSMANIYAH', 'SMP IT AL-FATH', 'SMP IT ANDALUS', 'SMP IT KAIFA', 'SMP IT NIDAUL UMMAH',
-  'SMP IT UMMUL QURO', 'SMP JAKARTA ISLAMIC BOY BOARDING SCHOOL', 'SMP KRISTEN KETAPANG III', 'SMP MULIA BUANA', 'SMP N 1 PARUNG',
-  'SMP N 3 GUNUNGSINDUR', 'SMP NAHDLATUL WATHAN', 'SMP NASIONAL PLUS PELITA INSANI', 'SMPN 1 CARIU', 'SMPN 1 CIBUNGBULANG',
-  'SMPN 1 CIGOMBONG', 'SMPN 1 CIGUDEG', 'SMPN 1 CIOMAS', 'SMPN 1 CISARUA', 'SMPN 1 CITEUREUP',
-  'SMPN 1 KEMANG', 'SMPN 1 KLAPANUNGGAL', 'SMPN 1 LEUWILIANG', 'SMPN 1 PARUNG PANJANG', 'SMPN 1 SUKAJAYA',
-  'SMPN 1 TENJO', 'SMPN 2 CIAWI', 'SMPN 2 CIBINONG', 'SMPN 2 CITEUREUP', 'SMPN 2 GUNUNGPUTRI',
-  'SMPN 2 PAMIJAHAN', 'SMPN 2 SUKARAJA', 'SMPN 2 TAMAN SARI', 'SMPN 3 CIBINONG', 'SMPN 3 CIBUNGBULANG',
-  'SMPN 3 CITEUREUP', 'SMPN 3 PARUNGPANJANG', 'SMPN 4 CILEUNGSI', 'SMPN 4 LEUWILIANG', 'SMPN SATU ATAP 01 TENJO',
-  'SMP PASIRMADANG', 'SMP PELITA CIAMPEA', 'SMP PEMBERDAYAAN UMMAT AN-NAHL', 'SMP PGRI BAGOANG', 'SMP PGRI GUNUNG PICUNG',
-  'SMP PGRI KLAPANUNGGAL', 'SMP PGRI TUGU 207', 'SMP PINGKU', 'SMP PLUS AL-KINDA', 'SMP PLUS ARRUSYDA',
-  'SMP PLUS NURUL HIKMAH AL HAKIM', 'SMP PUSPA MEKAR', 'SMP PUTRA PAKUAN BOGOR', 'SMP QURAN AS-SALAAM', 'SMP QURAN ELTAHFIDH',
-  'SMP SMART EKSELENSIA', 'SMP SYARAFUL HARAMAIN-IBS', 'SMP TARUNA TERPADU', 'SMPIT AL FATIH CIGOMBONG', 'SMPIT DARUL QUR-AN MULIA',
-  'SMPIT NURUL FIKRI BOGOR', 'SMPN 3 CIOMAS', 'SMPS AL JIHAD', 'SMPS ANANDA', 'SMPS CITRA BERKAT',
-  'SMPS HANGTUAH 6', 'SMPS IT BINA MASYARAKAT MANDIRI', 'SMPS KUSUMA BANGSA TAJURHALANG', 'SMPS PGRI 1 PARUNG', 'SMPS REGINA CAELI',
-  'SMPS TERPADU AL MAARIF', 'SMPS TRIWIJAYA'
-],
-  menengah: ['SMK AL - HALIM GARUT', 'SMK AL - MUFTI', 'SMK AL- WAFA', 'SMK AL-BADAR', 'SMK AL-BAROKAH',
-  'SMK AL-HUDA', 'SMK ALODIA', 'SMK ANANDA MITRA INDUSTRI DELTAMAS', 'SMK ANGKASA 1 MARGAHAYU', 'SMK ANGKASA 2 MARGAHAYU',
-  'SMK Ansoruna Hade Rancage', 'SMK AR ROSYID CAMPAKA PUTRA', 'SMK ARIA CENDEKIA', 'SMK ARROHMAH DADAHA', 'SMK AS-SALAFIYAH',
-  'SMK ATLANTIS PLUS', 'SMK BAKTI ASSYUKUR', 'SMK BAKTI INDONESIA', 'SMK BAKTI MANDIRI KOTA BEKASI', 'SMK BANGUN PERSADA',
-  'SMK BHAKTI KENCANA CICURUG', 'SMK BIDARA MUKTI GARUT', 'SMK BINAKARYA MANDIRI M', 'SMK BOASH 2', 'SMK BUANA INSAN',
-  'SMK BUDI BAKTI CIWIDEY', 'SMK BUDI BHAKTI MANDIRANCAN', 'SMK BUMI SILIWANGI', 'SMK CINTA NEGERI', 'SMK DAIROBBY',
-  'SMK DEWANTARA 2', 'SMK FAJAR UTAMA', 'SMK GHAMA CARAKA', 'SMK Global Persada Mandiri', 'SMK GOLDEN',
-  'SMK ILMAN NAFIAH CIREBON', 'SMK ILMINA PERSADA', 'SMK INFORMATIKA BINA GENERASI 2', 'SMK INFORMATIKA BINA GENERASI 3', 'SMK INSAN KAMIL',
-  'SMK INSAN TAZAKKA', 'SMK INTERMEDIKA', 'SMK ISLAM ATTURMUDZIYYAH GARUT', 'SMK ISLAM HEGARMANAH', 'SMK ISLAM TERPADU AR-RISALAH CARIU',
-  'SMK ISLAM TERPADU YASIN', 'SMK IT ASSALAM KARAWANG', 'SMK IT ATTAQWA PUSAT', 'SMK IT HIDAYATUL MUJAHIDIN', 'SMK KARYA BAHANA MANDIRI 2',
-  'SMK KARYA PEMBANGUNAN 2 CIPONGKOR', 'SMK KESEHATAN BHAKTI KENCANA', 'SMK KESEHATAN HIDAYAH MEDIKA', 'SMK KESEHATAN PRIMA INDONESIA', 'SMK KESEHATAN RAJAWALI',
-  'SMK KHARISMA NUSANTARA', 'SMK KORPRI MAJALENGKA', 'SMK KP 2 MARGAHAYU', 'SMK KP PASEH', 'SMK KP PASIRJAMBU',
-  'SMK MA ARIF CIDAUN', 'SMKN  1 CIBINONG', 'SMKN  1 CILAKU', 'SMKN 1 CIMAHI', 'SMKN 1 KEMANG',
-  'SMKN 1 SUKALUYU', 'SMKN 1 SUKANAGARA', 'SMKN 1 TASIKMALAYA', 'SMKN 15 KOTA BEKASI', 'SMKN 2 CIBINONG',
-  'SMKN 2 CIMAHI', 'SMKN 2 KUNINGAN', 'SMKN 3 KUNINGAN', 'SMK NU DARUSSALAM', 'SMK NUFA CITRA MANDIRI',
-  'SMK NURUL FALAH', 'SMK NURUL HUDA SUKABUMI', 'SMK PARIWISATA METLAND SCHOOL', 'SMK PARIWISATA TELKOM', 'SMK PASUNDAN 3',
-  'SMK PEMBANGUNAN BANDUNG BARAT', 'SMK PENIDA 2 KATAPANG', 'SMK PERINTIS 1 DEPOK', 'SMK PGRI SUBANG', 'SMK PLUS ARRUSYDA',
-  'SMK PLUS DARUSSURUR', 'SMK PLUS PELITA NUSANTARA', 'SMK PLUS RASANA RASYIDAH', 'SMK PLUS RIYADHUL HUDA', 'SMK PONPES MANBA\'UL \'ULUM',
-  'SMK PRESIDEN CIREBON', 'SMK PRIMA MAARIF', 'SMK PRIMA PRATAMA BOARDING SCHOOL', 'SMK SAHID', 'SMK SANGKURIANG 1',
-  'SMK SARIWANGI', 'SMK SATRIA BANGSA', 'SMK SINAR ISLAM ASIA PASIFIK', 'SMK SKYE DIGIPRENEUR', 'SMK SUMATRA 40',
-  'SMK SWASTA KOTA ILMU', 'SMK SWASTA MUTIARA HUSADA', 'SMK SYIS BADRUZZAMAN', 'SMK TARUNA MANDIRI', 'SMK TARUNA TERPADU AL MUSYAWARAH',
-  'SMK TI PEMBANGUNAN', 'SMK TUNAS BANGSA', 'SMK TUNAS MEDIA', 'SMK TUNGGAL PRAKARSA', 'SMK WAHDATUL UMMAT',
-  'SMK YADIKA SOREANG', 'SMK YPIB', 'SMKIT AL MUSTHAFAWIYAH', 'SMKN 1 BANDUNG', 'SMKN 1 BOGOR',
-  'SMKN 1 BOJONG GEDE', 'SMKN 1 CIAMIS', 'SMKN 1 CIANJUR', 'SMKN 1 CIBADAK SUKABUMI', 'SMKN 1 CIBINONG',
-  'SMKN 1 CIKAMPEK', 'SMKN 1 CIPAKU', 'SMKN 1 CIPEUNDEUY', 'SMKN 1 CIPONGKOR', 'SMKN 1 DEPOK',
-  'SMKN 1 GUNUNG SINDUR', 'SMKN 1 KANDANGHAUR', 'SMKN 1 KARAWANG', 'SMKN 1 KEDAWUNG', 'SMKN 1 KOTA BEKASI',
-  'SMKN 1 LELEA', 'SMKN 1 LEMAHABANG CIREBON', 'SMKN 1 PALABUHANRATU', 'SMKN 1 PALASAH', 'SMKN 1 PANJALU',
-  'SMKN 1 PANUMBANGAN', 'SMKN 1 PANYINGKIRAN', 'SMKN 1 RANCABALI', 'SMKN 1 SETU', 'SMKN 1 SUBANG',
-  'SMKN 1 SUKALARANG', 'SMKN 1 SURADE', 'SMKN 1 TAMBUN UTARA', 'SMKN 1 TERISI', 'SMKN 1 TIRTAJAYA',
-  'SMKN 10 BANDUNG', 'SMKN 11 BANDUNG', 'SMKN 13 Bandung', 'SMKN 15 BANDUNG', 'SMKN 2 BALEENDAH',
-  'SMKN 2 CIKARANG BARAT', 'SMKN 2 CIREBON', 'SMKN 2 KOTA BEKASI', 'SMKN 2 PURWAKARTA', 'SMKN 2 SUBANG',
-  'SMKN 2 SUKABUMI', 'SMKN 3 BALEENDAH', 'SMKN 3 BANDUNG', 'SMKN 3 BOGOR', 'SMKN 3 KARAWANG',
-  'SMKN 3 KOTA BEKASI', 'SMKN 4 BANDUNG', 'SMKN 4 GARUT', 'SMKN 4 PADALARANG', 'SMKN 4 TASIKMALAYA',
-  'SMKN 5 BANDUNG', 'SMKN 5 KOTA BEKASI', 'SMKN 6 GARUT', 'SMKN 6 KOTA BEKASI', 'SMKN 7 BANDUNG',
-  'SMKN 7 GARUT', 'SMKN 8 KOTA BEKASI', 'SMKN 9 BANDUNG', 'SMKN RAJAPOLAH', 'SMKN SUKASARI',
-  'SMKS 1 AMAL MULIA', 'SMKS 3 PASUNDAN PERKASA', 'SMKS ABDI KARYA LEMAHABANG CIREBON', 'SMKS ADZKIA KHARISMA', 'SMKS AGRI INSANI',
-  'SMKS AL BANA', 'SMKS AL HADIID 1 CILEUNGSI BOGOR', 'SMKS AL HADIID 2 CILEUNGSI BOGOR', 'SMKS AL HASRA', 'SMKS AL IBROHIMIYAH',
-  'SMKS AL LUTHFAH', 'SMKS AL MADANIYAH', 'SMKS AL MARUFI', 'SMKS AL MUBAROK CISALAK', 'SMKS AL MUHADJIRIN 2 BEKASI',
-  'SMKS AL MUHADJIRIN BEKASI', 'SMKS AL MUHTADIN', 'SMKS AL MUNIR', 'SMKS AL MUSLIM', 'SMKS AL MUSTHOFA',
-  'SMKS AL WASLIYAH SUMBER', 'SMKS AL-FALAH', 'SMKS AL-HUDA SADANANYA', 'SMKS AL-HUDA SARIWANGI', 'SMKS AL-MUMTAZ',
-  'SMKS ANALIS KIMIA NUSA BANGSA BOGOR', 'SMKS ANANDA BEKASI', 'SMKS ANNUR', 'SMKS AR RAHMAH', 'SMKS AR RAHMAH',
-  'SMKS ARJUNA', 'SMKS ARRAHMAN DEPOK', 'SMKS AS SAABIQ', 'SMKS ASMAUL HUSNA', 'SMKS ASY SYUKUR',
-  'SMKS ATTAJIR', 'SMKS ATTAQWA 01 TARUMAJAYA', 'SMKS AZZAINIYAH', 'SMKS BAABULKAMIL', 'SMKS BANI ABDUL MALIK',
-  'SMKS BANI SALEH', 'SMKS BHAKTI INSANI BOGOR', 'SMKS BHAKTI KARTINI', 'SMKS BHAKTI KENCANA BANDUNG', 'SMKS BHAKTI KENCANA CIAWI',
-  'SMKS BHAKTI PERTIWI MANONJAYA', 'SMKS BINA CENDEKIA CIREBON', 'SMKS BINA HARAPAN SUMEDANG', 'SMKS BINA KARYA MANDIRI BEKASI', 'SMKS BINA MANDIRI',
-  'SMKS BINA RAHAYU', 'SMKS BINA SEJAHTERA 1 BOGOR', 'SMKS BINA TEKNIKA', 'SMKS BINA WISATA LEMBANG', 'SMKS BISNIS DAN TEKNOLOGI BEKASI',
-  'SMKS BISNIS INFORMATIKA BEKASI', 'SMKS BOEDI LUHUR', 'SMKS BUDI MULIA', 'SMKS CIMENTENG', 'SMKS CO2',
-  'SMKS DAARUDDAWAH', 'SMKS DARUL HIKMAH', 'SMKS DARUL KAWAKIB', 'SMKS DARUL ULUM', 'SMKS DAYA UTAMA KOTA BEKASI',
-  'SMKS DELTA MUNDU CIREBON', 'SMKS DEWANTARA', 'SMKS DHARMA PERTIWI', 'SMKS DWI PUTRI HUSADA', 'SMKS EKONOMIKA',
-  'SMKS FARMASI BHAKTI KENCANA', 'SMKS FARMASI BHAKTI SEJAHTERA JATINANGOR', 'SMKS FARMASI BOGOR', 'SMKS FARMASI HARAPAN MASSA', 'SMKS FARMASI MUHAMMADIYAH CIREBON',
-  'SMKS FARMASI PASUNDAN KAWALI', 'SMKS FARMASI TUNAS MANDIRI', 'SMKS FARMASI YPIB CIREBON', 'SMKS FATAHILLAH CILEUNGSI', 'SMKS GALUH RAHAYU SINDANGKASIH',
-  'SMKS GANESHA CIMANGGUNG', 'SMKS GARUDA NUSANTARA', 'SMKS GAZZA WIGUNA 1 MEGAMENDUNG', 'SMKS GENERASI MANDIRI GUNUNG PUTRI', 'SMKS GENESIS MEDICARE',
-  'SMKS GRACIKA CIREBON', 'SMKS GRAFIKA MARDI YUANA BOGOR', 'SMKS HUMANIKA 1', 'SMKS HUTAMA BEKASI', 'SMKS IBNU AQIL BOGOR',
-  'SMKS ICB CINTA NIAGA BANDUNG', 'SMKS INDUSTRI JABABEKA', 'SMKS INDUSTRI LOGAM SITURAJA SUMEDANG', 'SMKS INFOKOM BOGOR', 'SMKS INFORMATIKA BINA GENERASI BOGOR',
-  'SMKS INFORMATIKA PESAT', 'SMKS INOVASI MANDIRI', 'SMKS INSAN MANDIRI', 'SMKS INSAN MANDIRI', 'SMKS IPTEK CILAMAYA',
-  'SMKS ISDA BABAKAN', 'SMKS ISLAM ANNAZHIRIYAH', 'SMKS ISLAM AZZHAHIRIYAH', 'SMKS ISLAM TERISI', 'SMKS IT ABU DZAR',
-  'SMKS IT ATAMMUL HUSNA', 'SMKS IT BINA INSANI', 'SMKS JAMIYATUL AULAD', 'SMKS JAYABEKA 01 KARAWANG', 'SMKS KARYA BAHANA MANDIRI',
-  'SMKS KARYA BHAKTI', 'SMKS KARYA BHAKTI 1 BEKASI', 'SMKS KARYA GUNA BHAKTI 1', 'SMKS KARYA GUNA BHAKTI 2', 'SMKS KENCANA BANDUNG',
-  'SMKS KESEHATAN ANNISA', 'SMKS KESEHATAN ANNISA 3', 'SMKS KESEHATAN BHAKTI INSANI', 'SMKS KESEHATAN BHAKTI KENCANA', 'SMKS KESEHATAN BOJONGSOANG',
-  'SMKS KESEHATAN CIANJUR', 'SMKS KESEHATAN EFARINA', 'SMKS KESEHATAN HARAPAN BUNDA', 'SMKS KESEHATAN LOGOS', 'SMKS KESEHATAN PATRIOT 3',
-  'SMKS KESEHATAN SENTRA MEDIKA', 'SMKS KESEHATAN TAMBUN ISLAMIC SCHOOL', 'SMKS KESEHATAN YPKH PALIMANAN', 'SMKS KESEHATAN ZAMZAM KURNIA', 'SMKS KOMPUTER ARYA KARINA PRATAMA AKP',
-  'SMKS KOMUNIKA PRESTASI GENTUR PADAKEMBANG', 'SMKS KUSUMA BANGSA', 'SMKS MAARIF PANGENAN', 'SMKS MADANI', 'SMKS MANBAUL ULUM',
-  'SMKS MANDALA', 'SMKS MARDI YUANA', 'SMKS MEDIA KREATIF', 'SMKS MEDIKACOM', 'SMKS MEILIA MEDIKA',
-  'SMKS MERAH PUTIH CIASEM SUBANG', 'SMKS MIFTAHUL ULUM', 'SMKS MITRA INDUSTRI', 'SMKS MITRA KARYA RENGASDENGKLOK', 'SMKS MITRA NUSANTARA',
-  'SMKS MITRA PASUNDAN', 'SMKS MITRA UNGGUL', 'SMKS MUHAMMADIYAH 2 CIBADAK', 'SMKS MUHAMMADIYAH CIKELET', 'SMKS MUHAMMADIYAH GARUT',
-  'SMKS MUHAMMADIYAH HAURGEULIS', 'SMKS MUHAMMADIYAH KADUNGORA', 'SMKS MUHAMMADIYAH SEGERAN JUNTINYUAT', 'SMKS MULTICOMP DEPOK', 'SMKS NU KAPLONGAN',
-  'SMKS NUR SYAFIIL UMMAH', 'SMKS NURUL HIKMAH', 'SMKS NURUL ILMI', 'SMKS NUURUL BAYAN KALAPANUNGGAL', 'SMKS PADAKEMBANG',
-  'SMKS PAKUSARAKAN CIKAMPEK', 'SMKS PASIM PLUS SUKABUMI', 'SMKS PASUNDAN 1 BANDUNG', 'SMKS PASUNDAN 3 BANDUNG', 'SMKS PATIH SEMI UJUNG SEMI',
-  'SMKS PELITA ALAM', 'SMKS PELITA CIAMPEA 2', 'SMKS PELITA CIANJUR', 'SMKS PELITA DEPOK', 'SMKS PERBANKAN INDONESIA',
-  'SMKS PERMATA', 'SMKS PERSADA', 'SMKS PERSADA BAGIA INFORMATIKA', 'SMKS PERSADA HUSADA INDONESIA', 'SMKS PGRI 1',
-  'SMKS PGRI 1 PALIMANAN CIREBON', 'SMKS PGRI 2', 'SMKS PGRI BANDUNG', 'SMKS PGRI GARUT', 'SMKS PGRI JATINANGOR',
-  'SMKS PGRI RAWALUMBU', 'SMKS PGRI SUKAMAKMUR', 'SMKS PLUS AL FARHAN', 'SMKS PLUS MUHAJIRIN', 'SMKS PLUS SUKARAJA',
-  'SMKS PRAKARYA INTERNASIONAL 1 BANDUNG', 'SMKS PRIMA GRAFIKA', 'SMKS PROFITA BANDUNG', 'SMKS PUI GEGESIK', 'SMKS PUJA BANGSA BM',
-  'SMKS PUNCAK BARU', 'SMKS PURNAWARMAN PURWAKARTA', 'SMKS PUTRA BANGSA DEPOK', 'SMKS PUTRA MANDALA I', 'SMKS PUTRA PAGELARAN',
-  'SMKS RAYHAN', 'SMKS SAIS 1', 'SMKS SANDIKTA BEKASI', 'SMKS SANTANA 2 CIBATU', 'SMKS SARI FARMA',
-  'SMKS SETIA NEGARA DEPOK', 'SMKS SIROJUL HUDA 3', 'SMKS SMART', 'SMKS STRADA BUDI LUHUR', 'SMKS SUKAPURA',
-  'SMKS SUMBER DAYA BEKASI', 'SMKS SUMPAH PEMUDA 2', 'SMKS SWADAYA BOJONGASIH', 'SMKS TALENTA BANGSA', 'SMKS TAMAN KARYA MADYA EKONOMI CIREBON',
-  'SMKS TAMANSISWA BANDUNG', 'SMKS TARUNA BHAKTI', 'SMKS TARUNA BHAKTI', 'SMKS TEKNIKOM CIKARANG', 'SMKS TEKNOLOGI INDUSTRI MANDIRI',
-  'SMKS TEKNOLOGI PLUS PADJADJARAN SUKABUMI', 'SMKS TELEKOMUNIKASI TELESANDI', 'SMKS TELKOM BANDUNG', 'SMKS TERPADU 2 YASPIDA SUKABUMI', 'SMKS TERPADU BOJONGNANGKA TASIKMALAYA',
-  'SMKS TERPADU H. ABDUL MALIK', 'SMKS TERPADU HIDAYATUL FAIZIEN', 'SMKS TEXAR KARAWANG', 'SMKS TI ANNISA 2', 'SMKS TIARA NUSA',
-  'SMKS TIK AL-ISLAM', 'SMKS TRI DHARMA 3 BOGOR', 'SMKS WAHIDIN CIREBON', 'SMKS WIDYA KUSUMA', 'SMKS WIKRAMA 1 GARUT',
-  'SMKS WIKRAMA BOGOR', 'SMKS WINDIAN NUGRAHA BOGOR', 'SMKS WIRASABA KARAWANG', 'SMKS WYATA DHARMA', 'SMKS YABP GARUT',
-  'SMKS YADIKA 12', 'SMKS YADIKA 6 BEKASI', 'SMKS YADIKA 7 BOGOR', 'SMKS YADIKA TANJUNGSARI', 'SMKS YAMI WALED',
-  'SMKS YAPARI AKTRIPA', 'SMKS YAPPRI SUMEDANG', 'SMKS YASBU AL QOMARIYAH', 'SMKS YASIDIK', 'SMKS YP 79 MAJALAYA',
-  'SMKS YPF', 'SMKS YPPD DEPOK', 'SMKS YPPS SUMEDANG', 'SMKS YPUI', 'SMKS YUDHA UTAMA NGAMPRAH', 'SMA AL AMIN', 'SMA AL MINHAJ', 'SMA BOASH', 'SMA CIPTA CENDIKIA', 'SMA FITRAH ISLAMIC WORLD ACADEMY',
-  'SMA ISLAM AL AZHAR 24', 'SMA ISLAM AL-GHOZALI', 'SMA ISLAM CIKAL HARAPAN 2', 'SMA ISLAM TERPADU AL MUSTHAFAWIYAH', 'SMA ISLAM TERPADU AL-MADINAH',
-  'SMA ISLAM TERPADU NURUL FIKRI BOARDING SCHOOL', 'SMA IT AL ANDALUS', 'SMA IT Al Fityan Boarding School Bogor', 'SMA IT DARUL QUR AN', 'SMA IT DARUL QUR`AN MULIA',
-  'SMA Nahdlatul Wathan Bogor', 'SMA NEGERI 1 LEUWISADENG', 'SMA QURAN ASY SYAHID', 'SMA RAUDHATUL MUTTAQIN', 'SMA REGINA CAELI',
-  'SMA SMART CIBINONG', 'SMA TARUNA BANGSA', 'SMAN 1 BABAKAN MADANG', 'SMAN 1 CARINGIN', 'SMAN 1 CIAWI BOGOR',
-  'SMAN 1 CIBINONG', 'SMAN 1 CIBUNGBULANG', 'SMAN 1 CIGOMBONG', 'SMAN 1 CITEUREUP', 'SMAN 1 DRAMAGA',
-  'SMAN 1 GUNUNG SINDUR', 'SMAN 1 PAMIJAHAN', 'SMAN 1 PARUNG', 'SMAN 1 PARUNG PANJANG', 'SMAN 1 RANCABUNGUR',
-  'SMAN 1 RUMPIN', 'SMAN 2 CIBINONG', 'SMAN 3 CIBINONG', 'SMAN 4 CIBINONG', 'SMAS AL ASIYAH',
-  'SMAS AL KAHFI', 'SMAS AL MUKLISIN', 'SMAS AMALIAH', 'SMAS AN NAJAH', 'SMAS ASHRIYAH NURUL IMAN',
-  'SMAS BP FAI UMJ', 'SMAS BUNDA', 'SMAS BUNDA HATI KUDUS', 'SMAS CISARUA', 'SMAS CITRA NUSA',
-  'SMAS DARUL KHOLIDIN', 'SMAS DWIWARNA', 'SMAS FATHAN MUBINA', 'SMAS GEMILANG YASIFA', 'SMAS GLOBAL MANDIRI',
-  'SMAS INDOCEMENT', 'SMAS KETAPANG 3', 'SMAS MARSUDIRINI', 'SMAS MATHLAHUL HUDA', 'SMAS MIFTAHUL HUDA AL BARKAH',
-  'SMAS MUHAMMADIYAH PARUNG', 'SMAS MULIA BUANA', 'SMAS PGRI CIBINONG', 'SMAS PGRI RUMPIN', 'SMAS PLUS CENDEKIA CIKEAS',
-  'SMAS PLUS DARUSSALAM KOPOSARI', 'SMAS PLUS IBNU SINA', 'SMAS PM AT TAQWA', 'SMAS PUSPA MEKAR', 'SMAS SMART EKSELENSIA INDONESIA',
-  'SMAS WIDYA KUSUMA'
-],
+    <form id="quiz"></form>
 
-  profesional: [
-  'SDN KOTABATU 03', 'SDN KOTABATU 05', 'SDN KOTABATU 07', 'SDN KP. SAWAH 01', 'SDN KUBANG 02',
-  'SDN LEBAKWANGI 02', 'SDN LEUWEUNGKOLOT 02', 'SDN LEUWIBATU 02', 'SDN LEUWIBATU 03', 'SDN LEUWIBATU 04',
-  'SDN LEUWIHALANG', 'SDN LEUWISADENG', 'SDN MALAHPAR', 'SDN MEGAMENDUNG 04', 'SDN MUARAJAYA',
-  'SDN NANGGELENG', 'SDN NEGLA BUANA', 'SDN NEGLASARI 03', 'SDN PABANGBON 02', 'SDN PAGELARAN 01',
-  'SDN PANDANSARI 01', 'SDN PANGARAKAN 02', 'SDN PARAKAN 02', 'SDN PARUNGPANJANG 02', 'SDN PASIRANGIN 05',
-  'SDN PASIRMADANG 02', 'SDN PASIRMADANG 03', 'SDN PASIRMUNCANG 02', 'SDN RABAK', 'SDN RANCABUNGUR 01',
-  'SDN SAMPAY', 'SDN SASANAWIYATA 01', 'SDN SATUS', 'SDN SELAAWI', 'SDN SIBANTENG 02',
-  'SDN SIRNABAKTI', 'SDN SITU SARI 02', 'SDN SROGOL 03', 'SDN SUKAHATI 03', 'SDN SUKAJAYA 02',
-  'SDN SUKAJAYA 03', 'SDN SUKALUYU 03', 'SDN SUKAMAHI', 'SDN SUKAMAJU', 'SDN SUKAMAJU 01',
-  'SDN SUKANAGARA 01', 'SDN SUKANEGARA 02', 'SDN SUKASARI 01', 'SDN SUKASIRNA 01', 'SDN SUKASIRNA 04',
-  'SDN SUKAWANGI 03', 'SDN TAJURHALANG 05', 'SDN TAMANSARI 04', 'SDN TANGGULUN', 'SDN TANJUNGSARI',
-  'SDN TARIKOLOT', 'SDN TENJO 01', 'SDN TENJO 02', 'SDN TENJOLAYA', 'SDN WANAHERANG 03',
-  'SDN BABAKAN 03', 'SDN BABAKAN SADENG 01', 'SDN BABAKAN SADENG 02', 'SDN BAGOANG 02', 'SDN BANTARKARET 02',
-  'SDN BATUTULIS', 'SDN BENGLE', 'SDN BOJONG 02', 'SDN BOJONGKIHARIB', 'SDN BOJONGKONENG 05',
-  'SDN BOJONGRANGKAS 01', 'SDN BUNISARI', 'SDN CEMPLANG 02', 'SDN CIADEG 03', 'SDN CIADEG 06',
-  'SDN CIARUTEUN ILIR 04', 'SDN CIARUTEUN UDIK 03', 'SDN CIASIHAN 01', 'SDN CIBATOK 05', 'SDN CIBATOK 06',
-  'SDN CIGOMBONG 05', 'SDN CIGOWONG 03', 'SDN CIGUHA', 'SDN CIHIDEUNG UDIK 01', 'SDN CIJUJUNG 03 KEC. CIBUNGBULANG',
-  'SDN CIJUJUNG 03 KEC. SUKARAJA', 'SDN CIKARET 01', 'SDN CIKURAY', 'SDN CILEUKSA 02', 'SDN CILEUNGSI 01',
-  'SDN CIMANDIRASA', 'SDN CIMANGGU 01', 'SDN CIPEUNDEUY 01', 'SDN CIPINING', 'SDN CIPOPOKOL',
-  'SDN CIRIMEKAR 02', 'SDN CISARUA 01', 'SDN CISARUA 02', 'SDN CISAUK', 'SDN CITARINGGUL 01',
-  'SDN DUKUH 05', 'SDN GOROWONG 01', 'SDN GOROWONG 05', 'SDN KADUSEWU', 'SDN KALONG 03',
-  'SDN KAREHKEL 02', 'SDN KARYASARI 01', 'SDN KARYASARI 03', 'SDN LEBAKPARI', 'SDN LEGOK DADAP',
-  'SDN LEUWILIANG 01', 'SDN LEUWILIANG 02', 'SDN LEUWILIANG 04', 'SDN MEKARWANGI', 'SDN MULYASARI',
-  'SDN MUNCANG', 'SDN NAGRAK 06', 'SDN NEGLASARI 02', 'SDN NEGLASARI 04', 'SDN NEGLASARI KEC. JASINGA',
-  'SDN NEGLASARI KEC. TANJUNGSARI', 'SDN NUNGGAHERANG 01', 'SDN NYALINDUNG', 'SDN PABANGBON 01', 'SDN PAKANSARI 04',
-  'SDN PALASARI 01', 'SDN PANGARAKAN 01', 'SDN PANYARANG', 'SDN PARAKANMUNCANG 02', 'SDN PARIGI',
-  'SDN PARUNG 02', 'SDN PASIRTENGAH 01', 'SDN PERINTIS', 'SDN PERUMNAS BP', 'SDN PURASARI 02',
-  'SDN RUMPIN 03', 'SDN SADENG 01', 'SDN SALUYU', 'SDN SIDAMULYA', 'SDN SINARSARI',
-  'SDN SIRNAGALIH 03', 'SDN SITU UDIK', 'SDN SUKAJADI', 'SDN SUKAKARYA', 'SDN SUKAMANAH 01',
-  'SDN SUKARAJA 01', 'SDN SUKARAJA 03', 'SDN TAPOS 03', 'SDN TELUKPINANG 03', 'SDN TLAJUNG UDIK 05',
-  'SDN TLAJUNG UDIK 06', 'SDN WARGAJAYA', 'SDN WATES', 'SD PLUS DAARUL FUDLOLA', 'SD RHEMA ENCARA SCHOOL',
-  'SD S AN NAJAH', 'SD S ANANDA', 'SD S LABS SCHOOL KAIZEN', 'SD TAHFIDZ AR-RASYID', 'SD TAZKIA GLOBAL ISLAMIC SCHOOL',
-  'SDIP NUR ALIF', 'SDIT AL FITYAN SCHOOL BOGOR', 'SDIT AL GHANIYUL MARTUA', 'SDIT BAITUSSALAM', 'SDIT GREEN BHAKTI INSANI',
-  'SDIT NAHWA NUR', 'SDIT PUTRA PAKUAN', 'SDIT UMMUL QURO', 'SDN 4 WANAHERANG', 'SDN 5 CICADAS',
-  'SDN BABAKAN 01', 'SDN BABAKAN 03', 'SDN BARENGKOK 01', 'SDN CIARUTEUN ILIR 05', 'SDN CIBITUNG KULON 05',
-  'SDN CIDOKOM 02', 'SDN CIPINANG 01', 'SDN CITRA INDAH SUKAMAJU', 'SDN DAGO 05', 'SDN GADOG 04',
-  'SDN KALONGSAWAH 02', 'SDN NAGRAK 05', 'SDN NEGLASARI', 'SDN PABUARAN', 'SDN PALASARI 03',
-  'SDN PASIR JAWA 01', 'SDN PUTATNUTUG 02', 'SDN SUKAASIH 01', 'SDN SUKAMANAH 03', 'SDN SUKASARI 03',
-  'SDN TANJUNGSARI 01', 'SDS INSAN PERTIWI', 'SDS IQRO KAIRO', 'SDS ISLAM TERPADU AMALIA', 'SDS NASIONAL PLUS PELITA INSANI',
-  'SDS NURUL ISLAM', 'SDTIARA SCHOOL II', 'SLB AL-FAJRI', 'SLB AYAH BUNDA', 'SLB BINA SEJAHTERA',
-  'SLB MEKAR SARI 1', 'SLB NEGERI BOGOR', 'SMP AL - FALAH LULUT', 'SMP AL ASHRIYAH NURUL IMAN', 'SMP AL AZHAR SYIFA BUDI CIBINONG',
-  'SMP AL- FAATHIR', 'SMP AL FALAH TLAJUNG', 'SMP AL HIDAYAH', 'SMP AL MINHAJ TAMANSARI', 'SMP Al-AqSyar',
-  'SMP AL-WAFI ISLAMIC BOARDING SCHOOL', 'SMP AN NAHL ISLAMIC SCHOOL', 'SMP ANGKASA BOGOR', 'SMP AR-RASYID', 'SMP BUNDA',
-  'SMP CIKAL CENDEKIA', 'SMP CIPTA CENDIKIA', 'SMP CITRA NUSA', 'SMP DARUL FIKRI NANGGUNG', 'SMP DJOJOREDJO PUTAT NUTUG',
-  'SMP FITRAH ISLAMIC WORLD ACADEMY', 'SMP GIRI TARUNA', 'SMP GLOBAL INSANI SCHOOL', 'SMP INSAN TELADAN', 'SMP ISLAM AL ANSHOR',
-  'SMP ISLAM AL HIKMAH', 'SMP ISLAM ASY-SYUHADA', 'SMP ISLAM BOEDI OETOMO', 'SMP ISLAM IMAM SYAFII', 'SMP ISLAM IZZATUL MADANI',
-  'SMP ISLAM MIFTAHUL HUDA', 'SMP ISLAM NURUL IHSAN', 'SMP ISLAM PARUNG', 'SMP ISLAM PLUS DAARUL JANNAH', 'SMP ISLAM SIROJUL ATHFAL',
-  'SMP ISLAM TERPADU AL MUTTAQIEN', 'SMP ISLAM TERPADU AL-FITYAN BSB', 'SMP ISLAM TERPADU ASY SYIFA QOLBU', 'SMP IT AL KAHFI', 'SMP IT AL MADINAH',
-  'SMP IT AL UTSMANIYAH', 'SMP IT AL-FATH', 'SMP IT ANDALUS', 'SMP IT KAIFA', 'SMP IT NIDAUL UMMAH',
-  'SMP IT UMMUL QURO', 'SMP JAKARTA ISLAMIC BOY BOARDING SCHOOL', 'SMP KRISTEN KETAPANG III', 'SMP MULIA BUANA', 'SMP N 1 PARUNG',
-  'SMP N 3 GUNUNGSINDUR', 'SMP NAHDLATUL WATHAN', 'SMP NASIONAL PLUS PELITA INSANI', 'SMPN 1 CARIU', 'SMPN 1 CIBUNGBULANG',
-  'SMPN 1 CIGOMBONG', 'SMPN 1 CIGUDEG', 'SMPN 1 CIOMAS', 'SMPN 1 CISARUA', 'SMPN 1 CITEUREUP',
-  'SMPN 1 KEMANG', 'SMPN 1 KLAPANUNGGAL', 'SMPN 1 LEUWILIANG', 'SMPN 1 PARUNG PANJANG', 'SMPN 1 SUKAJAYA',
-  'SMPN 1 TENJO', 'SMPN 2 CIAWI', 'SMPN 2 CIBINONG', 'SMPN 2 CITEUREUP', 'SMPN 2 GUNUNGPUTRI',
-  'SMPN 2 PAMIJAHAN', 'SMPN 2 SUKARAJA', 'SMPN 2 TAMAN SARI', 'SMPN 3 CIBINONG', 'SMPN 3 CIBUNGBULANG',
-  'SMPN 3 CITEUREUP', 'SMPN 3 PARUNGPANJANG', 'SMPN 4 CILEUNGSI', 'SMPN 4 LEUWILIANG', 'SMPN SATU ATAP 01 TENJO',
-  'SMP PASIRMADANG', 'SMP PELITA CIAMPEA', 'SMP PEMBERDAYAAN UMMAT AN-NAHL', 'SMP PGRI BAGOANG', 'SMP PGRI GUNUNG PICUNG',
-  'SMP PGRI KLAPANUNGGAL', 'SMP PGRI TUGU 207', 'SMP PINGKU', 'SMP PLUS AL-KINDA', 'SMP PLUS ARRUSYDA',
-  'SMP PLUS NURUL HIKMAH AL HAKIM', 'SMP PUSPA MEKAR', 'SMP PUTRA PAKUAN BOGOR', 'SMP QURAN AS-SALAAM', 'SMP QURAN ELTAHFIDH',
-  'SMP SMART EKSELENSIA', 'SMP SYARAFUL HARAMAIN-IBS', 'SMP TARUNA TERPADU', 'SMPIT AL FATIH CIGOMBONG', 'SMPIT DARUL QUR-AN MULIA',
-  'SMPIT NURUL FIKRI BOGOR', 'SMPN 3 CIOMAS', 'SMPS AL JIHAD', 'SMPS ANANDA', 'SMPS CITRA BERKAT',
-  'SMPS HANGTUAH 6', 'SMPS IT BINA MASYARAKAT MANDIRI', 'SMPS KUSUMA BANGSA TAJURHALANG', 'SMPS PGRI 1 PARUNG', 'SMPS REGINA CAELI',
-  'SMPS TERPADU AL MAARIF', 'SMPS TRIWIJAYA', 'SMK AL - HALIM GARUT', 'SMK AL - MUFTI', 'SMK AL- WAFA', 'SMK AL-BADAR', 'SMK AL-BAROKAH',
-  'SMK AL-HUDA', 'SMK ALODIA', 'SMK ANANDA MITRA INDUSTRI DELTAMAS', 'SMK ANGKASA 1 MARGAHAYU', 'SMK ANGKASA 2 MARGAHAYU',
-  'SMK Ansoruna Hade Rancage', 'SMK AR ROSYID CAMPAKA PUTRA', 'SMK ARIA CENDEKIA', 'SMK ARROHMAH DADAHA', 'SMK AS-SALAFIYAH',
-  'SMK ATLANTIS PLUS', 'SMK BAKTI ASSYUKUR', 'SMK BAKTI INDONESIA', 'SMK BAKTI MANDIRI KOTA BEKASI', 'SMK BANGUN PERSADA',
-  'SMK BHAKTI KENCANA CICURUG', 'SMK BIDARA MUKTI GARUT', 'SMK BINAKARYA MANDIRI M', 'SMK BOASH 2', 'SMK BUANA INSAN',
-  'SMK BUDI BAKTI CIWIDEY', 'SMK BUDI BHAKTI MANDIRANCAN', 'SMK BUMI SILIWANGI', 'SMK CINTA NEGERI', 'SMK DAIROBBY',
-  'SMK DEWANTARA 2', 'SMK FAJAR UTAMA', 'SMK GHAMA CARAKA', 'SMK Global Persada Mandiri', 'SMK GOLDEN',
-  'SMK ILMAN NAFIAH CIREBON', 'SMK ILMINA PERSADA', 'SMK INFORMATIKA BINA GENERASI 2', 'SMK INFORMATIKA BINA GENERASI 3', 'SMK INSAN KAMIL',
-  'SMK INSAN TAZAKKA', 'SMK INTERMEDIKA', 'SMK ISLAM ATTURMUDZIYYAH GARUT', 'SMK ISLAM HEGARMANAH', 'SMK ISLAM TERPADU AR-RISALAH CARIU',
-  'SMK ISLAM TERPADU YASIN', 'SMK IT ASSALAM KARAWANG', 'SMK IT ATTAQWA PUSAT', 'SMK IT HIDAYATUL MUJAHIDIN', 'SMK KARYA BAHANA MANDIRI 2',
-  'SMK KARYA PEMBANGUNAN 2 CIPONGKOR', 'SMK KESEHATAN BHAKTI KENCANA', 'SMK KESEHATAN HIDAYAH MEDIKA', 'SMK KESEHATAN PRIMA INDONESIA', 'SMK KESEHATAN RAJAWALI',
-  'SMK KHARISMA NUSANTARA', 'SMK KORPRI MAJALENGKA', 'SMK KP 2 MARGAHAYU', 'SMK KP PASEH', 'SMK KP PASIRJAMBU',
-  'SMK MA ARIF CIDAUN', 'SMKN  1 CIBINONG', 'SMKN  1 CILAKU', 'SMKN 1 CIMAHI', 'SMKN 1 KEMANG',
-  'SMKN 1 SUKALUYU', 'SMKN 1 SUKANAGARA', 'SMKN 1 TASIKMALAYA', 'SMKN 15 KOTA BEKASI', 'SMKN 2 CIBINONG',
-  'SMKN 2 CIMAHI', 'SMKN 2 KUNINGAN', 'SMKN 3 KUNINGAN', 'SMK NU DARUSSALAM', 'SMK NUFA CITRA MANDIRI',
-  'SMK NURUL FALAH', 'SMK NURUL HUDA SUKABUMI', 'SMK PARIWISATA METLAND SCHOOL', 'SMK PARIWISATA TELKOM', 'SMK PASUNDAN 3',
-  'SMK PEMBANGUNAN BANDUNG BARAT', 'SMK PENIDA 2 KATAPANG', 'SMK PERINTIS 1 DEPOK', 'SMK PGRI SUBANG', 'SMK PLUS ARRUSYDA',
-  'SMK PLUS DARUSSURUR', 'SMK PLUS PELITA NUSANTARA', 'SMK PLUS RASANA RASYIDAH', 'SMK PLUS RIYADHUL HUDA', 'SMK PONPES MANBA\'UL \'ULUM',
-  'SMK PRESIDEN CIREBON', 'SMK PRIMA MAARIF', 'SMK PRIMA PRATAMA BOARDING SCHOOL', 'SMK SAHID', 'SMK SANGKURIANG 1',
-  'SMK SARIWANGI', 'SMK SATRIA BANGSA', 'SMK SINAR ISLAM ASIA PASIFIK', 'SMK SKYE DIGIPRENEUR', 'SMK SUMATRA 40',
-  'SMK SWASTA KOTA ILMU', 'SMK SWASTA MUTIARA HUSADA', 'SMK SYIS BADRUZZAMAN', 'SMK TARUNA MANDIRI', 'SMK TARUNA TERPADU AL MUSYAWARAH',
-  'SMK TI PEMBANGUNAN', 'SMK TUNAS BANGSA', 'SMK TUNAS MEDIA', 'SMK TUNGGAL PRAKARSA', 'SMK WAHDATUL UMMAT',
-  'SMK YADIKA SOREANG', 'SMK YPIB', 'SMKIT AL MUSTHAFAWIYAH', 'SMKN 1 BANDUNG', 'SMKN 1 BOGOR',
-  'SMKN 1 BOJONG GEDE', 'SMKN 1 CIAMIS', 'SMKN 1 CIANJUR', 'SMKN 1 CIBADAK SUKABUMI', 'SMKN 1 CIBINONG',
-  'SMKN 1 CIKAMPEK', 'SMKN 1 CIPAKU', 'SMKN 1 CIPEUNDEUY', 'SMKN 1 CIPONGKOR', 'SMKN 1 DEPOK',
-  'SMKN 1 GUNUNG SINDUR', 'SMKN 1 KANDANGHAUR', 'SMKN 1 KARAWANG', 'SMKN 1 KEDAWUNG', 'SMKN 1 KOTA BEKASI',
-  'SMKN 1 LELEA', 'SMKN 1 LEMAHABANG CIREBON', 'SMKN 1 PALABUHANRATU', 'SMKN 1 PALASAH', 'SMKN 1 PANJALU',
-  'SMKN 1 PANUMBANGAN', 'SMKN 1 PANYINGKIRAN', 'SMKN 1 RANCABALI', 'SMKN 1 SETU', 'SMKN 1 SUBANG',
-  'SMKN 1 SUKALARANG', 'SMKN 1 SURADE', 'SMKN 1 TAMBUN UTARA', 'SMKN 1 TERISI', 'SMKN 1 TIRTAJAYA',
-  'SMKN 10 BANDUNG', 'SMKN 11 BANDUNG', 'SMKN 13 Bandung', 'SMKN 15 BANDUNG', 'SMKN 2 BALEENDAH',
-  'SMKN 2 CIKARANG BARAT', 'SMKN 2 CIREBON', 'SMKN 2 KOTA BEKASI', 'SMKN 2 PURWAKARTA', 'SMKN 2 SUBANG',
-  'SMKN 2 SUKABUMI', 'SMKN 3 BALEENDAH', 'SMKN 3 BANDUNG', 'SMKN 3 BOGOR', 'SMKN 3 KARAWANG',
-  'SMKN 3 KOTA BEKASI', 'SMKN 4 BANDUNG', 'SMKN 4 GARUT', 'SMKN 4 PADALARANG', 'SMKN 4 TASIKMALAYA',
-  'SMKN 5 BANDUNG', 'SMKN 5 KOTA BEKASI', 'SMKN 6 GARUT', 'SMKN 6 KOTA BEKASI', 'SMKN 7 BANDUNG',
-  'SMKN 7 GARUT', 'SMKN 8 KOTA BEKASI', 'SMKN 9 BANDUNG', 'SMKN RAJAPOLAH', 'SMKN SUKASARI',
-  'SMKS 1 AMAL MULIA', 'SMKS 3 PASUNDAN PERKASA', 'SMKS ABDI KARYA LEMAHABANG CIREBON', 'SMKS ADZKIA KHARISMA', 'SMKS AGRI INSANI',
-  'SMKS AL BANA', 'SMKS AL HADIID 1 CILEUNGSI BOGOR', 'SMKS AL HADIID 2 CILEUNGSI BOGOR', 'SMKS AL HASRA', 'SMKS AL IBROHIMIYAH',
-  'SMKS AL LUTHFAH', 'SMKS AL MADANIYAH', 'SMKS AL MARUFI', 'SMKS AL MUBAROK CISALAK', 'SMKS AL MUHADJIRIN 2 BEKASI',
-  'SMKS AL MUHADJIRIN BEKASI', 'SMKS AL MUHTADIN', 'SMKS AL MUNIR', 'SMKS AL MUSLIM', 'SMKS AL MUSTHOFA',
-  'SMKS AL WASLIYAH SUMBER', 'SMKS AL-FALAH', 'SMKS AL-HUDA SADANANYA', 'SMKS AL-HUDA SARIWANGI', 'SMKS AL-MUMTAZ',
-  'SMKS ANALIS KIMIA NUSA BANGSA BOGOR', 'SMKS ANANDA BEKASI', 'SMKS ANNUR', 'SMKS AR RAHMAH', 'SMKS AR RAHMAH',
-  'SMKS ARJUNA', 'SMKS ARRAHMAN DEPOK', 'SMKS AS SAABIQ', 'SMKS ASMAUL HUSNA', 'SMKS ASY SYUKUR',
-  'SMKS ATTAJIR', 'SMKS ATTAQWA 01 TARUMAJAYA', 'SMKS AZZAINIYAH', 'SMKS BAABULKAMIL', 'SMKS BANI ABDUL MALIK',
-  'SMKS BANI SALEH', 'SMKS BHAKTI INSANI BOGOR', 'SMKS BHAKTI KARTINI', 'SMKS BHAKTI KENCANA BANDUNG', 'SMKS BHAKTI KENCANA CIAWI',
-  'SMKS BHAKTI PERTIWI MANONJAYA', 'SMKS BINA CENDEKIA CIREBON', 'SMKS BINA HARAPAN SUMEDANG', 'SMKS BINA KARYA MANDIRI BEKASI', 'SMKS BINA MANDIRI',
-  'SMKS BINA RAHAYU', 'SMKS BINA SEJAHTERA 1 BOGOR', 'SMKS BINA TEKNIKA', 'SMKS BINA WISATA LEMBANG', 'SMKS BISNIS DAN TEKNOLOGI BEKASI',
-  'SMKS BISNIS INFORMATIKA BEKASI', 'SMKS BOEDI LUHUR', 'SMKS BUDI MULIA', 'SMKS CIMENTENG', 'SMKS CO2',
-  'SMKS DAARUDDAWAH', 'SMKS DARUL HIKMAH', 'SMKS DARUL KAWAKIB', 'SMKS DARUL ULUM', 'SMKS DAYA UTAMA KOTA BEKASI',
-  'SMKS DELTA MUNDU CIREBON', 'SMKS DEWANTARA', 'SMKS DHARMA PERTIWI', 'SMKS DWI PUTRI HUSADA', 'SMKS EKONOMIKA',
-  'SMKS FARMASI BHAKTI KENCANA', 'SMKS FARMASI BHAKTI SEJAHTERA JATINANGOR', 'SMKS FARMASI BOGOR', 'SMKS FARMASI HARAPAN MASSA', 'SMKS FARMASI MUHAMMADIYAH CIREBON',
-  'SMKS FARMASI PASUNDAN KAWALI', 'SMKS FARMASI TUNAS MANDIRI', 'SMKS FARMASI YPIB CIREBON', 'SMKS FATAHILLAH CILEUNGSI', 'SMKS GALUH RAHAYU SINDANGKASIH',
-  'SMKS GANESHA CIMANGGUNG', 'SMKS GARUDA NUSANTARA', 'SMKS GAZZA WIGUNA 1 MEGAMENDUNG', 'SMKS GENERASI MANDIRI GUNUNG PUTRI', 'SMKS GENESIS MEDICARE',
-  'SMKS GRACIKA CIREBON', 'SMKS GRAFIKA MARDI YUANA BOGOR', 'SMKS HUMANIKA 1', 'SMKS HUTAMA BEKASI', 'SMKS IBNU AQIL BOGOR',
-  'SMKS ICB CINTA NIAGA BANDUNG', 'SMKS INDUSTRI JABABEKA', 'SMKS INDUSTRI LOGAM SITURAJA SUMEDANG', 'SMKS INFOKOM BOGOR', 'SMKS INFORMATIKA BINA GENERASI BOGOR',
-  'SMKS INFORMATIKA PESAT', 'SMKS INOVASI MANDIRI', 'SMKS INSAN MANDIRI', 'SMKS INSAN MANDIRI', 'SMKS IPTEK CILAMAYA',
-  'SMKS ISDA BABAKAN', 'SMKS ISLAM ANNAZHIRIYAH', 'SMKS ISLAM AZZHAHIRIYAH', 'SMKS ISLAM TERISI', 'SMKS IT ABU DZAR',
-  'SMKS IT ATAMMUL HUSNA', 'SMKS IT BINA INSANI', 'SMKS JAMIYATUL AULAD', 'SMKS JAYABEKA 01 KARAWANG', 'SMKS KARYA BAHANA MANDIRI',
-  'SMKS KARYA BHAKTI', 'SMKS KARYA BHAKTI 1 BEKASI', 'SMKS KARYA GUNA BHAKTI 1', 'SMKS KARYA GUNA BHAKTI 2', 'SMKS KENCANA BANDUNG',
-  'SMKS KESEHATAN ANNISA', 'SMKS KESEHATAN ANNISA 3', 'SMKS KESEHATAN BHAKTI INSANI', 'SMKS KESEHATAN BHAKTI KENCANA', 'SMKS KESEHATAN BOJONGSOANG',
-  'SMKS KESEHATAN CIANJUR', 'SMKS KESEHATAN EFARINA', 'SMKS KESEHATAN HARAPAN BUNDA', 'SMKS KESEHATAN LOGOS', 'SMKS KESEHATAN PATRIOT 3',
-  'SMKS KESEHATAN SENTRA MEDIKA', 'SMKS KESEHATAN TAMBUN ISLAMIC SCHOOL', 'SMKS KESEHATAN YPKH PALIMANAN', 'SMKS KESEHATAN ZAMZAM KURNIA', 'SMKS KOMPUTER ARYA KARINA PRATAMA AKP',
-  'SMKS KOMUNIKA PRESTASI GENTUR PADAKEMBANG', 'SMKS KUSUMA BANGSA', 'SMKS MAARIF PANGENAN', 'SMKS MADANI', 'SMKS MANBAUL ULUM',
-  'SMKS MANDALA', 'SMKS MARDI YUANA', 'SMKS MEDIA KREATIF', 'SMKS MEDIKACOM', 'SMKS MEILIA MEDIKA',
-  'SMKS MERAH PUTIH CIASEM SUBANG', 'SMKS MIFTAHUL ULUM', 'SMKS MITRA INDUSTRI', 'SMKS MITRA KARYA RENGASDENGKLOK', 'SMKS MITRA NUSANTARA',
-  'SMKS MITRA PASUNDAN', 'SMKS MITRA UNGGUL', 'SMKS MUHAMMADIYAH 2 CIBADAK', 'SMKS MUHAMMADIYAH CIKELET', 'SMKS MUHAMMADIYAH GARUT',
-  'SMKS MUHAMMADIYAH HAURGEULIS', 'SMKS MUHAMMADIYAH KADUNGORA', 'SMKS MUHAMMADIYAH SEGERAN JUNTINYUAT', 'SMKS MULTICOMP DEPOK', 'SMKS NU KAPLONGAN',
-  'SMKS NUR SYAFIIL UMMAH', 'SMKS NURUL HIKMAH', 'SMKS NURUL ILMI', 'SMKS NUURUL BAYAN KALAPANUNGGAL', 'SMKS PADAKEMBANG',
-  'SMKS PAKUSARAKAN CIKAMPEK', 'SMKS PASIM PLUS SUKABUMI', 'SMKS PASUNDAN 1 BANDUNG', 'SMKS PASUNDAN 3 BANDUNG', 'SMKS PATIH SEMI UJUNG SEMI',
-  'SMKS PELITA ALAM', 'SMKS PELITA CIAMPEA 2', 'SMKS PELITA CIANJUR', 'SMKS PELITA DEPOK', 'SMKS PERBANKAN INDONESIA',
-  'SMKS PERMATA', 'SMKS PERSADA', 'SMKS PERSADA BAGIA INFORMATIKA', 'SMKS PERSADA HUSADA INDONESIA', 'SMKS PGRI 1',
-  'SMKS PGRI 1 PALIMANAN CIREBON', 'SMKS PGRI 2', 'SMKS PGRI BANDUNG', 'SMKS PGRI GARUT', 'SMKS PGRI JATINANGOR',
-  'SMKS PGRI RAWALUMBU', 'SMKS PGRI SUKAMAKMUR', 'SMKS PLUS AL FARHAN', 'SMKS PLUS MUHAJIRIN', 'SMKS PLUS SUKARAJA',
-  'SMKS PRAKARYA INTERNASIONAL 1 BANDUNG', 'SMKS PRIMA GRAFIKA', 'SMKS PROFITA BANDUNG', 'SMKS PUI GEGESIK', 'SMKS PUJA BANGSA BM',
-  'SMKS PUNCAK BARU', 'SMKS PURNAWARMAN PURWAKARTA', 'SMKS PUTRA BANGSA DEPOK', 'SMKS PUTRA MANDALA I', 'SMKS PUTRA PAGELARAN',
-  'SMKS RAYHAN', 'SMKS SAIS 1', 'SMKS SANDIKTA BEKASI', 'SMKS SANTANA 2 CIBATU', 'SMKS SARI FARMA',
-  'SMKS SETIA NEGARA DEPOK', 'SMKS SIROJUL HUDA 3', 'SMKS SMART', 'SMKS STRADA BUDI LUHUR', 'SMKS SUKAPURA',
-  'SMKS SUMBER DAYA BEKASI', 'SMKS SUMPAH PEMUDA 2', 'SMKS SWADAYA BOJONGASIH', 'SMKS TALENTA BANGSA', 'SMKS TAMAN KARYA MADYA EKONOMI CIREBON',
-  'SMKS TAMANSISWA BANDUNG', 'SMKS TARUNA BHAKTI', 'SMKS TARUNA BHAKTI', 'SMKS TEKNIKOM CIKARANG', 'SMKS TEKNOLOGI INDUSTRI MANDIRI',
-  'SMKS TEKNOLOGI PLUS PADJADJARAN SUKABUMI', 'SMKS TELEKOMUNIKASI TELESANDI', 'SMKS TELKOM BANDUNG', 'SMKS TERPADU 2 YASPIDA SUKABUMI', 'SMKS TERPADU BOJONGNANGKA TASIKMALAYA',
-  'SMKS TERPADU H. ABDUL MALIK', 'SMKS TERPADU HIDAYATUL FAIZIEN', 'SMKS TEXAR KARAWANG', 'SMKS TI ANNISA 2', 'SMKS TIARA NUSA',
-  'SMKS TIK AL-ISLAM', 'SMKS TRI DHARMA 3 BOGOR', 'SMKS WAHIDIN CIREBON', 'SMKS WIDYA KUSUMA', 'SMKS WIKRAMA 1 GARUT',
-  'SMKS WIKRAMA BOGOR', 'SMKS WINDIAN NUGRAHA BOGOR', 'SMKS WIRASABA KARAWANG', 'SMKS WYATA DHARMA', 'SMKS YABP GARUT',
-  'SMKS YADIKA 12', 'SMKS YADIKA 6 BEKASI', 'SMKS YADIKA 7 BOGOR', 'SMKS YADIKA TANJUNGSARI', 'SMKS YAMI WALED',
-  'SMKS YAPARI AKTRIPA', 'SMKS YAPPRI SUMEDANG', 'SMKS YASBU AL QOMARIYAH', 'SMKS YASIDIK', 'SMKS YP 79 MAJALAYA',
-  'SMKS YPF', 'SMKS YPPD DEPOK', 'SMKS YPPS SUMEDANG', 'SMKS YPUI', 'SMKS YUDHA UTAMA NGAMPRAH', 'SMA AL AMIN', 'SMA AL MINHAJ', 'SMA BOASH', 'SMA CIPTA CENDIKIA', 'SMA FITRAH ISLAMIC WORLD ACADEMY',
-  'SMA ISLAM AL AZHAR 24', 'SMA ISLAM AL-GHOZALI', 'SMA ISLAM CIKAL HARAPAN 2', 'SMA ISLAM TERPADU AL MUSTHAFAWIYAH', 'SMA ISLAM TERPADU AL-MADINAH',
-  'SMA ISLAM TERPADU NURUL FIKRI BOARDING SCHOOL', 'SMA IT AL ANDALUS', 'SMA IT Al Fityan Boarding School Bogor', 'SMA IT DARUL QUR AN', 'SMA IT DARUL QUR`AN MULIA',
-  'SMA Nahdlatul Wathan Bogor', 'SMA NEGERI 1 LEUWISADENG', 'SMA QURAN ASY SYAHID', 'SMA RAUDHATUL MUTTAQIN', 'SMA REGINA CAELI',
-  'SMA SMART CIBINONG', 'SMA TARUNA BANGSA', 'SMAN 1 BABAKAN MADANG', 'SMAN 1 CARINGIN', 'SMAN 1 CIAWI BOGOR',
-  'SMAN 1 CIBINONG', 'SMAN 1 CIBUNGBULANG', 'SMAN 1 CIGOMBONG', 'SMAN 1 CITEUREUP', 'SMAN 1 DRAMAGA',
-  'SMAN 1 GUNUNG SINDUR', 'SMAN 1 PAMIJAHAN', 'SMAN 1 PARUNG', 'SMAN 1 PARUNG PANJANG', 'SMAN 1 RANCABUNGUR',
-  'SMAN 1 RUMPIN', 'SMAN 2 CIBINONG', 'SMAN 3 CIBINONG', 'SMAN 4 CIBINONG', 'SMAS AL ASIYAH',
-  'SMAS AL KAHFI', 'SMAS AL MUKLISIN', 'SMAS AMALIAH', 'SMAS AN NAJAH', 'SMAS ASHRIYAH NURUL IMAN',
-  'SMAS BP FAI UMJ', 'SMAS BUNDA', 'SMAS BUNDA HATI KUDUS', 'SMAS CISARUA', 'SMAS CITRA NUSA',
-  'SMAS DARUL KHOLIDIN', 'SMAS DWIWARNA', 'SMAS FATHAN MUBINA', 'SMAS GEMILANG YASIFA', 'SMAS GLOBAL MANDIRI',
-  'SMAS INDOCEMENT', 'SMAS KETAPANG 3', 'SMAS MARSUDIRINI', 'SMAS MATHLAHUL HUDA', 'SMAS MIFTAHUL HUDA AL BARKAH',
-  'SMAS MUHAMMADIYAH PARUNG', 'SMAS MULIA BUANA', 'SMAS PGRI CIBINONG', 'SMAS PGRI RUMPIN', 'SMAS PLUS CENDEKIA CIKEAS',
-  'SMAS PLUS DARUSSALAM KOPOSARI', 'SMAS PLUS IBNU SINA', 'SMAS PM AT TAQWA', 'SMAS PUSPA MEKAR', 'SMAS SMART EKSELENSIA INDONESIA',
-  'SMAS WIDYA KUSUMA'
-]};
+    <div class="btns" style="text-align:center">
+      <button type="button" class="primary" id="submitBtn">SUBMIT</button>
+      <button type="button" class="soft" id="resetBtn">RESET</button>
+      <button type="button" class="soft" id="analisisBtn">ANALISIS</button>
+      <button type="button" class="soft" id="cetakBtn">CETAK TANPA ANALISIS</button>
+      <button type="button" class="primary" id="loginBtn">GRAFIK</button>
+    </div>
+    <div id="result" class="result"></div>
 
-function updateInstansiList(paket) {
-  const list = document.getElementById('instansiList');
-  if (!list) return;
-  list.innerHTML = '';
-  const arr = instansiOptions[paket] || [];
-  arr.forEach(v => {
-    const opt = document.createElement('option');
-    opt.value = v;
-    list.appendChild(opt);
-  });
-}
+    <!-- === Area Grafik (muncul setelah login) === -->
+    <div id="chartArea">
+      <div id="chartHeader"><h3>ANALISA GRAFIK</h3></div>
+      <div class="chartsGrid">
+        <div class="chartBox">
+          <select id="instansiFilter"></select>
+          <canvas id="pieChartInstansi"></canvas>
+        </div>
+        <div class="chartBox">
+          <h4 style="text-align:center">
+            Akumulasi <span id="totalResponden" class="blue-text">0</span> Responden
+          </h4>
+          <canvas id="pieChartSheet"></canvas>
+        </div>
+      </div>
+    </div>
 
-// === DATASET LENGKAP DARI FILE ASLI ===
-const paketData = {
-  dasar: {
-    statements: [
-      "Saya memiliki kelemahan dalam melakukan beberapa hal.",
-      "Tidak masalah bila saya gagal sebab itu kesempatan untuk belajar.",
-      "Jika orang lain melakukan sesuatu yang lebih baik daripada saya, itu akan menyebabkan saya merasa rendah diri.",
-      "Saya suka mencoba hal-hal yang baru meskipun hal ini memiliki resiko.",
-      "Saya merasa sukses pada saat mampu menunjukkan kepada orang lain bahwa saya mahir dalam suatu bidang.",
-      "Ketika orang lain sukses, saya merasa terinspirasi dan ingin melakukan hal yang sama.",
-      "Saya senang saat mampu melakukan sesuatu yang tidak bisa dilakukan orang lain.",
-      "Tingkat kecerdasan bisa diubah lewat belajar dan berlatih",
-      "Menurut pendapat saya, manusia dilahirkan dengan tingkat kecerdasan tertentu yang tidak bisa diubah lagi",
-      "Kesulitan membuat saya ingin berusaha lebih keras lagi."
-    ],
-    scoring: [[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0]],
-    analisisPerSoal: [
-  [
-    "Jika seseorang sangat setuju dengan pernyataan ini, hal itu bisa mencerminkan pandangan bahwa kelemahan adalah bagian permanen dari dirinya. Orang dengan pola pikir tetap biasanya memandang kelemahan sebagai batasan yang sulit diubah. Akibatnya, responden mungkin akan cenderung menghindari tantangan karena merasa kelemahan tersebut akan selalu menghalangi, sehingga kurang memiliki dorongan untuk berkembang.",
-    "Pilihan ini menunjukkan pengakuan atas kelemahan, Dalam konteks pola pikir, responden berada di wilayah campuran: di satu sisi ia sadar akan keterbatasan, namun di sisi lain masih terbuka untuk mengubah atau memperbaiki diri. Artinya, ada kecenderungan untuk mengakui kelemahan tetapi tidak menganggapnya mutlak permanen.",
-    "Menolak pernyataan ini berarti responden tidak mau melihat kelemahan sebagai sesuatu yang menetap. Sikap ini mencerminkan pola pikir bertumbuh, karena ia lebih percaya bahwa kelemahan bisa diatasi lewat usaha. Penolakan terhadap gagasan “punya kelemahan yang menghambat” menunjukkan keyakinan pada potensi perbaikan.",
-    "Jawaban ini adalah bentuk optimisme penuh: responden yakin bahwa kelemahan bukan sesuatu yang membatasi hidupnya. Dengan sikap seperti ini, ia memandang semua hambatan dapat diubah menjadi peluang belajar. Ini adalah ciri kuat pola pikir bertumbuh, di mana kelemahan diposisikan sebagai tantangan yang bisa diatasi melalui kerja keras."
-  ],
-  [
-    "Pernyataan ini merefleksikan inti pola pikir bertumbuh. Responden dengan pilihan ini memandang kegagalan sebagai bagian alami dari proses pembelajaran. Ia tidak takut gagal, bahkan melihatnya sebagai jalan untuk menemukan cara baru dan memperkuat kemampuan. Ini adalah ciri khas individu yang resilien dan berorientasi pada pertumbuhan",
-    "Masih berada di jalur pola pikir bertumbuh, namun dengan keyakinan yang lebih moderat. Responden menyadari bahwa kegagalan tidak selalu buruk, tetapi mungkin masih ada rasa cemas atau keraguan. Dengan demikian, ia lebih fleksibel namun belum sepenuhnya menginternalisasi bahwa kegagalan adalah kesempatan besar untuk maju",
-    "Menolak pernyataan ini menunjukkan responden melihat kegagalan sebagai sesuatu yang merugikan. Sikap ini lebih dekat ke pola pikir tetap, meskipun tidak absolut. Responden mungkin merasa kegagalan sebaiknya dihindari, sehingga peluang untuk berkembang bisa berkurang",
-    "Jawaban ini menggambarkan pola pikir tetap yang kuat. Responden tidak melihat kegagalan sebagai sarana belajar, melainkan ancaman terhadap harga diri. Orang dengan pola pikir ini cenderung menghindari tantangan, takut mencoba hal baru, dan mudah menyerah jika menemui hambatan."
-  ],
-  [
-    "Respon ini menandakan kerentanan tinggi terhadap perbandingan sosial. Individu dengan pilihan ini biasanya melihat keberhasilan orang lain sebagai ancaman, bukan inspirasi. Ini merupakan pola pikir tetap yang kuat, karena keberhasilan orang lain dianggap memperkecil nilai dirinya sendiri",
-    "Masih ada rasa minder ketika melihat orang lain lebih unggul, Ini mencerminkan pola pikir campuran: kadang masih terjebak dalam perasaan negatif, namun ada potensi untuk beralih pada cara pandang lebih sehat jika diarahkan",
-    "Menolak pernyataan ini menunjukkan responden tidak mudah merasa rendah diri. Ia bisa menjaga harga diri meski orang lain lebih baik. Sikap ini mendekati pola pikir bertumbuh, karena ia lebih fokus pada upaya perbaikan diri daripada membandingkan dengan orang lain",
-    "Jawaban ini menandakan keyakinan penuh bahwa keberhasilan orang lain tidak mengurangi nilai diri sendiri. Justru bisa menjadi motivasi untuk berkembang. Inilah ciri pola pikir bertumbuh yang sangat kuat: orang lain dipandang sebagai sumber inspirasi, bukan ancaman"
-  ],
-  [
-    "Ini mencerminkan keberanian tinggi menghadapi tantangan dan risiko. Responden dengan pilihan ini jelas berpola pikir bertumbuh, karena ia melihat risiko sebagai bagian alami dari proses belajar",
-    "Masih positif terhadap hal baru, meski mungkin lebih berhati-hati. Sikap ini tetap mengarah ke pola pikir bertumbuh, tetapi dengan batasan tertentu. Responden bersedia mencoba, namun mungkin masih mempertimbangkan rasa aman",
-    "Menolak pernyataan ini menandakan adanya keengganan mencoba hal baru. Hal ini lebih dekat dengan pola pikir tetap, atau setidaknya campuran, karena responden takut risiko akan menghasilkan kegagalan",
-    "Jawaban ini jelas menunjukkan pola pikir tetap: menghindari risiko, menolak tantangan, dan cenderung bermain aman. Responden lebih memilih berada di zona nyaman ketimbang berkembang melalui pengalaman baru"
-  ],
-  [
-    "Respon ini menunjukkan bahwa kesuksesan diukur dari pengakuan eksternal. Responden lebih mementingakan validasi orang lain ketimbang perkembangan diri. Ini adalah ciri khas pola pikir tetap (PPT), karena keberhasilan dianggap bergantung pada citra diri yang harus dilihat oleh lingkungan. Individu dengan pola ini seringkali rentan terhadap kritik dan lebih mudah kehilangan motivasi jika tidak mendapat pengakuan",
-    "Masih ada kecenderungan mencari pengakuan, Responden mulai menunjukkan tanda pola pikir campuran, di mana dirinya masih menimbang antara pencapaian pribadi dan validasi orang lain. Ia bisa berprestasi, tetapi tujuan akhirnya masih bercampur antara perkembangan diri dan pengakuan sosial",
-    "Menolak pernyataan ini berarti responden tidak sepenuhnya mendefinisikan sukses dari pengakuan orang lain. Ia mulai menunjukkan ciri bertumbuh, karena nilai keberhasilan lebih terletak pada kemajuan pribadi dan usaha yang dijalankan. Fokus lebih diarahkan pada penguasaan keterampilan ketimbang sekadar pamer hasil",
-    "Jawaban ini mencerminkan pola pikir bertumbuh yang kuat. Responden percaya kesuksesan bukan diukur dari pandangan luar, melainkan dari peningkatan kompetensi dan usaha diri. Bagi mereka, proses lebih penting daripada validasi sosial, sehingga tetap termotivasi meski tidak mendapat pengakuan"
-  ],
-  [
-    "Ini merupakan ekspresi pola pikir bertumbuh yang kuat. Responden menjadikan keberhasilan orang lain sebagai sumber motivasi. Ia melihat kesuksesan bukan sebagai ancaman, melainkan peluang belajar. Orang dengan sikap ini biasanya cepat terdorong untuk meningkatkan kemampuan diri setelah melihat contoh nyata",
-    "Masih menunjukkan pola pikir bertumbuh, tetapi dengan intensitas lebih ringan. Responden bisa termotivasi oleh kesuksesan orang lain, meskipun mungkin tidak selalu langsung menindaklanjuti dengan aksi nyata. Ini tetap sehat, tetapi belum sepenuhnya kuat",
-    "Menolak pernyataan ini menunjukkan kecenderungan campuran. Responden mungkin tidak merasa terganggu oleh kesuksesan orang lain, tetapi juga tidak mendapat inspirasi darinya. Sikap ini bisa menyebabkan motivasi stagnan, karena kehilangan peluang belajar dari orang lain",
-    "Ini mencerminkan pola pikir tetap. Responden melihat keberhasilan orang lain bukan sebagai inspirasi, melainkan bisa jadi ancaman atau hal yang membuat minder. Dengan pola pikir ini, seseorang lebih mudah merasa iri atau frustrasi, yang menghambat perkembangan diri"
-  ],
-  [
-    "Jawaban ini mengindikasikan pola pikir tetap (PPT), karena keberhasilan dinilai dari keunggulan dibandingkan orang lain. Kepuasan diperoleh bukan dari proses belajar, melainkan dari perasaan lebih hebat daripada orang lain. Sikap ini membuat seseorang fokus pada kompetisi ketimbang pertumbuhan",
-    "Masih ada kecenderungan membandingkan diri dengan orang lain, Hal ini mencerminkan pola pikir campuran, di mana responden kadang mencari validasi dari keunggulan, tetapi di sisi lain juga bisa fokus pada usaha pribadi",
-    "Menolak pernyataan ini berarti responden tidak terlalu bergantung pada perbandingan sosial. Ia lebih menghargai usaha dan pencapaian pribadi. Sikap ini selaras dengan pola pikir bertumbuh, karena keberhasilan orang lain tidak mengurangi nilai dirinya",
-    "Jawaban ini mencerminkan pola pikir bertumbuh yang kuat. Responden benar-benar fokus pada pembelajaran dan perkembangan diri tanpa peduli apakah orang lain mampu atau tidak. Ia tidak mencari kepuasan dari membandingkan diri, melainkan dari pencapaian internal"
-  ],
-  [
-    "Ini adalah inti pola pikir bertumbuh. Responden meyakini bahwa kecerdasan bukan hal yang tetap, melainkan bisa berkembang lewat usaha. Sikap ini menunjukkan optimisme tinggi terhadap kemampuan belajar, sehingga lebih mudah bangkit dari kegagalan",
-    "Masih dalam jalur pola pikir bertumbuh, Responden percaya kecerdasan bisa berubah, tetapi mungkin masih ada sedikit keraguan atau keterbatasan dalam penerapannya",
-    "Menolak pernyataan ini menandakan kecenderungan pola pikir campuran. Responden ragu bahwa kecerdasan bisa ditingkatkan sepenuhnya, sehingga mungkin merasa sebagian kemampuan sudah ditentukan sejak lahir",
-    "Jawaban ini mencerminkan pola pikir tetap (PPT). Responden percaya bahwa kecerdasan adalah bawaan lahir dan tidak bisa diubah. Keyakinan seperti ini biasanya membuat seseorang enggan berusaha lebih keras, karena merasa hasilnya tidak akan berbeda"
-  ],
-  [
-    "Ini adalah pernyataan klasik pola pikir tetap. Responden percaya kecerdasan adalah bawaan lahir dan tidak bisa berkembang. Dengan pola ini, individu cenderung cepat menyerah karena merasa hasil sudah ditentukan sejak awal",
-    "Masih berpola pikir tetap, namun dengan intensitas lebih rendah. Responden mungkin masih membuka sedikit ruang bahwa usaha bisa memengaruhi, tetapi dominasi tetap ada pada keyakinan bahwa kecerdasan relatif permanen",
-    "Menolak pernyataan ini berarti responden lebih dekat ke pola pikir bertumbuh. Ia percaya bahwa kecerdasan tidak mutlak tetap, melainkan bisa berkembang lewat pembelajaran",
-    "Jawaban ini mencerminkan pola pikir bertumbuh yang kuat. Responden yakin kecerdasan adalah sesuatu yang dinamis, yang bisa berkembang seiring pengalaman, latihan, dan pendidikan. Keyakinan ini membuat individu lebih gigih dalam menghadapi tantangan"
-  ],
-  [
-    "Ini adalah bentuk pola pikir bertumbuh yang kuat. Responden memandang kesulitan sebagai pendorong untuk bekerja lebih keras. Sikap ini mencerminkan ketahanan (resilience) yang tinggi",
-    "Masih selaras dengan pola pikir bertumbuh, Responden cenderung tetap berusaha menghadapi kesulitan, meski ada kalanya ragu atau khawatir gagal",
-    "Menolak pernyataan ini menandakan kecenderungan campuran. Responden merasa kesulitan justru membuatnya kehilangan semangat, meski mungkin masih mau mencoba dalam kondisi tertentu",
-    "Jawaban ini mencerminkan pola pikir tetap (PPT). Responden menganggap kesulitan sebagai hambatan yang membuat mereka menyerah. Sikap ini membuat individu mudah berhenti di tengah jalan dan enggan mengambil tantangan baru"
-  ]
-],
-    kategori: (tot)=> tot<=15?"F":tot<=20?"FG":tot<=25?"GF":"G"
-  },
-  menengah: {
-    statements: [
+    <div class="share-section">
+      <h3>Bagikan Link</h3>
+      <input type="text" id="shareUrl" readonly />
+      <div id="qrcode"></div>
+      <button type="button" class="soft" id="downloadQR">Unduh QR</button>
+    </div>
+  </div>
+
+  <!-- TEMPLATE CETAK -->
+  <div id="printTemplate">
+    <h2>PEMETAAN POLA PIKIR</h2>
+    <table class="identitas">
+      <tr><td class="label">Nama Responden</td><td>: <span id="pnama">-</span></td></tr>
+      <tr><td class="label">Instansi/Lembaga</td><td>: <span id="pinstansi">-</span></td></tr>
+      <tr><td class="label">Bidang/Mapel</td><td>: <span id="pmapel">-</span></td></tr>
+    </table>
+
+    <table class="hasil">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Pernyataan</th>
+          <th>SS</th>
+          <th>S</th>
+          <th>TS</th>
+          <th>STS</th>
+        </tr>
+      </thead>
+      <tbody id="printTableBody"></tbody>
+    </table>
+    <p id="printKategori" class="summary"></p>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-3d"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+  <script>
+    /* ===================== CONFIG ===================== */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec";
+    const SHEET_URL = "https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet2";
+    
+    /* ================== MASTER DATA =================== */
+    const statements=[
       "Kemampuan Anda adalah sesuatu yang sangat mendasar yang tidak banyak dapat Anda ubah lagi.",
       "Tidak peduli seberapapun tingkat kemampuan Anda saat ini, Anda bisa mengubahnya walaupun sedikit.",
       "Anda akan selalu dapat mengubah kemampuan Anda.",
@@ -867,9 +177,93 @@ const paketData = {
       "Semua orang pada dasarnya baik, tapi kadang-kadang membuat keputusan yang salah.",
       "Alasan terpenting mengapa Anda melakukan pekerjaan Anda adalah keinginan untuk mempelajari sesuatu yang baru.",
       "Orang yang benar-benar cerdas, tidak perlu bekerja keras."
-    ],
-    scoring: [[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]],
-    analisisPerSoal: [
+    ];
+    const labels=["SS","S","TS","STS"];
+    const scoring=[[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]];
+
+    /* ============== RENDER & UTILITIES ============== */
+    function renderQuestions(){
+      const form=document.getElementById("quiz");
+      form.innerHTML="";
+      statements.forEach((t,i)=>{
+        const q=document.createElement("div");
+        q.className="q";
+        q.innerHTML=`
+          <p><b>${i+1}.</b> ${t}</p>
+          <div class="opt">
+            ${labels.map((lab,j)=>`<label><input type="radio" name="q${i}" value="${j}"><span>${lab}</span></label>`).join("")}
+          </div>`;
+        form.appendChild(q);
+      });
+    }
+    function renderPrintTable(){
+      const tbody=document.getElementById("printTableBody");
+      tbody.innerHTML="";
+      statements.forEach((t,i)=>{
+        tbody.innerHTML+=`
+          <tr id="row${i}">
+            <td>${i+1}</td><td style="text-align:left">${t}</td>
+            <td class="ss"></td><td class="s"></td><td class="ts"></td><td class="sts"></td>
+          </tr>`;
+      });
+    }
+    document.addEventListener("DOMContentLoaded",()=>{
+      renderQuestions();
+      renderPrintTable();
+      const url=window.location.href;
+      document.getElementById("shareUrl").value=url;
+      new QRCode(document.getElementById("qrcode"),{text:url,width:150,height:150});
+    });
+
+    /* ============== SKOR & CETAK ============== */
+    function computeScore(){
+      let tot=0; let answers=[];
+      for(let i=0;i<statements.length;i++){
+        const sel=document.querySelector(`input[name="q${i}"]:checked`);
+        if(!sel) return null;
+        const selVal=parseInt(sel.value,10);
+        const sc=scoring[i][selVal];
+        tot+=sc;
+        answers.push({index:i,q:statements[i],opt:labels[selVal],score:sc});
+      }
+      let cat=""; if(tot<=20) cat="F"; else if(tot<=33) cat="FG"; else if(tot<=44) cat="GF"; else cat="G";
+      return {total:tot,category:cat,answers};
+    }
+
+    function fillPrintTemplate(){
+      for(let i=0;i<statements.length;i++){
+        const sel=document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel){
+          const row=document.getElementById(`row${i}`);
+          row.querySelector(".ss").innerHTML="";
+          row.querySelector(".s").innerHTML="";
+          row.querySelector(".ts").innerHTML="";
+          row.querySelector(".sts").innerHTML="";
+          if(sel.value=="0") row.querySelector(".ss").innerHTML="✔";
+          if(sel.value=="1") row.querySelector(".s").innerHTML="✔";
+          if(sel.value=="2") row.querySelector(".ts").innerHTML="✔";
+          if(sel.value=="3") row.querySelector(".sts").innerHTML="✔";
+        }
+      }
+      const hasil = computeScore();
+      if(hasil){
+        document.getElementById("pnama").textContent=document.getElementById("nama").value;
+        document.getElementById("pinstansi").textContent=document.getElementById("instansi").value;
+        document.getElementById("pmapel").textContent=document.getElementById("mapel").value;
+        const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth Mindset)",GF:"GF (Growth→Fixed Mindset)",G:"G (Growth Mindset)"};
+        document.getElementById("printKategori").innerHTML=`SKOR: ${hasil.total} KATEGORI: ${labelsFull[hasil.category]}`;
+      }
+    }
+
+    function showResult(r){
+      const res=document.getElementById("result");
+      res.style.display="block";
+      const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth)",GF:"GF (Growth→Fixed)",G:"G (Growth Mindset)"};
+      res.innerHTML=`<span class="score">${r.total}</span> <span class="badge ${r.category}">${labelsFull[r.category]}</span>`;
+    }
+
+    /* ================== ANALISIS CETAK (ringkas) ================== */
+const analisisPerSoal = [
   [
     "Anda memandang kemampuan sebagai hal yang statis. Tindak lanjut: uji keyakinan ini dengan proyek kecil yang menantang dan catat peningkatannya.",
     "Anda ragu kemampuan dapat berubah. Tindak lanjut: tetapkan target mingguan dan refleksikan proses belajar.",
@@ -990,1121 +384,505 @@ const paketData = {
     "Padukan kecerdasan & ketekunan. Tindak lanjut: feedback ahli.",
     "Kerja keras = pengungkit utama. Tindak lanjut: ritme & evaluasi berkelanjutan."
   ]
-],
-    kategori: (tot)=> tot<=33?"FG": (tot<=44?"GF": (tot<=20?"F":"G")) // same thresholds, ordering resolved below
-  },
-  profesional: {
-    statements: [
-      "Saya beranggapan bahwa kecerdasan dan kemampuan utama seseorang pada dasarnya sudah ditentukan sejak lahir, sehingga usaha dan pengalaman baru hanya sedikit berpengaruh untuk benar-benar mengubahnya.",
-      "Meskipun saya memiliki keterbatasan dalam kemampuan tertentu saat ini, saya yakin dengan usaha yang konsisten, refleksi diri, dan strategi yang tepat, kemampuan tersebut dapat meningkat meskipun secara bertahap.",
-      "Saya percaya bahwa sepanjang hidup, manusia selalu punya peluang untuk menumbuhkan keterampilan baru dan memperbaiki kelemahan, asalkan memiliki motivasi dan kesediaan untuk terus belajar.",
-      "Menurut saya, kepribadian dan pola pikir yang melekat dalam diri seseorang adalah sesuatu yang tetap, sehingga pengalaman baru jarang benar-benar dapat mengubah sifat dasar individu.",
-      "Saya meyakini bahwa diri saya selalu bisa berkembang menjadi versi yang lebih baik, karena setiap tantangan dan kesalahan adalah bagian penting dari proses pembelajaran yang berkelanjutan.",
-      "Saya percaya bahwa keterampilan seni maupun musik bukan semata-mata bakat bawaan, melainkan sesuatu yang tetap bisa dikuasai siapa pun, termasuk orang dewasa, jika mereka mau berlatih dengan konsisten.",
-      "Saya memandang bahwa dalam olahraga, hanya orang yang sudah memiliki bakat alami sejak kecil yang dapat benar-benar mencapai tingkat keahlian tinggi, sementara latihan saja tidak cukup.",
-      "Menurut saya, kemampuan matematika lebih banyak dipengaruhi oleh faktor bawaan atau lingkungan tertentu, sehingga usaha belajar tidak banyak mengubah hasil bagi sebagian besar orang.",
-      "Saya yakin bahwa semakin keras saya berlatih, semakin sering saya mencoba strategi berbeda, dan semakin berani menghadapi tantangan, maka kemampuan saya akan meningkat jauh lebih baik.",
-      "Saya percaya bahwa identitas, cara berpikir, maupun tipe diri seseorang tidak bersifat tetap, melainkan dapat berubah secara signifikan seiring pengalaman hidup dan pembelajaran yang terus berlangsung.",
-      "Saya sering merasa bahwa mencoba hal-hal baru terlalu berisiko dan melelahkan, sehingga saya lebih memilih menghindari pengalaman yang tidak familiar agar tidak menambah beban.",
-      "Saya beranggapan bahwa ada orang yang memang cerdas sejak lahir dan ada yang tidak, dan kenyataan ini adalah sesuatu yang tetap, sehingga sulit diubah melalui pendidikan atau pengalaman.",
-      "Saya menilai kritik, masukan, maupun saran dari orang lain sebagai peluang berharga untuk merefleksikan diri, memperbaiki kelemahan, serta mengembangkan cara kerja saya agar lebih efektif.",
-      "Saya merasa kurang nyaman ketika ada orang lain yang memberi kritik atau masukan, karena hal tersebut sering membuat saya defensif atau merasa tidak dihargai.",
-      "Saya percaya bahwa semua orang yang sehat secara fisik dan mental pada dasarnya memiliki kesempatan yang sama untuk belajar dan berkembang, hanya saja kecepatan belajarnya bisa berbeda-beda.",
-      "Saya merasa bahwa menambah pengetahuan baru memang mungkin, tetapi secara umum kemampuan dasar saya sudah terbentuk dan sulit berubah secara mendasar.",
-      "Saya beranggapan bahwa meskipun saya dapat mencoba pendekatan atau strategi baru, pada hakikatnya kemampuan inti saya tidak banyak berubah dari waktu ke waktu.",
-      "Saya percaya bahwa pada dasarnya setiap orang memiliki niat baik, namun dalam praktiknya seringkali mereka mengambil keputusan yang salah karena keterbatasan pengetahuan atau kondisi tertentu.",
-      "Bagi saya, motivasi utama dalam bekerja bukan hanya mendapatkan penghasilan, tetapi juga memperoleh kesempatan untuk mempelajari hal-hal baru yang menantang dan memperluas wawasan.",
-      "Saya berpandangan bahwa orang yang benar-benar cerdas dapat meraih keberhasilan tanpa harus berusaha keras, karena kecerdasan alami mereka sudah memberi keuntungan besar sejak awal."
-    ],
-    scoring: [[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[0,1,2,3],[3,2,1,0],[0,1,2,3],[0,1,2,3],[3,2,1,0],[3,2,1,0],[0,1,2,3]],
-    analisisPerSoal: [
-  [
-    "Jika seseorang memilih sangat setuju, hal ini menunjukkan keyakinan yang sangat kuat pada Fixed Mindset. Responden meyakini bahwa kecerdasan adalah sesuatu yang sudah ditentukan sejak lahir dan hampir tidak mungkin berubah, sekeras apa pun usaha yang dilakukan. Pilihan ini biasanya muncul dari pengalaman atau keyakinan bahwa usaha tidak banyak berpengaruh, dan bisa mengarah pada sikap pasif, cepat menyerah, atau menghindari tantangan karena merasa hasil akhirnya sudah terkunci.",
-    "Memilih setuju mencerminkan kecenderungan Fixed Mindset, tetapi tidak sekuat pilihan SS. Responden mungkin percaya sebagian kecerdasan bisa berkembang, tetapi tetap berpikir bahwa faktor bawaan jauh lebih dominan. Artinya, ada sedikit ruang untuk perubahan, tetapi secara umum masih ada keraguan untuk mencoba berusaha lebih keras. Orang dengan pilihan ini mungkin masih mau belajar, tetapi akan cepat frustrasi jika tidak segera berhasil.",
-    "Jawaban ini mulai menunjukkan adanya pergeseran ke arah Growth Mindset. Responden menolak pandangan bahwa kecerdasan sepenuhnya tetap, meskipun masih menyisakan keraguan. Sikap ini menunjukkan bahwa orang mulai percaya pada kemungkinan adanya peningkatan kemampuan, namun mungkin masih membatasi diri pada aspek tertentu. Ini mencerminkan posisi Growth-Fixed Mindset, yakni membuka peluang tumbuh tetapi masih dibayangi keyakinan lama tentang batas kemampuan.",
-    "Pilihan ini menunjukkan keyakinan penuh pada Growth Mindset. Responden sepenuhnya menolak anggapan bahwa kecerdasan sudah ditentukan sejak lahir, dan sebaliknya percaya bahwa kecerdasan dapat berkembang melalui usaha, pembelajaran, dan pengalaman. Orang dengan jawaban ini biasanya lebih berani menghadapi tantangan, lebih ulet, dan lebih terbuka menerima kegagalan sebagai bagian dari proses belajar."
-  ],
-  [
-    "Pilihan ini menunjukkan sikap Growth Mindset yang sangat kuat. Responden percaya bahwa keterbatasan yang ada sekarang bukanlah penghalang permanen, melainkan tantangan yang dapat diatasi dengan usaha yang terarah. Jawaban ini menggambarkan individu yang optimis, tekun, dan siap melakukan refleksi untuk memperbaiki strategi. Orang dengan kecenderungan ini biasanya tahan menghadapi kegagalan karena yakin setiap kesalahan adalah peluang belajar.",
-    "Jika seseorang memilih setuju, maka ia cenderung pada Growth Mindset tetapi tidak sekuat pilihan SS. Keyakinan terhadap perubahan kemampuan ada, namun mungkin dibatasi oleh kondisi tertentu seperti waktu, sumber daya, atau motivasi. Responden dengan jawaban ini masih berpikir positif, tetapi dalam praktiknya bisa saja mudah goyah jika menghadapi tantangan yang besar. Artinya, ia lebih moderat dalam melihat peluang perkembangan.",
-    "Pilihan tidak setuju menunjukkan adanya keraguan terhadap konsep Growth Mindset. Responden mulai condong pada Fixed-Growth Mindset, yaitu percaya bahwa kemampuan bisa sedikit meningkat, tetapi secara keseluruhan keterbatasan akan tetap ada. Sikap ini mencerminkan pandangan bahwa usaha mungkin berguna dalam jangka pendek, tetapi hasil jangka panjang sudah ditentukan. Orang dengan kecenderungan ini biasanya berusaha, tetapi sering membatasi diri sendiri.",
-    "Jawaban ini menegaskan Fixed Mindset. Responden menolak gagasan bahwa usaha dan strategi dapat meningkatkan kemampuan, dan justru meyakini bahwa keterbatasan adalah sesuatu yang menetap. Pilihan ini menggambarkan sikap pesimis, menghindari tantangan, dan cenderung menyalahkan faktor bawaan ketika menghadapi kesulitan. Dalam konteks pembelajaran orang dewasa, hal ini bisa menjadi hambatan besar untuk berkembang."
-  ],
-  [
-    "Pilihan ini mencerminkan keyakinan penuh pada Growth Mindset. Responden yakin bahwa belajar dan berkembang adalah proses seumur hidup, tidak terbatas oleh usia maupun kondisi saat ini. Orang dengan pilihan ini akan melihat tantangan sebagai peluang, terbuka pada perubahan, dan siap beradaptasi dalam situasi apa pun. Mereka cenderung memiliki ketekunan tinggi serta keberanian mencoba hal-hal baru tanpa takut gagal.",
-    "Jika responden memilih setuju, berarti ia sejalan dengan prinsip Growth Mindset meskipun tidak sepenuhnya optimis seperti pilihan SS. Keyakinan bahwa manusia bisa berkembang ada, tetapi dengan batasan tertentu. Misalnya, seseorang percaya bahwa kemampuan bisa meningkat di beberapa bidang saja, atau mungkin hanya dalam jangka waktu tertentu. Sikap ini positif, tetapi masih menyisakan keraguan dalam menghadapi kesulitan nyata.",
-    "Jawaban ini menunjukkan posisi Fixed-Growth Mindset. Responden mulai meragukan bahwa manusia bisa berkembang secara konsisten sepanjang hidup. Mereka mungkin menganggap ada bidang tertentu yang bisa dipelajari, tetapi keterampilan inti dianggap tidak banyak berubah. Hal ini bisa membuat individu membatasi dirinya sendiri, misalnya dengan berkata saya sudah terlalu tua untuk belajar hal ini.",
-    "Jika responden memilih sangat tidak setuju, maka jelas ia menganut Fixed Mindset. Ia menolak gagasan bahwa kemampuan dapat bertumbuh sepanjang hidup, dan percaya bahwa keterampilan serta kelemahan sudah permanen. Orang dengan pandangan ini akan sulit menerima tantangan baru, menghindari risiko, dan cenderung pasrah pada keadaan."
-  ],
-  [
-    "Pilihan ini menunjukkan Fixed Mindset yang sangat kuat. Responden meyakini bahwa kepribadian dan pola pikir adalah sesuatu yang statis dan sulit diubah, tidak peduli seberapa banyak pengalaman hidup yang dijalani. Hal ini bisa membuat orang cenderung pesimis terhadap upaya pengembangan diri atau pelatihan, karena merasa sifat dasar manusia sudah terkunci.",
-    "Jika responden memilih setuju, berarti ia condong pada Fixed Mindset tetapi dengan intensitas yang lebih rendah. Mereka mungkin percaya bahwa ada sedikit perubahan yang bisa terjadi, tetapi tetap menilai bahwa inti kepribadian dan pola pikir tidak bisa digeser jauh. Sikap ini biasanya terlihat pada orang yang percaya orang sulit berubah, meskipun masih mengakui ada perkembangan kecil pada aspek tertentu.",
-    "Jawaban ini mencerminkan posisi Growth-Fixed Mindset. Responden menolak pandangan bahwa kepribadian sepenuhnya tetap, tetapi juga belum sepenuhnya percaya bahwa perubahan bisa signifikan. Mereka mungkin berpikir kepribadian dapat berkembang perlahan melalui pengalaman besar, tetapi secara umum tetap terbatas. Sikap ini setengah hati menerima gagasan perkembangan.",
-    "Pilihan ini menunjukkan sikap Growth Mindset yang jelas. Responden percaya bahwa pengalaman hidup, pembelajaran, dan refleksi diri dapat mengubah kepribadian serta pola pikir seseorang secara signifikan. Orang dengan keyakinan ini cenderung lebih terbuka pada perubahan, melihat diri sendiri sebagai proses yang terus berkembang, dan lebih optimis dalam memandang orang lain."
-  ],
-  [
-    "Pilihan ini menunjukkan Growth Mindset yang sangat kuat. Responden memiliki keyakinan penuh bahwa dirinya bisa selalu berkembang, dan bahkan memandang kesalahan sebagai sumber pembelajaran berharga. Orang dengan pandangan ini biasanya tidak mudah menyerah, lebih tahan terhadap kegagalan, dan memiliki rasa ingin tahu tinggi terhadap hal-hal baru.",
-    "Jika memilih setuju, responden masih menunjukkan kecenderungan Growth Mindset, tetapi dengan intensitas yang lebih moderat. Ia percaya pada perkembangan diri, tetapi mungkin masih melihat ada batas tertentu. Sikap ini tetap positif, namun ada kemungkinan responden mudah goyah saat menghadapi tantangan yang lebih berat atau kegagalan yang berulang.",
-    "Jawaban ini mencerminkan posisi Fixed-Growth Mindset. Responden tidak sepenuhnya menolak gagasan berkembang, tetapi menganggap bahwa kesalahan dan tantangan tidak selalu membantu. Mereka mungkin percaya perkembangan diri hanya terbatas pada bidang tertentu, atau hanya sampai tahap tertentu. Sikap ini membuat individu ragu untuk mengambil peluang belajar dari kegagalan.",
-    "Pilihan ini jelas menunjukkan Fixed Mindset. Responden menolak gagasan bahwa tantangan atau kesalahan dapat membuat seseorang berkembang. Pandangan ini cenderung membuat individu menghindari risiko, tidak tahan dengan kegagalan, dan merasa dirinya sulit berubah meskipun diberi kesempatan."
-  ],
-  [
-    "Responden yang memilih sangat setuju menunjukkan sikap Growth Mindset yang kuat. Ia percaya bahwa seni dan musik dapat dikuasai siapa saja, tanpa terkecuali, asalkan ada kemauan dan latihan yang konsisten. Pandangan ini mencerminkan keterbukaan terhadap pembelajaran sepanjang hayat, bahkan dalam bidang yang sering dianggap hanya bisa dikuasai oleh mereka yang berbakat. Orang dengan jawaban ini biasanya berani mencoba, tidak mudah menyerah, dan melihat latihan sebagai jalan menuju penguasaan.",
-    "Jawaban ini tetap mengarah ke Growth Mindset, namun dengan keyakinan yang tidak sekuat SS. Responden mengakui bahwa latihan penting, tetapi mungkin masih menyisakan keyakinan bahwa faktor bakat tetap berperan dalam kecepatan belajar. Sikap ini cukup positif, meski bisa membuat responden ragu untuk bertahan lama jika merasa perkembangannya lebih lambat daripada orang lain.",
-    "Memilih tidak setuju mencerminkan posisi Fixed-Growth Mindset. Responden mulai meragukan bahwa seni dan musik benar-benar bisa dipelajari siapa saja, dan cenderung melihat bakat sebagai syarat penting. Hal ini bisa membuat individu tetap mau mencoba, tetapi cepat menyerah jika hasil latihannya tidak terlihat signifikan. Sikap ini menunjukkan setengah hati dalam menerima konsep berkembang melalui usaha.",
-    "Jawaban ini menunjukkan Fixed Mindset yang kuat. Responden yakin bahwa seni dan musik hanya bisa dikuasai oleh mereka yang sejak awal sudah berbakat. Sikap ini bisa menutup peluang pengembangan diri, karena individu cenderung menghindari mencoba hal baru jika merasa tidak memiliki bakat. Dengan keyakinan ini, kegigihan belajar hampir tidak mungkin berkembang."
-  ],
-  [
-    "Pilihan ini mencerminkan Fixed Mindset yang kuat. Responden meyakini bahwa bakat adalah penentu utama keberhasilan dalam olahraga, sementara latihan dianggap tidak banyak berpengaruh. Pandangan ini bisa membuat individu cepat menyerah, menghindari latihan keras, dan membatasi diri sejak awal dengan alasan saya memang tidak berbakat.",
-    "Jawaban ini tetap condong pada Fixed Mindset, meskipun tidak sekuat SS. Responden masih mengakui latihan penting, tetapi menilai bakat jauh lebih menentukan. Dengan sikap ini, individu mungkin tetap berlatih, tetapi berhenti lebih cepat ketika hasil tidak sesuai harapan. Ini menunjukkan keraguan pada efektivitas usaha jangka panjang.",
-    "Memilih tidak setuju mencerminkan posisi Growth-Fixed Mindset. Responden mulai menolak pandangan bahwa olahraga hanya soal bakat, namun masih menyimpan keraguan apakah semua orang bisa benar-benar mencapai tingkat mahir hanya dengan latihan. Orang dengan jawaban ini mungkin berlatih lebih tekun, tetapi tetap membatasi ekspektasi diri.",
-    "Pilihan ini jelas menggambarkan Growth Mindset. Responden percaya bahwa siapa pun, tanpa memandang bakat awal, bisa mencapai keahlian tinggi dalam olahraga melalui latihan disiplin, strategi tepat, dan kegigihan. Orang dengan pandangan ini cenderung tidak mudah putus asa dan terus berusaha meskipun progres terasa lambat."
-  ],
-  [
-    "Jawaban ini menunjukkan Fixed Mindset yang sangat kuat. Responden percaya bahwa kemampuan matematika ditentukan oleh faktor bawaan seperti kecerdasan sejak lahir atau lingkungan yang mendukung. Usaha belajar dianggap tidak efektif, sehingga individu mungkin enggan mencoba lebih keras atau bahkan menghindari pelajaran matematika sepenuhnya.",
-    "Jika responden memilih setuju, ia masih condong pada Fixed Mindset namun lebih moderat. Ia mengakui sedikit peran usaha, tetapi tetap menilai faktor bawaan atau lingkungan lebih dominan. Orang dengan pandangan ini biasanya belajar, tetapi berhenti ketika merasa hasilnya tidak sesuai ekspektasi, karena berpikir saya memang tidak cocok dengan matematika.",
-    "Pilihan ini menunjukkan posisi Growth-Fixed Mindset. Responden menolak gagasan bahwa matematika sepenuhnya ditentukan oleh bakat atau lingkungan, tetapi masih menyimpan keraguan apakah semua orang bisa berhasil hanya dengan usaha. Sikap ini bisa membuat orang mencoba, tetapi tetap mudah membatasi diri ketika mengalami kesulitan.",
-    "Jawaban ini menunjukkan Growth Mindset. Responden percaya bahwa siapa pun bisa belajar matematika jika memiliki usaha, strategi belajar yang tepat, dan lingkungan yang mendukung. Orang dengan sikap ini biasanya lebih gigih, lebih tahan menghadapi kesulitan, dan tidak mudah menyerah."
-  ],
-  [
-    "Pilihan ini mencerminkan Growth Mindset yang sangat kuat. Responden percaya bahwa peningkatan kemampuan sepenuhnya bergantung pada latihan, kreativitas dalam strategi, dan keberanian menghadapi tantangan. Pandangan ini menunjukkan optimisme tinggi dan keyakinan pada kekuatan usaha sebagai kunci kesuksesan.",
-    "Jawaban ini tetap menunjukkan Growth Mindset, namun lebih moderat. Responden mengakui usaha penting, tetapi mungkin masih menyisakan keraguan apakah semua tantangan bisa diatasi dengan latihan. Sikap ini tetap positif, tetapi bisa goyah saat menghadapi kegagalan yang berulang.",
-    "Pilihan ini menunjukkan posisi Fixed-Growth Mindset. Responden meragukan bahwa latihan dan strategi baru benar-benar bisa meningkatkan kemampuan secara signifikan. Ia mungkin percaya sedikit pada usaha, tetapi tetap melihat bakat sebagai faktor dominan. Sikap ini bisa membuat orang hanya berusaha setengah hati.",
-    "Jawaban ini jelas menggambarkan Fixed Mindset. Responden menolak gagasan bahwa usaha, latihan, dan tantangan bisa membuat kemampuan meningkat. Orang dengan pandangan ini biasanya mudah menyerah, menghindari situasi sulit, dan percaya bahwa perkembangan diri sangat terbatas."
-  ],
-  [
-    "Jawaban ini menunjukkan Growth Mindset yang sangat kuat. Responden meyakini bahwa identitas dan cara berpikir seseorang dapat berubah seiring pengalaman hidup. Hal ini menggambarkan keterbukaan pada pembelajaran, refleksi diri, dan keyakinan bahwa manusia adalah makhluk yang dinamis.",
-    "Jika responden memilih setuju, ia mendukung Growth Mindset namun lebih moderat. Mereka percaya perubahan mungkin terjadi, tetapi tidak selalu signifikan. Pandangan ini cukup positif, tetapi bisa membatasi optimisme responden terhadap peluang perubahan besar dalam dirinya atau orang lain.",
-    "Jawaban ini menempatkan responden pada posisi Fixed-Growth Mindset. Ia menolak sebagian besar gagasan bahwa identitas dapat berubah, tetapi masih mengakui sedikit kemungkinan adanya pergeseran. Pandangan ini cenderung ragu-ragu dan membuat orang sulit melihat peluang besar dalam proses transformasi diri.",
-    "Pilihan ini jelas mencerminkan Fixed Mindset. Responden meyakini identitas, tipe diri, dan pola pikir bersifat tetap. Pandangan ini membuat individu pasrah terhadap keadaan, sulit menerima perubahan, dan cenderung resisten terhadap pengalaman baru."
-  ],
-  [
-    "Responden yang memilih sangat setuju jelas menunjukkan Fixed Mindset. Ia percaya bahwa tantangan baru adalah ancaman atau beban, bukan peluang. Pandangan ini membuat individu enggan keluar dari zona nyaman, cenderung defensif, dan menghindari risiko. Hal ini berdampak pada minimnya pertumbuhan diri, karena setiap peluang belajar baru akan dilihat dengan rasa takut atau penolakan.",
-    "Jika memilih setuju, responden masih berada pada ranah Fixed Mindset, meski lebih moderat. Ia mengakui hal baru bisa dilakukan, tetapi tetap menilai bahwa risikonya lebih besar daripada manfaatnya. Orang dengan sikap ini biasanya mencoba sesuatu hanya ketika benar-benar dipaksa atau mendesak, dan mudah berhenti saat menemui hambatan.",
-    "Jawaban ini menunjukkan Growth-Fixed Mindset. Responden mulai menolak gagasan bahwa hal baru selalu berisiko, namun masih menyimpan keraguan. Ia mungkin berani mencoba hal baru, tetapi dengan perhitungan hati-hati, dan bisa mundur jika merasa tantangannya terlalu besar. Sikap ini masih membatasi peluang pembelajaran optimal.",
-    "Pilihan ini mencerminkan Growth Mindset. Responden percaya bahwa mencoba hal-hal baru justru memberi peluang belajar, meski penuh risiko. Orang dengan pandangan ini lebih berani, terbuka terhadap pengalaman, dan tidak takut gagal. Mereka melihat risiko sebagai bagian dari perjalanan untuk berkembang."
-  ],
-  [
-    "Pilihan ini mencerminkan Fixed Mindset yang kuat. Responden percaya kecerdasan adalah sesuatu yang permanen dan ditentukan sejak lahir, sehingga pendidikan maupun pengalaman tidak mampu mengubahnya. Pandangan ini membuat individu mudah putus asa, apatis, dan cenderung menghindari usaha jangka panjang karena dianggap sia-sia.",
-    "Jika memilih setuju, responden masih mendukung Fixed Mindset, tetapi dengan intensitas lebih rendah. Ia percaya sebagian orang mungkin bisa berubah, tetapi secara umum kecerdasan dilihat sebagai bawaan. Sikap ini membuat orang cepat menyimpulkan batas dirinya atau orang lain tanpa memberi ruang yang cukup untuk usaha dan proses belajar.",
-    "Jawaban ini menunjukkan posisi Growth-Fixed Mindset. Responden menolak pandangan bahwa kecerdasan sepenuhnya tetap, tetapi masih menyisakan keraguan. Misalnya, ia bisa percaya kecerdasan meningkat hanya dalam batas kecil atau dalam kondisi tertentu saja. Pandangan ini setengah hati terhadap konsep berkembang melalui pendidikan.",
-    "Pilihan ini mencerminkan Growth Mindset. Responden percaya kecerdasan dapat dikembangkan melalui pengalaman, latihan, dan pendidikan. Ia optimis terhadap potensi diri maupun orang lain, dan melihat setiap kesempatan belajar sebagai peluang meningkatkan kemampuan."
-  ],
-  [
-    "Jawaban ini menunjukkan Growth Mindset yang kuat. Responden sepenuhnya terbuka pada kritik dan masukan, bahkan menganggapnya sebagai hadiah untuk memperbaiki diri. Orang dengan pandangan ini biasanya lebih cepat berkembang, karena mereka menjadikan umpan balik sebagai bagian dari proses belajar, bukan sebagai ancaman.",
-    "Jika memilih setuju, responden masih menunjukkan kecenderungan Growth Mindset, namun tidak sekuat SS. Ia menganggap kritik penting, tetapi mungkin kadang masih merasa tidak nyaman. Meski begitu, ia tetap terbuka untuk belajar dari masukan, meskipun tidak selalu menerapkannya secara penuh.",
-    "Pilihan ini mencerminkan posisi Fixed-Growth Mindset. Responden mulai menolak nilai kritik, tetapi masih bisa menerima dalam kondisi tertentu. Sikap ini bisa membuatnya berkembang, namun sangat terbatas, karena ia mungkin hanya menerima kritik yang sesuai dengan keinginannya.",
-    "Jawaban ini menunjukkan Fixed Mindset. Responden menolak kritik dan masukan, serta menganggapnya sebagai sesuatu yang mengganggu. Orang dengan sikap ini biasanya sulit berkembang, defensif, dan tidak mampu melihat kelemahan sebagai peluang untuk belajar."
-  ],
-  [
-    "Pilihan ini menunjukkan Fixed Mindset yang kuat. Responden memandang kritik sebagai sesuatu yang merugikan dan menyakitkan. Sikap ini membuatnya defensif, sulit menerima perbaikan, dan cenderung menolak kesempatan untuk berkembang.",
-    "Jika memilih setuju, responden masih menunjukkan kecenderungan Fixed Mindset, meskipun tidak sekeras SS. Ia mungkin sesekali bisa menerima kritik, tetapi lebih sering merasa tersinggung. Sikap ini membatasi peluang belajar karena masukan hanya diterima sebagian.",
-    "Jawaban ini menunjukkan posisi Growth-Fixed Mindset. Responden tidak sepenuhnya menolak kritik, tetapi masih merasa canggung atau tidak nyaman. Hal ini membuat mereka bisa menerima kritik dalam beberapa situasi, tetapi tetap mempertahankan sikap defensif dalam situasi lain.",
-    "Pilihan ini mencerminkan Growth Mindset. Responden terbuka pada kritik, bahkan jika kritik tersebut keras atau sulit didengar. Ia tidak melihat kritik sebagai ancaman, melainkan peluang untuk memperbaiki diri. Orang dengan sikap ini biasanya lebih mudah berkembang dan beradaptasi."
-  ],
-  [
-    "Jawaban ini menunjukkan Growth Mindset yang kuat. Responden yakin bahwa setiap orang memiliki kesempatan belajar yang sama, tanpa terkecuali. Pandangan ini membuatnya lebih menghargai keberagaman individu, lebih inklusif, dan optimis terhadap potensi orang lain.",
-    "Jika memilih setuju, responden masih mendukung Growth Mindset, tetapi lebih moderat. Ia percaya setiap orang bisa belajar, tetapi mungkin masih melihat ada keterbatasan tertentu. Sikap ini positif, meski belum seoptimis SS dalam menilai kemampuan orang lain.",
-    "Jawaban ini menunjukkan posisi Fixed-Growth Mindset. Responden mulai meragukan bahwa semua orang benar-benar memiliki kesempatan yang sama untuk belajar. Ia mungkin berpikir bahwa hanya sebagian orang yang bisa berhasil, tergantung kondisi tertentu. Hal ini membatasi keyakinannya pada potensi manusia.",
-    "Pilihan ini jelas mencerminkan Fixed Mindset. Responden menolak gagasan bahwa setiap orang bisa belajar dengan kesempatan yang sama, dan percaya hanya sebagian orang saja yang bisa berkembang. Pandangan ini membuat individu pesimis terhadap peluang perubahan, baik bagi dirinya maupun orang lain."
-  ],
-  [
-    "Pilihan ini jelas menunjukkan Fixed Mindset yang kuat. Responden percaya bahwa meski pengetahuan bisa bertambah, kemampuan inti dianggap permanen dan tidak bisa berubah. Sikap ini membuat orang lebih pasrah, kurang termotivasi untuk berlatih, dan cenderung menghindari tantangan karena merasa hasil akhirnya tidak bisa berbeda jauh dari keadaan sekarang.",
-    "Jika memilih setuju, responden tetap condong pada Fixed Mindset, meskipun tidak sekeras SS. Ia masih mengakui ada peluang belajar, tetapi tetap yakin bahwa kemampuan inti tidak bisa berubah signifikan. Sikap ini membuat usaha belajar hanya dilakukan secara terbatas, tanpa keyakinan penuh untuk berkembang.",
-    "Jawaban ini mencerminkan posisi Growth-Fixed Mindset. Responden mulai menolak gagasan bahwa kemampuan dasar benar-benar tetap, namun masih menyisakan keraguan. Misalnya, mereka percaya beberapa aspek bisa berkembang, tetapi tetap merasa ada batasan tertentu yang sulit ditembus.",
-    "Pilihan ini mencerminkan Growth Mindset. Responden percaya bahwa pengetahuan dan kemampuan dasar dapat berubah secara mendasar melalui usaha, strategi, dan pengalaman hidup. Orang dengan sikap ini biasanya lebih gigih, lebih terbuka, dan optimis terhadap perkembangan jangka panjang."
-  ],
-  [
-    "Jawaban ini menunjukkan Fixed Mindset yang kuat. Responden meyakini bahwa kemampuan inti bersifat permanen, sehingga strategi baru tidak akan memberikan dampak signifikan. Sikap ini biasanya membuat orang malas bereksperimen dengan metode belajar baru, dan cenderung menerima keadaan seadanya.",
-    "Jika memilih setuju, responden masih berada pada ranah Fixed Mindset tetapi lebih moderat. Ia mengakui strategi baru bisa membantu, tetapi tetap merasa perkembangan hanya sedikit. Sikap ini bisa menghambat potensi, karena individu hanya berusaha dalam batas tertentu tanpa keyakinan penuh akan hasilnya.",
-    "Jawaban ini mencerminkan posisi Growth-Fixed Mindset. Responden menolak sebagian pandangan bahwa kemampuan inti tidak bisa berubah, tetapi masih menyimpan keraguan. Ia mungkin mencoba strategi baru, namun tidak selalu yakin dengan hasilnya. Hal ini mencerminkan sikap setengah hati dalam mengadopsi Growth Mindset.",
-    "Pilihan ini jelas menunjukkan Growth Mindset. Responden percaya bahwa kemampuan inti pun bisa berkembang jika didukung oleh strategi baru yang tepat. Orang dengan sikap ini biasanya lebih fleksibel, berani mencoba, dan yakin bahwa pendekatan yang berbeda dapat membuka peluang kemajuan yang signifikan."
-  ],
-  [
-    "Jawaban ini menunjukkan Growth Mindset yang kuat. Responden percaya bahwa manusia pada dasarnya baik dan keputusan buruk lebih banyak disebabkan oleh keterbatasan situasi. Sikap ini membuat orang lebih berempati, lebih terbuka untuk memberi kesempatan kedua, dan optimis bahwa orang bisa belajar dari kesalahan.",
-    "Jika memilih setuju, responden masih condong ke Growth Mindset, meskipun tidak sekuat SS. Ia percaya orang bisa berubah, tetapi mungkin lebih berhati-hati dalam menilai. Pandangan ini positif, tetapi bisa menjadi ragu-ragu ketika menghadapi kesalahan serius dari orang lain.",
-    "Jawaban ini menunjukkan posisi Fixed-Growth Mindset. Responden mulai meragukan bahwa setiap orang pada dasarnya baik, meskipun masih mengakui kemungkinan perubahan. Sikap ini membuatnya lebih skeptis terhadap manusia, meski tidak sepenuhnya menutup peluang perbaikan.",
-    "Pilihan ini mencerminkan Fixed Mindset. Responden menolak pandangan bahwa orang pada dasarnya baik, dan lebih percaya bahwa sifat dasar seseorang sulit diubah. Pandangan ini bisa membuat individu pesimis terhadap orang lain dan menolak kemungkinan perbaikan."
-  ],
-  [
-    "Jawaban ini jelas menunjukkan Growth Mindset yang kuat. Responden menilai belajar dan tantangan baru sebagai motivasi utama dalam bekerja, bukan sekadar penghasilan. Sikap ini membuat individu lebih bersemangat menghadapi tantangan, lebih mudah berkembang, dan lebih tahan dalam menghadapi kesulitan kerja.",
-    "Jika memilih setuju, responden tetap mendukung Growth Mindset, meski tidak sekuat SS. Ia melihat belajar sebagai motivasi penting, tetapi mungkin masih menempatkan penghasilan pada posisi utama. Sikap ini positif, namun bisa membuat individu cepat kehilangan motivasi ketika hasil kerja tidak sesuai ekspektasi materi.",
-    "Jawaban ini menunjukkan posisi Fixed-Growth Mindset. Responden mulai meragukan bahwa belajar adalah motivasi utama dalam bekerja. Ia mungkin masih menghargai pembelajaran, tetapi lebih mengutamakan faktor stabilitas atau keuntungan praktis. Hal ini bisa membuat individu kurang terbuka pada pengalaman baru.",
-    "Pilihan ini mencerminkan Fixed Mindset. Responden menolak gagasan bahwa pembelajaran adalah motivasi penting dalam bekerja, dan lebih percaya bahwa tujuan utama bekerja hanya untuk penghasilan. Pandangan ini membatasi ruang berkembang, karena individu kurang tertarik pada pengalaman yang bisa memperluas wawasan."
-  ],
-  [
-    "Jawaban ini menunjukkan Fixed Mindset yang kuat. Responden percaya bahwa kecerdasan alami sudah cukup untuk meraih keberhasilan, tanpa memerlukan kerja keras. Pandangan ini membuat individu cenderung malas berusaha, dan menilai keberhasilan lebih pada faktor bawaan daripada proses.",
-    "Jika memilih setuju, responden tetap condong pada Fixed Mindset, meskipun lebih moderat. Ia percaya kecerdasan alami memberi keuntungan besar, namun masih mengakui sedikit peran usaha. Sikap ini bisa membuat individu berusaha hanya seadanya.",
-    "Jawaban ini menunjukkan posisi Growth-Fixed Mindset. Responden menolak sebagian pandangan bahwa kecerdasan alami cukup, namun masih menyisakan keyakinan bahwa bakat tetap dominan. Sikap ini membuatnya berusaha, tetapi tidak sepenuhnya percaya pada pentingnya kerja keras.",
-    "Pilihan ini mencerminkan Growth Mindset. Responden percaya keberhasilan sejati hanya bisa dicapai melalui kerja keras, strategi, dan ketekunan, bukan semata-mata kecerdasan bawaan. Sikap ini membuat individu gigih, pantang menyerah, dan lebih realistis dalam mengejar tujuan."
-  ]
-],
-    kategori: (tot)=> tot<=33?"FG": (tot<=44?"GF": (tot<=20?"F":"G"))
-  }
-};
+];
 
-// Normalize kategori function for menengah/profesional to exact rule:
-// F<=20, FG<=33, GF<=44, else G
-paketData.menengah.kategori = (t)=> t<=20?'F': t<=33?'FG': t<=44?'GF':'G';
-paketData.profesional.kategori = (t)=> t<=20?'F': t<=33?'FG': t<=44?'GF':'G';
-
-const labelsFull={F:"F (Fixed Mindset)",FG:"FG (Fixed→Growth Mindset)",GF:"GF (Growth→Fixed Mindset)",G:"G (Growth Mindset)"};
-
-function setPaket(paket){
-  
-// perbarui datalist instansi sesuai paket
-  try{ updateInstansiList(paket); }catch(e){}
-
-  try{ updateInstansiList(paket); }catch(e){}
-
-  const quiz=document.getElementById("quiz");quiz.innerHTML="";
-  soal[paket].forEach((q,i)=>{
-    const div=document.createElement("div");div.className="q";
-    div.innerHTML=`<p><b>${i+1}. ${q.t}</b></p>`+q.o.map(opt=>`<label><input type='radio' name='q${i}' value='${opt}'> ${opt}</label>`).join('');
-    quiz.appendChild(div);
-  });
+function getAnalisisPerButir(a){
+  const arr = analisisPerSoal[a.index];
+  if(!arr) return "Analisis tidak tersedia.";
+  return arr[a.score] ?? "Analisis tidak tersedia.";
 }
 
-// === NOTIFIKASI SWEETALERT2 ===
-
-// --- Tambahkan notifikasi ke dalam fungsi setPaket lama ---
-const oldSetPaket = window.setPaket;
-window.setPaket = function(paket) {
-  Swal.fire({
-    icon: 'success',
-    title: 'Paket Dipilih',
-    text: 'Anda memilih paket: ' + paket.toUpperCase(),
-    timer: 1500,
-    showConfirmButton: false
+    function showAnalysis(r){
+  let newWin=window.open("","_blank");
+  let html=`<html><head><title>Analisis</title>
+  <style>
+    body{font-family:Arial,sans-serif; padding:15px; line-height:1.35;}
+    h2{text-align:center;color:#2563eb;margin-bottom:10px;}
+    .header-table{width:100%; border-collapse:collapse; margin-bottom:8px;}
+    .header-table td{font-size:13px; padding:4px 6px; vertical-align:top; white-space:nowrap;}
+    .header-table td:nth-child(2),
+    .header-table td:nth-child(4),
+    .header-table td:nth-child(6) {
+      white-space:normal;         /* biarkan kolom isi bisa wrap kalau terlalu panjang */
+      word-break:break-word;      /* pecah kata panjang supaya tidak melebar ke kanan */
+}
+    .header-table .label{text-align:right; font-weight:bold; width:120px;}
+    table{width:100%; border-collapse:collapse; font-size:13px;}
+    th,td{padding:6px 8px; border-bottom:1px solid #ddd; text-align:left; vertical-align:top;}
+    tr:nth-child(even){background:#f9f9f9;} tr:hover{background:#eef6ff;}
+    th{background:#2563eb;color:white;}
+    .btn-print{margin-top:10px; display:block; padding:10px 14px; background:#2563eb; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:bold;}
+    @media print{.btn-print{display:none;} body{margin:0;} @page{margin:1.5cm; size:A4;}}
+  </style>
+  </head><body>
+  <h2>Analisis Pemetaan Profil Pola Pikir</h2>
+  <table class="header-table">
+    <tr>
+      <td class="label">Nama</td><td>: ${document.getElementById("nama").value || "-"}</td>
+      <td style="font-weight:bold;">Total:</td><td>${r.total}</td>
+      <td style="font-weight:bold;">Kategori:</td><td>${r.category}</td>
+    </tr>
+    <tr>
+      <td class="label">Instansi</td><td>: ${document.getElementById("instansi").value || "-"}</td>
+      <td style="font-weight:bold;">Interpretasi:</td>
+      <td colspan="3">${
+        r.category=="G"?"Growth Mindset sangat baik—Anda konsisten melihat tantangan sebagai peluang belajar.":
+        r.category=="GF"?"Cenderung Growth—dasar positif sudah ada, tinggal memperkuat konsistensi di area tertentu.":
+        r.category=="FG"?"Cenderung Fixed—namun mulai terbuka; fokuskan pada pengalaman belajar yang terstruktur.":
+        "Fixed Mindset dominan—perlu perubahan cara pandang terhadap usaha, proses, dan umpan balik."
+      }</td>
+    </tr>
+    <tr>
+      <td class="label">Bidang/Mapel</td><td>: ${document.getElementById("mapel").value || "-"}</td>
+      <td style="font-weight:bold;">Motivasi:</td>
+      <td colspan="3">Kemampuan berkembang lewat proses: tetapkan target jelas, latihan konsisten, dan rayakan progres kecil.</td>
+    </tr>
+  </table>
+  <table>
+    <tr><th>Pernyataan</th><th>Jawaban</th><th>Analisis & Tindak Lanjut</th></tr>`;
+  r.answers.forEach(a=>{
+    html+=`<tr><td>${a.q}</td><td>${a.opt}</td><td>${getAnalisisPerButir(a)}</td></tr>`;
   });
+  html+=`</table>
+  <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+  </body></html>`;
+  newWin.document.write(html);
+  newWin.document.close();
+}
 
-  // jalankan logika asli
-  oldSetPaket(paket);
+
+    /* ================== SUBMIT → SHEET + LOKAL ================== */
+    function buildPayload(){
+      const nama=(document.getElementById("nama").value||"").trim();
+      const instansi=(document.getElementById("instansi").value||"").trim()||"(Tanpa Instansi)";
+      const mapel=(document.getElementById("mapel").value||"").trim();
+      const r=computeScore();
+      if(!r) return {ok:false,message:"Lengkapi semua 20 pertanyaan terlebih dahulu."};
+      return {ok:true,data:{nama,instansi,mapel,skor:r.total,kategori:r.category,jawaban:r.answers},result:r};
+    }
+    // --- Fungsi submit asli ---
+    async function submitToSheet(){
+      const btn = document.getElementById("submitBtn");
+      const pack=buildPayload();
+
+      if(!pack.ok){
+        Swal.fire("Peringatan", pack.message, "warning");
+        return;
+      }
+
+      // Ubah tombol jadi PROSES...
+      btn.disabled = true;
+      btn.textContent = "PROSES...";
+      
+      try{
+        const body=new URLSearchParams({payload:JSON.stringify(pack.data)});
+        await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+        accumulateLocal(pack.data.instansi,pack.data.kategori);
+        showResult(pack.result);
+        Swal.fire("Berhasil","Data berhasil diproses, silakan cek hasilnya!","success");
+  }catch(e){
+    Swal.fire("Error","Gagal mengirim data. Silakan coba lagi.","error");
+  }finally{
+    // Kembalikan tombol ke SUBMIT
+    btn.disabled = false;
+    btn.textContent = "SUBMIT";
+  }
+}
+
+    // --- Binding tombol dengan SweetAlert2 ---
+    document.getElementById("submitBtn").onclick = async ()=>{
+  const pack=buildPayload();
+  if(!pack.ok){
+    Swal.fire("Peringatan", pack.message, "warning");
+    return;
+  }
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true; 
+  btn.textContent="PROSES...";
+
+  try{
+    const body=new URLSearchParams({payload:JSON.stringify(pack.data)});
+    await fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
+    accumulateLocal(pack.data.instansi, pack.data.kategori);
+    showResult(pack.result);
+
+    Swal.fire("Berhasil","Data berhasil diproses!","success");
+  }catch(e){
+    Swal.fire("Error","Gagal mengirim data!","error");
+  }
+
+  btn.disabled=false;
+  btn.textContent="SUBMIT";
 };
 
-// --- Submit dengan cek identitas ---
-const oldSubmitBtn = document.getElementById("submitBtn").onclick;
-document.getElementById("submitBtn").onclick = function(e) {
-  const nama = document.getElementById("nama").value.trim();
-  const instansi = document.getElementById("instansi").value.trim();
-  const mapel = document.getElementById("mapel").value.trim();
+    document.getElementById("analisisBtn").onclick = ()=>{
+  const r=computeScore();
+  if(!r){
+    Swal.fire("Peringatan","Lengkapi semua pertanyaan dulu sebelum analisis!","warning");
+    return;
+  }
+  Swal.fire({
+    title:"Analisis Siap",
+    text:"Hasil analisis akan ditampilkan di jendela baru.",
+    icon:"info",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      showAnalysis(r);
+    }
+  });
+};
 
-  if (!nama || !instansi || !mapel) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Identitas Belum Lengkap',
-      text: 'Silakan isi Nama, Instansi, dan Mapel sebelum submit.'
-    });
+    document.getElementById("resetBtn").onclick = ()=>{
+  Swal.fire({
+    title:"Reset Form",
+    text:"Apakah Anda yakin ingin mereset semua jawaban?",
+    icon:"warning",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      location.reload();
+    }
+  });
+};
+
+    document.getElementById("cetakBtn").onclick = ()=>{
+  const r=computeScore();
+  if(!r){
+    Swal.fire("Peringatan","Lengkapi semua pertanyaan dulu sebelum cetak!","warning");
+    return;
+  }
+  Swal.fire({
+    title:"Cetak Data",
+    text:"Apakah Anda yakin ingin mencetak tanpa analisis?",
+    icon:"question",
+    showCancelButton:true,
+    confirmButtonText:"OK",
+    cancelButtonText:"Batal"
+  }).then((result)=>{
+    if(result.isConfirmed){
+      fillPrintTemplate();
+      window.print();
+    }
+  });
+};
+
+    /* ========== GRAFIK ========== */
+document.getElementById("loginBtn").onclick=()=>{
+  Swal.fire({
+    title:"Masukkan Password",
+    input:"password",
+    inputPlaceholder:"Password grafik",
+    showCancelButton:true,
+    confirmButtonText:"Lihat Grafik",
+    cancelButtonText:"Batal",
+    footer:'<small><b>Khusus Fasilitator</b> Silahkan <br> hubungi <b>Kang Andes</b></small>'
+  }).then((result)=>{
+    if(result.isConfirmed){
+      if(result.value==="13a"){
+        document.getElementById("chartArea").style.display="block";
+        loadLocalInstansiChart();
+        loadSheetChart();
+        populateInstansiDropdown(); // ← isi dropdown di sini
+        Swal.fire("Berhasil","Grafik ditampilkan!","success");
+      }else{
+        Swal.fire("Salah","Password tidak benar!","error");
+      }
+    }
+  });
+};
+
+function getMidnightExpiry(){
+  const now = new Date();
+  // konversi ke WIB (UTC+7)
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const wib = new Date(utc + (7 * 3600 * 1000));
+
+  // set ke pukul 24:00 WIB (besok jam 00:00 WIB)
+  wib.setHours(24,0,0,0);
+
+  return wib.getTime();
+}
+
+function accumulateLocal(instansi, kategori){
+  const key = "agg_instansi", expKey = "agg_instansi_expire";
+  const now = Date.now();
+  const exp = localStorage.getItem(expKey);
+
+  // reset otomatis jika sudah melewati pukul 24:00 WIB
+  if(!exp || now > parseInt(exp, 10)){
+    localStorage.removeItem(key);
+    localStorage.setItem(expKey, getMidnightExpiry());
+  }
+
+  const all = JSON.parse(localStorage.getItem(key) || "{}");
+
+  if(!all[instansi]) all[instansi] = {F:0, FG:0, GF:0, G:0, responden:0};
+  all[instansi][kategori] = (all[instansi][kategori] || 0) + 1;
+  all[instansi].responden++;
+
+  localStorage.setItem(key, JSON.stringify(all));
+}
+
+function loadLocalInstansiChart(){
+  const key = "agg_instansi", expKey = "agg_instansi_expire";
+  const now = Date.now();
+  const exp = localStorage.getItem(expKey);
+
+  // jika sudah expired → reset data grafik
+  if(!exp || now > parseInt(exp, 10)){
+    localStorage.removeItem(key);
+    localStorage.setItem(expKey, getMidnightExpiry());
+  }
+
+  const all = JSON.parse(localStorage.getItem(key) || "{}");
+  const instansiList = Object.keys(all);
+
+  if(instansiList.length === 0){
+    document.getElementById("pieChartInstansi").getContext("2d").clearRect(0,0,400,400);
     return;
   }
 
-  Swal.fire({
-    icon: 'success',
-    title: 'Jawaban Disubmit',
-    text: 'Terima kasih ' + nama + ',\n data Anda sedang diproses.',
-    timer: 2500,
-    showConfirmButton: false
-  });
+  // siapkan data untuk chart
+  const labels = instansiList;
+  const data = instansiList.map(i => all[i].responden);
 
-  if (typeof oldSubmitBtn === "function") oldSubmitBtn(e);
-};
-document.getElementById("submitBtn").addEventListener("click", function() {
-  // ambil semua blok pertanyaan
-  const questions = document.querySelectorAll(".q");
-  let incomplete = false;
-
-  questions.forEach(q => {
-    const checked = q.querySelector("input[type=radio]:checked");
-    if (!checked) {
-      incomplete = true;
+  new Chart(document.getElementById("pieChartInstansi"), {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: ["#f87171","#facc15","#38bdf8","#4ade80","#a78bfa","#f472b6","#fb923c"]
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          color: '#111',
+          font: {weight:'bold', size:16},
+          formatter: (val, ctx) => ctx.chart.data.labels[ctx.dataIndex]+": "+val
+        }
+      }
     }
   });
+}
+    /* ================== GRAFIK (dengan LABEL kategori + jumlah) ================== */
+    
+    // Registrasi plugin datalabels agar aktif
+    Chart.register(ChartDataLabels);
+ // Registrasi datalabels
+    Chart.register(ChartDataLabels);
 
-  if (incomplete) {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'warning',
-      title: 'Ada pertanyaan yang belum dijawab!',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true
-    });
-    return; // hentikan proses submit
-  }
+    // === Plugin gambar tengah donat ===
+    const centerImagePlugin = {
+      id: 'centerImagePlugin',
+      beforeDraw(chart) {
+        if (chart.config.type !== 'doughnut') return;
 
-  // kalau semua lengkap, lanjut proses
-  Swal.fire({
-    toast: true,
-    position: 'top-end',
-    icon: 'success',
-    title: 'Semua jawaban lengkap, data diproses!',
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true
-  });
+        const { ctx, chartArea: { left, right, top, bottom }, width, height } = chart;
 
-  // TODO: lanjutkan proses hitung skor + tampilkan hasil
-});
+        const centerX = (left + right) / 2;
+        const centerY = (top + bottom) / 2;
 
-// --- Reset dengan konfirmasi dan reset identitas ---
-(function() {
-  const btn = document.getElementById("resetBtn");
-  if (!btn) return;
+        // hitung diameter dalam berdasarkan cutout
+        let cutout = chart.config.options.cutout;
+        if (typeof cutout === "string" && cutout.includes("%")) {
+          cutout = parseInt(cutout) / 100;
+        } else {
+          cutout = 0.6; // default kalau tidak ada
+        }
+        const innerDiameter = Math.min(width, height) * cutout;
 
-  btn.addEventListener("click", function(e) {
-    e.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
+        // load gambar sekali saja
+        if (!chart.$centerImage) {
+          const img = new Image();
+	  img.src = "https://raw.githubusercontent.com/andesofiani/pemetaan-profil-pola-pikir/refs/heads/main/KerangkaPM.png";
+          chart.$centerImage = img;
+        }
 
-    Swal.fire({
-      title: 'Yakin reset jawaban?',
-      text: 'Semua isian akan dikosongkan!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yakin',
-      cancelButtonText: 'Batal'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          const form = document.querySelector("form#quiz") || document.querySelector("form");
-          if (form && typeof form.reset === "function") form.reset();
-        } catch (e) {}
+        const image = chart.$centerImage;
+        if (!image.complete) {
+          image.onload = () => chart.draw();
+          return;
+        }
 
-        // Reset identitas
-        try { document.getElementById("nama").value = ""; } catch (e) {}
-        try { document.getElementById("instansi").value = ""; } catch (e) {}
-        try { document.getElementById("mapel").value = ""; } catch (e) {}
-
-        // Reset area quiz/hasil/grafik
-        try { const quiz = document.getElementById('quiz'); if (quiz) quiz.innerHTML = ''; } catch (e) {}
-        try { const res = document.getElementById('result'); if (res) res.style.display = 'none'; } catch (e) {}
-        try { currentPaket = null; } catch (e) {}
-        try { const instSel = document.getElementById('instansiFilter'); if (instSel) instSel.selectedIndex = 0; } catch (e) {}
-        try { const chartArea = document.getElementById('chartArea'); if (chartArea) chartArea.style.display = 'none'; } catch (e) {}
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Form Direset',
-          text: 'Semua jawaban dan identitas Anda telah dikosongkan.',
-          timer: 1600,
-          showConfirmButton: false
-        });
-      } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Dibatalkan',
-          text: 'Reset dibatalkan — data tetap aman.',
-          timer: 1200,
-          showConfirmButton: false
-        });
+        const size = innerDiameter * 0.95; // isi 95% dari lubang donat
+        ctx.save();
+        ctx.drawImage(image, centerX - size / 2, centerY - size / 2, size, size);
+        ctx.restore();
       }
-    });
-  }, true);
-})();
+    };
+    Chart.register(centerImagePlugin);
 
-// --- Analisis ---
-const oldAnalisisBtn = document.getElementById("analisisBtn").onclick;
-document.getElementById("analisisBtn").onclick = function(e) {
-  Swal.fire({
-    icon: 'info',
-    title: 'Analisis Dibuka',
-    text: 'Menampilkan hasil analisis dari jawaban Anda.',
-    timer: 1500,
-    showConfirmButton: true
-  });
-  if (typeof oldAnalisisBtn === "function") oldAnalisisBtn(e);
+    const doughnutBaseOptions = {
+  responsive: true,
+  plugins: {
+    legend: { position: "bottom" },
+    datalabels: {
+      display: 'auto',
+      anchor: 'center',
+      align: 'center',
+      color: '#111',
+      font: { weight: 'bold', size: 14 },
+      formatter: (value, ctx) => {
+        const total = ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+        if (!value || !total) return "";
+        const pct = (value * 100 / total).toFixed(1) + "%";
+        const label = ctx.chart.data.labels[ctx.dataIndex];
+        return label + "\n" + pct;   // ← 2 baris: label di atas, persen di bawah
+      }
+    }
+  },
+  // Efek 3D plugin
+  plugins3d: {
+    enabled: true,
+    alpha: 35,
+    beta: 35,
+    depth: 75,
+    viewDistance: 75,
+    shadow: true,
+    highlight: true
+  },
+  cutout: "75%"
 };
 
-// --- Grafik ---
-const oldGrafikBtn = document.getElementById("grafikBtn").onclick;
-document.getElementById("grafikBtn").onclick = function(e) {
-  Swal.fire({
-    icon: 'info',
-    title: 'Grafik Dibuka',
-    text: 'Visualisasi data sedang ditampilkan.',
-    timer: 1500,
-    showConfirmButton: false
-  });
-  if (typeof oldGrafikBtn === "function") oldGrafikBtn(e);
-};
+    let chartInstansi, chartSheet;
 
-// --- Cetak ---
-const oldCetakBtn = document.getElementById("cetakTanpaAnalisisBtn").onclick;
-document.getElementById("cetakTanpaAnalisisBtn").onclick = function(e) {
-  Swal.fire({
-    icon: 'question',
-    title: 'Cetak Data',
-    text: 'Data Anda siap dicetak tanpa analisis.',
-    timer: 2500,
-    showConfirmButton: false
-  });
-  if (typeof oldCetakBtn === "function") oldCetakBtn(e);
-};
-
-// --- Notifikasi saat identitas lengkap ---
-["nama","instansi","mapel"].forEach(id => {
-  document.getElementById(id).addEventListener("blur", () => {
-    const nama = document.getElementById("nama").value.trim();
-    const instansi = document.getElementById("instansi").value.trim();
-    const mapel = document.getElementById("mapel").value.trim();
-
-    if (nama && instansi && mapel) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Identitas Lengkap',
-        text: 'Terima kasih, semua identitas sudah terisi.',
-        timer: 2000,
-        showConfirmButton: false
+    function renderInstansiChart(obj){
+      if(!obj) obj={F:0,FG:0,GF:0,G:0};
+      const ctx=document.getElementById("pieChartInstansi").getContext("2d");
+      if(chartInstansi) chartInstansi.destroy();
+      chartInstansi=new Chart(ctx,{
+        type:"doughnut",
+        data:{
+          labels:["F","FG","GF","G"],
+          datasets:[{
+            data:[obj.F,obj.FG,obj.GF,obj.G],
+            backgroundColor:["#f87171","#facc15","#38bdf8","#4ade80"],
+            borderWidth:2,
+            borderColor:'#fff'
+          }]
+        },
+        options:doughnutBaseOptions
       });
     }
-  });
-});
-
-// --- Notifikasi welcome saat halaman dibuka ---
-window.addEventListener("load", () => {
-  Swal.fire({
-    icon: 'info',
-    title: 'Selamat Datang!',
-    text: 'Silakan pilih paket dan isi identitas Anda.',
-    timer: 3000,
-    showConfirmButton: true
-  });
-});
-
-// PATCH: Perbaiki tombol reset agar tidak mengosongkan form saat klik BATAL
-(function() {
-  const btn = document.getElementById("resetBtn");
-  if (!btn) return;
-  const prevHandler = btn.onclick;
-  btn.onclick = function(e) {
-    // Hentikan aksi default reset terlebih dahulu
-    if (e && typeof e.preventDefault === "function") e.preventDefault();
-
-    Swal.fire({
-      title: 'Yakin reset jawaban?',
-      text: 'Semua isian akan dikosongkan!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yakin',
-      cancelButtonText: 'Batal'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Reset form secara terprogram
-        const form = btn.form || btn.closest('form') || document.querySelector('form');
-        if (form && typeof form.reset === 'function') form.reset();
-
-        // Panggil handler lama (jika ada) untuk logika tambahan
-        if (typeof prevHandler === 'function') prevHandler(e);
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Form Direset',
-          text: 'Semua jawaban Anda telah dikosongkan.',
-          timer: 1800,
-          showConfirmButton: false
-        });
-      } else {
-        // Jika batal, tidak ada perubahan pada data
-        Swal.fire({
-          icon: 'info',
-          title: 'Dibatalkan',
-          text: 'Reset dibatalkan, data tetap aman.',
-          timer: 1400,
-          showConfirmButton: false
-        });
-      }
-    });
-  };
-})();
-
-
-// === Perbaikan Tombol Reset ===
-(function() {
-  const btn = document.getElementById("resetBtn");
-  const form = document.querySelector("form#quiz") || document.querySelector("form");
-
-  btn.addEventListener("click", function(e) {
-    e.preventDefault(); // cegah aksi default
-
-    Swal.fire({
-      title: 'Yakin reset jawaban?',
-      text: 'Semua isian akan dikosongkan!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yakin',
-      cancelButtonText: 'Batal'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (form && typeof form.reset === "function") form.reset();
-        Swal.fire({
-          icon: 'success',
-          title: 'Form Direset',
-          text: 'Semua jawaban Anda telah dikosongkan.',
-          timer: 2000,
-          showConfirmButton: false
-        });
-      } else {
-        Swal.fire({
-          icon: 'info',
-          title: 'Dibatalkan',
-          text: 'Reset dibatalkan, data tetap aman.',
-          timer: 1500,
-          showConfirmButton: false
-        });
-      }
-    });
-  });
-})();
-
-// === PATCH: Intersep klik Reset di capture phase agar BATAL tidak mengubah tampilan ===
-(function() {
-  const btn = document.getElementById("resetBtn");
-  if (!btn) return;
-
-  // Listener di capture phase: dijalankan sebelum listener lain (bubble)
-  btn.addEventListener("click", function(e) {
-    // Stopper: cegah handler lain berjalan sementara kita minta konfirmasi
-    try {
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-      e.preventDefault();
-    } catch (err) {}
-
-    Swal.fire({
-      title: 'Yakin reset jawaban?',
-      text: 'Semua isian akan dikosongkan!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yakin',
-      cancelButtonText: 'Batal'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Lakukan reset manual (mirip logika asli di file)
-        try {
-          const form = document.querySelector("form#quiz") || document.querySelector("form");
-          if (form && typeof form.reset === "function") form.reset();
-        } catch (e) {}
-
-        try {
-          const quiz = document.getElementById('quiz');
-          if (quiz) quiz.innerHTML = '';
-        } catch (e) {}
-
-        try {
-          const res = document.getElementById('result');
-          if (res) res.style.display = 'none';
-        } catch (e) {}
-
-        try {
-          currentPaket = null;
-        } catch (e) {}
-
-        try {
-          const instSel = document.getElementById('instansiFilter');
-          if (instSel) instSel.selectedIndex = 0;
-        } catch (e) {}
-
-        try {
-          const chartArea = document.getElementById('chartArea');
-          if (chartArea) chartArea.style.display = 'none';
-        } catch (e) {}
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Form Direset',
-          text: 'Semua jawaban Anda telah dikosongkan.',
-          timer: 1400,
-          showConfirmButton: false
-        });
-      } else {
-        // Kalau Batal: jangan panggil handler lain dan jangan ubah tampilan sama sekali
-        Swal.fire({
-          icon: 'info',
-          title: 'Dibatalkan',
-          text: 'Reset dibatalkan',
-          timer: 1200,
-          showConfirmButton: false
-        });
-      }
-    });
-  }, true); // <-- capture = true
-})();
-
-
-// --- Grafik dengan ECharts ---
-let instansiSet=new Set();
-
-// Tambah instansi saat submit
- document.getElementById("submitBtn").addEventListener("click",()=>{
-   const val=document.getElementById("instansi").value.trim();
-   if(val) instansiSet.add(val);
-   updateDropdown();
- });
- function updateDropdown(){
-   const sel=document.getElementById("instansiFilter");
-   sel.innerHTML="<option>Semua Instansi</option>";
-   instansiSet.forEach(i=>{
-     const opt=document.createElement("option");opt.value=i;opt.textContent=i;sel.appendChild(opt);
-   });
- }
-
- document.getElementById("grafikBtn").addEventListener("click",()=>{
-   Swal.fire({title:'Masukkan Password',input:'password',confirmButtonText:'OK',showCancelButton:true})
-   .then(res=>{if(res.value==="13a"){document.getElementById("chartArea").style.display="block";loadCharts();}
-   else if(res.value){Swal.fire("Salah","Password tidak cocok","error");}});
- });
-
-
-// Fungsi helper untuk format tanggal ke bahasa Indonesia
-function formatTanggalIndoUS(dateStr){
-  // Timestamp dari Google Sheet biasanya "M/D/YYYY ..."
-  let parts = dateStr.split(" ")[0].split("/"); 
-  // parts[0]=bulan, parts[1]=tanggal, parts[2]=tahun
-  let m = parseInt(parts[0]);
-  let d = parseInt(parts[1]);
-  let y = parts[2];
-
-  const bulan = ["JANUARI","FEBRUARI","MARET","APRIL","MEI","JUNI",
-                 "JULI","AGUSTUS","SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"];
-  return `DATA TANGGAL ${d} ${bulan[m-1]} ${y}`;
-}
-
-// Fungsi untuk pasang gambar di tengah sesuai inner radius donat
-function setCenterImage(chart, defaultInnerPercent = 50){
-  if(!chart || !chart.getDom) return;
-  let innerPercent = defaultInnerPercent;
-  try{
-    const opt = chart.getOption && chart.getOption();
-    const r = opt && opt.series && opt.series[0] && opt.series[0].radius && opt.series[0].radius[0];
-    if(r !== undefined) {
-      innerPercent = parseFloat(String(r).replace('%','')) || defaultInnerPercent;
-    }
-  }catch(e){}
-  const w = chart.getWidth();
-  const h = chart.getHeight();
-  const diameter = Math.max(0, Math.floor(Math.min(w, h) * (innerPercent / 100)));
-  chart.setOption({
-    graphic:[{
-      id:'centerImage',
-      type:'image',
-      left:'center',
-      top:'center',
-      z:10,
-      style:{
-        image:'https://raw.githubusercontent.com/andesofiani/pemetaan-profil-pola-pikir/refs/heads/main/KerangkaPM.png',
-        width:diameter,
-        height:diameter
-      }
-    }]
-  });
-}
-
-async function loadCharts(){
-  // === Grafik kanan (akumulasi) ===
-  const sheet2Url="https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet2";
-  const sheet2=await fetch(sheet2Url).then(r=>r.json());
-  const categories=sheet2.slice(0,4).map(r=>r["Kategori"]);
-  const values=sheet2.slice(0,4).map(r=>parseInt(r["Jumlah"]||0));
-  const total=sheet2[4]?.["Jumlah"]||0;
-
-  document.getElementById("akumulasiTitle").innerHTML=`Akumulasi <span class='blue-text'>${total}</span> Responden`;
-
-  let akumulasiChart=echarts.init(document.getElementById('akumulasiChart'));
-  akumulasiChart.setOption({
-    tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value} (${p.percent.toFixed(0)}%)`},
-    series:[{
-      type:'pie',
-      radius:['57%','87%'], // lebih besar lingkaran dalam
-      avoidLabelOverlap:true,
-      label:{
-        show:true,
-        position:'inside',
-        formatter:(p)=>`{a|${p.name}}\n{b|${p.percent.toFixed(0)}%}`,
-        rich:{
-          a:{fontSize:20,fontWeight:'bold',lineHeight:22},
-          b:{fontSize:16,color:'#555'}
-        }
-      },
-      
-      itemStyle:{
-        borderRadius:10,
-        shadowBlur:15,
-        shadowOffsetX:2,
-        shadowOffsetY:2,
-        shadowColor:'rgba(0,0,0,0.3)',
+    
+    function renderSheetChart(obj, grandTotal){
+  const ctx=document.getElementById("pieChartSheet").getContext("2d");
+  if(chartSheet) chartSheet.destroy();
+  chartSheet=new Chart(ctx,{
+    type:"doughnut",
+    data:{
+      labels:["F","FG","GF","G"],
+      datasets:[{
+        data:[obj.F,obj.FG,obj.GF,obj.G],
+        backgroundColor:["#f87171","#facc15","#38bdf8","#4ade80"],
         borderWidth:2,
         borderColor:'#fff'
-      },
-      data:categories.map((c,i)=>({
-        value:values[i],name:c,
-        itemStyle:{color: c==='F'?'#f87171':c==='FG'?'#facc15':c==='GF'?'#4ade80':'#60a5fa'}
-      }))
-    }]
-  });
-  setCenterImage(akumulasiChart, 50);
-
-  // === Grafik kiri (instansi, tanggal terbaru) ===
-  const respUrl="https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Data_Responden";
-  const resp=await fetch(respUrl).then(r=>r.json());
-  
-  // Ambil semua tanggal (hanya bagian M/D/YYYY)
-  const allDates = resp.map(r => r["Timestamp"]?r["Timestamp"].split(" ")[0]:null).filter(Boolean);
-  const latestDateStr = allDates.sort((a,b)=> new Date(a)-new Date(b)).pop(); // tanggal terbaru string
-  const latestData = resp.filter(r => r["Timestamp"].startsWith(latestDateStr));
-
-
-  // isi dropdown instansi
-  const instansiList=[...new Set(latestData.map(r=>r["Instansi/Lembaga"]))];
-  const sel=document.getElementById("instansiFilter");
-  sel.innerHTML="<option value=''>Semua Instansi</option>";
-  instansiList.forEach(i=>{
-    let opt=document.createElement("option");
-    opt.value=i; opt.textContent=i;
-    sel.appendChild(opt);
-  });
-
-  function renderInstansiChart(filterInstansi=""){
-    let dataFiltered = filterInstansi
-      ? latestData.filter(r => r["Instansi/Lembaga"] === filterInstansi)
-      : latestData;
-
-    // jumlah responden per kategori
-    let count={F:0,FG:0,GF:0,G:0};
-    dataFiltered.forEach(r=>{
-      let kategori=r["Kategori"];
-      if(kategori in count) count[kategori]++; // tambah 1 per responden
-    });
-
-    let instansiChart=echarts.init(document.getElementById('instansiChart'));
-    instansiChart.setOption({
-      title:{text: formatTanggalIndoUS(latestDateStr), left:'center', textStyle:{fontSize:16,fontWeight:'bold',color:'#1e3a8a'}}, 
-      tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value}`},
-      series:[{
-        type:'pie',
-        radius:['57%','87%'],
-        label:{
-          show:true,
-          position:'inside',
-          formatter:(p)=>`{a|${p.name}}\n{b|${p.value} resp}`,
-          rich:{
-            a:{fontSize:20,fontWeight:'bold',lineHeight:24},
-            b:{fontSize:16,color:'#555'}
-          }
-        },
-        
-        itemStyle:{
-          borderRadius:10,
-          shadowBlur:15,
-          shadowOffsetX:2,
-          shadowOffsetY:2,
-          shadowColor:'rgba(0,0,0,0.3)',
-          borderWidth:2,
-          borderColor:'#fff'
-        },
-        data:Object.keys(count).map(k=>({
-          value:count[k],name:k,
-          itemStyle:{color: k==='F'?'#f87171':k==='FG'?'#facc15':k==='GF'?'#4ade80':'#60a5fa'}
-        }))
       }]
-    });
-    setCenterImage(instansiChart, 50);
-  }
-
-  renderInstansiChart();
-  sel.addEventListener("change",e=>{renderInstansiChart(e.target.value);});
-
-  window.addEventListener("resize", ()=>{
-    akumulasiChart.resize();
-    setCenterImage(akumulasiChart, 50);
-    let instansiChart=echarts.init(document.getElementById('instansiChart'));
-    instansiChart.resize();
-    setCenterImage(instansiChart, 50);
+    },
+    options:doughnutBaseOptions
   });
+
+  // update jumlah responden total di judul
+  document.getElementById("totalResponden").textContent = grandTotal;
 }
 
-window.onload = loadCharts;
+    async function loadSheetChart(){
+      try{
+        const res=await fetch(SHEET_URL,{cache:"no-store"});
+        const rows=await res.json();
 
+        const totalCat={F:0,FG:0,GF:0,G:0};
+        let grandTotal=0;
 
-function setPaket(p){
-  // perbarui datalist instansi sesuai paket
-  try{ updateInstansiList(p); }catch(e){}
+        rows.forEach(row=>{
+          const kat = (row["Kategori"]||"").toUpperCase().trim();
+          const jml = parseFloat(String(row["Jumlah"]).replace(",","."))||0;
+          if(totalCat.hasOwnProperty(kat)) {
+            totalCat[kat]+=jml;
+            grandTotal+=jml;
+          }
+        });
 
-  try{ updateInstansiList(p); }catch(e){}
+        renderSheetChart(totalCat, grandTotal);
+      }catch(e){
+        console.error(e);
+        renderSheetChart({F:0,FG:0,GF:0,G:0}, 0);
+      }
+    }
 
-  currentPaket = p;
-  const data = paketData[p];
-  const form = document.getElementById('quiz');
-  form.innerHTML = '';
-  data.statements.forEach((t,i)=>{
-    form.innerHTML += `
-      <div class="q">
-        <p><b>${i+1}.</b> ${t}</p>
-        <div class="opt">
-          <label><input type="radio" name="q${i}" value="0"><span>SS</span></label>
-          <label><input type="radio" name="q${i}" value="1"><span>S</span></label>
-          <label><input type="radio" name="q${i}" value="2"><span>TS</span></label>
-          <label><input type="radio" name="q${i}" value="3"><span>STS</span></label>
-        </div>
-      </div>`;
-  });
-  document.getElementById('result').style.display='none';
-  const box = document.getElementById('analysisBox');
-  box.style.display='none';
-  box.innerHTML='';
-}
-// tampilkan keterangan
-  document.getElementById("keteranganOpsi").style.display = "block";
+    function loadLocalInstansiChart(){
+  const agg=JSON.parse(localStorage.getItem("agg_instansi")||"{}");
+  const filter=document.getElementById("instansiFilter");
+  filter.innerHTML="";
 
-  // reset soal
-  document.getElementById("quiz").innerHTML = "";
+  const names=Object.keys(agg);
 
+  // Tambahkan opsi permanen "Semua Instansi"
+  const allOpt=document.createElement("option");
+  allOpt.value="ALL";
+  allOpt.textContent="Semua Instansi";
+  filter.appendChild(allOpt);
 
-function submitQuiz(){
-  if(!currentPaket){ Swal.fire('Pilih Paket','Silakan pilih salah satu paket terlebih dahulu.','info'); return; }
-  const data = paketData[currentPaket];
-  let tot=0; let allAnswered=true; const jawab=[];
-  for(let i=0;i<data.statements.length;i++){ 
-    const sel = document.querySelector(`input[name="q${i}"]:checked`);
-    if(!sel){ allAnswered=false; break; }
-    const v = parseInt(sel.value,10);
-    const scArr = data.scoring[i];
-    const sc = Array.isArray(scArr)? scArr[v] : 0;
-    tot += sc;
-    jawab.push({no:i+1, val:v, label:sel.nextSibling.textContent});
+  if(names.length===0){
+    const opt=document.createElement("option");
+    opt.value=""; 
+    opt.textContent="(Belum ada data)";
+    filter.appendChild(opt);
+    renderInstansiChart({F:0,FG:0,GF:0,G:0}); 
+    return;
   }
-  if(!allAnswered){ Swal.fire('Belum Lengkap','Harap jawab semua pertanyaan.','warning'); return; }
-  const cat = data.kategori(tot);
-  document.getElementById('result').style.display='block';
-  document.getElementById('result').innerHTML = `<span class="score">${tot}</span> <span class="badge ${cat}">${labelsFull[cat]}</span>`;
 
-  lastResult = {
-    nama: document.getElementById("nama").value,
-    instansi: document.getElementById("instansi").value,
-    mapel: document.getElementById("mapel").value,
-    total: tot,
-    kategori: cat,
-    jawab: jawab,
-    data: data
+  names.forEach(nm=>{
+    const opt=document.createElement("option");
+    opt.value=nm; 
+    opt.textContent=`${nm} (${agg[nm].responden} resp.)`; 
+    filter.appendChild(opt);
+  });
+
+  // default tampil Semua Instansi (gabungan)
+  filter.value="ALL";
+  renderInstansiChart(sumAllInstansi(agg));
+
+  filter.onchange=()=>{
+    const val=filter.value;
+    if(val==="ALL"){
+      renderInstansiChart(sumAllInstansi(agg));
+    }else if(agg[val]){
+      renderInstansiChart(agg[val]);
+    }
   };
 }
 
-function showAnalysis(){
-  if(!lastResult){ Swal.fire('Belum Ada Hasil','Silakan isi kuis dan tekan SUBMIT dulu.','info'); return; }
-  
-  const htmlContent = `
-  <html>
-  <head>
-    <title>Hasil Analisis</title>
-    <style>
-      @page { margin: 20mm 15mm 20mm 15mm; }  /* margin cetak */
-      body { font-family: Arial, sans-serif; background:#f8fafc; padding:20px; color:#333; }
-      h2 { text-align:center; color:#2563eb; margin-bottom:20px; }
-
-      /* layout identitas + interpretasi */
-      .top-section { display:flex; gap:20px; margin-bottom:20px; }
-      .identitas { border-collapse:collapse; flex:1; }
-      .identitas td { padding:6px 10px; border:1px solid #ccc; }
-      .identitas td:first-child { width:120px; font-weight:bold; background:#f1f5f9; }
-
-      .interpretasi-box { flex:1; display:flex; flex-direction:column; gap:10px; }
-      .interpretasi, .motivasi { background:#fef3c7; padding:10px; border-radius:8px; }
-
-      /* tabel analisis */
-      table { border-collapse:collapse; width:100%; margin-top:20px; }
-      table th, table td { border:1px solid #ccc; padding:8px; font-size: 14px; }
-      thead { display: table-header-group; }
-      table th { background:#2563eb; color:#fff; }
-      table tr:nth-child(even) td { background:#f9fafb; }
-      table td:nth-child(2){ text-align:center; font-weight:bold; }
-
-      /* tombol cetak */
-      .btn-print { display:block; margin:20px auto; padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
-      @media print { .btn-print { display:none; } body{background:white;} }
-    </style>
-  </head>
-  <body>
-    <h2>Analisis Pemetaan Profil Pola Pikir</h2>
-
-    <div class="top-section">
-      <table class="identitas">
-        <tr><td>Nama</td><td>${lastResult.nama || "-"}</td></tr>
-        <tr><td>Instansi</td><td>${lastResult.instansi || "-"}</td></tr>
-        <tr><td>Bidang/Mapel</td><td>${lastResult.mapel || "-"}</td></tr>
-        <tr><td>Total</td><td>${lastResult.total} | ${labelsFull[lastResult.kategori]}</td></tr>
-      </table>
-
-      <div class="interpretasi-box">
-        <div class="interpretasi"><b>Interpretasi:</b><br>${interpretasiKategori(lastResult.kategori)}</div>
-        <div class="motivasi"><b>Motivasi:</b><br>${motivasiKategori(lastResult.kategori)}</div>
-      </div>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th width="40%">Pernyataan</th>
-          <th width="8%">Jawaban</th>
-          <th>Analisis & Tindak Lanjut</th>
-        </tr>
-      </thead>
-      <tbody>
-      ${lastResult.jawab.map(j=>{
-        const analisis = lastResult.data.analisisPerSoal[j.no-1][j.val] || "Tidak ada analisis.";
-        return `<tr>
-          <td>${lastResult.data.statements[j.no-1]}</td>
-          <td>${j.label}</td>
-          <td>${analisis}</td>
-        </tr>`;
-      }).join("")}
-      </tbody>
-    </table>
-
-    <button class="btn-print" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
-  </body>
-  </html>
-  `;
-
-  const newWin = window.open("", "_blank");
-  newWin.document.write(htmlContent);
-  newWin.document.close();
+// fungsi bantu untuk menjumlah semua instansi
+function sumAllInstansi(agg){
+  const total={F:0,FG:0,GF:0,G:0};
+  Object.values(agg).forEach(v=>{
+    total.F+=v.F||0;
+    total.FG+=v.FG||0;
+    total.GF+=v.GF||0;
+    total.G+=v.G||0;
+  });
+  return total;
 }
 
-function interpretasiKategori(cat){
-  switch(cat){
-    case "F": return "Fixed Mindset — cenderung melihat kemampuan sebagai bawaan tetap.";
-    case "FG": return "Fixed → Growth Mindset — mulai terbuka, namun masih ada keyakinan tetap.";
-    case "GF": return "Growth → Fixed Mindset — umumnya terbuka, tapi kadang masih ragu.";
-    case "G": return "Growth Mindset — konsisten melihat tantangan sebagai peluang belajar.";
-    default: return "";
-  }
-}
-function motivasiKategori(cat){
-  switch(cat){
-    case "F": return "Cobalah mulai dari tantangan kecil, dan catat progres Anda.";
-    case "FG": return "Tetapkan target jelas dan gunakan pengalaman untuk membuktikan diri.";
-    case "GF": return "Fokus pada konsistensi agar keyakinan bertumbuh makin kuat.";
-    case "G": return "Kemampuan berkembang lewat proses: tetapkan target jelas, latihan konsisten, rayakan progres kecil.";
-    default: return "";
-  }
-}
-
-function cetakTanpaAnalisis(){
-  if(!lastResult){ Swal.fire('Belum Ada Hasil','Silakan isi kuis dan tekan SUBMIT dulu.','info'); return; }
-  const pilihan = ["SS","S","TS","STS"];
-
-  const htmlContent = `
-  <html>
-  <head>
-    <title>Cetak Jawaban</title>
-    <style>
-      @page { margin: 20mm 15mm 20mm 15mm; }
-      body { font-family: Arial, sans-serif; background:#f8fafc; padding:20px; color:#333; }
-      h2 { text-align:center; color:#2563eb; margin-bottom:20px; }
-
-      /* identitas + skor sejajar */
-      .top-section {
-        display:flex;
-        justify-content:space-between;
-        align-items:flex-start;
-        gap:20px;
-        margin-bottom:20px;
-      }
-      .identitas { border-collapse:collapse; width:60%; }
-      .identitas td { padding:6px 10px; border:1px solid #ddd; }
-      .identitas td:first-child { width:150px; font-weight:bold; background:#f1f5f9; }
-
-      /* hasil skor elegan */
-      .score-box {
-        flex:1;
-        text-align:center;
-        padding:25px;
-        border-radius:14px;
-        background:linear-gradient(135deg,#2563eb,#1e3a8a);
-        color:white;
-        font-size:22px;
-        font-weight:bold;
-        box-shadow:0 6px 15px rgba(0,0,0,0.25);
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        line-height:1.4;
-      }
-
-      /* tabel jawaban */
-      table { border-collapse:separate; border-spacing:0; width:100%; margin-top:10px;
-              border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
-      table th, table td { padding:10px; font-size:14px; text-align:center; border:1px solid #ddd; }
-      thead { display: table-header-group; }
-      table th {
-        background: linear-gradient(135deg,#2563eb,#1e40af);
-        color:#fff;
-        font-size:13px;
-        font-weight:bold;
-      }
-      table tr:nth-child(even) td { background:#f9fafb; }
-      table tr:nth-child(odd) td { background:#fff; }
-      table td:first-child, table td:nth-child(2) { text-align:left; }
-
-      /* kolom kecil untuk SS S TS STS */
-      table th:nth-child(n+3), table td:nth-child(n+3) { width:7%; }
-
-      /* checklist besar */
-      .check { font-size:22px; font-weight:bold; color:#2563eb; }
-
-      .btn-print { display:block; margin:25px auto; padding:10px 20px;
-                   background:#2563eb; color:white; border:none; border-radius:6px;
-                   font-weight:bold; cursor:pointer; }
-      @media print { .btn-print { display:none; } body{background:white;} }
-    </style>
-  </head>
-  <body>
-    <h2>PEMETAAN PROFIL POLA PIKIR</h2>
-
-    <div class="top-section">
-      <table class="identitas">
-        <tr><td>Nama Responden</td><td>${lastResult.nama || "-"}</td></tr>
-        <tr><td>Instansi/Lembaga</td><td>${lastResult.instansi || "-"}</td></tr>
-        <tr><td>Bidang/Mapel</td><td>${lastResult.mapel || "-"}</td></tr>
-      </table>
-
-      <div class="score-box">
-        Hasil Skor: ${lastResult.total}<br>${labelsFull[lastResult.kategori]}
-      </div>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th width="3%">NO</th>
-          <th width="61%">PERNYATAAN</th>
-          <th>SS</th>
-          <th>S</th>
-          <th>TS</th>
-          <th>STS</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${lastResult.jawab.map(j=>{
-          let cells = pilihan.map((p,idx)=> 
-            `<td>${j.val===idx?'<div class="check">✔</div>':''}</td>`
-          ).join("");
-          return `<tr>
-            <td style="text-align:center">${j.no}</td>
-            <td style="text-align:left">${lastResult.data.statements[j.no-1]}</td>
-            ${cells}
-          </tr>`;
-        }).join("")}
-      </tbody>
-    </table>
-
-    <button class="btn-print" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
-  </body>
-  </html>
-  `;
-
-  const newWin = window.open("", "_blank");
-  newWin.document.write(htmlContent);
-  newWin.document.close();
-}
-
-// === Hubungkan tombol ===
-document.getElementById("submitBtn").addEventListener("click", submitQuiz);
-document.getElementById("resetBtn").addEventListener("click", ()=>{document.getElementById('quiz').innerHTML='';document.getElementById('result').style.display='none';currentPaket=null;});
-document.getElementById("analisisBtn").addEventListener("click", showAnalysis);
-document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetakTanpaAnalisis);
-
+    // QR download
+    document.getElementById("downloadQR").onclick=()=>{
+      const canvas=document.querySelector("#qrcode canvas");
+      const link=document.createElement("a");
+      link.href=canvas.toDataURL("image/png");
+      link.download="QRCode.png";
+      link.click();
+    };
   </script>
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-  try {
-    var btnContainer = document.querySelector('.btn-container');
-    if (!btnContainer) return;
-
-    // ensure hidden initially
-    btnContainer.style.display = 'none';
-
-    // reveal when any paket button clicked
-    var paketButtons = document.querySelectorAll('.paket-btns button');
-    paketButtons.forEach(function(b){
-      b.addEventListener('click', function(){
-        try{ btnContainer.style.display = 'flex'; }catch(e){}
-      });
-    });
-
-    // Helper to hide if quiz has no questions
-    function checkAndHideByQuiz(){
-      var quiz = document.getElementById('quiz');
-      if (!quiz) return;
-      var hasQ = quiz.querySelectorAll('.q').length > 0;
-      if (!hasQ) {
-        // small delay to allow other handlers to finish
-        setTimeout(function(){
-          var stillHasQ = quiz.querySelectorAll('.q').length > 0;
-          if (!stillHasQ) try{ btnContainer.style.display = 'none'; }catch(e){}
-        }, 80);
-      }
-    }
-
-    // Mutation observer on quiz container
-    var quizEl = document.getElementById('quiz');
-    if (quizEl) {
-      var observer = new MutationObserver(function(muts){
-        checkAndHideByQuiz();
-      });
-      observer.observe(quizEl, { childList: true, subtree: true, characterData: true });
-    }
-
-    // Also hide when identity inputs are cleared (some reset handlers clear inputs)
-    var nama = document.getElementById('nama'), inst = document.getElementById('instansi'), mapel = document.getElementById('mapel');
-    function checkIdentityAndHide(){
-      setTimeout(function(){
-        if ((nama && nama.value.trim()==='') &&
-            (inst && inst.value.trim()==='') &&
-            (mapel && mapel.value.trim()==='')) {
-          try{ btnContainer.style.display = 'none'; }catch(e){}
-        }
-      }, 80);
-    }
-    [nama, inst, mapel].forEach(function(el){
-      if (!el) return;
-      el.addEventListener('input', checkIdentityAndHide);
-      el.addEventListener('change', checkIdentityAndHide);
-    });
-
-    // Also attach to reset button as a last-resort fallback
-    var resetBtn = document.getElementById('resetBtn');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', function(){
-        // wait for existing reset handlers (swal etc.) to run
-        setTimeout(function(){
-          try{ checkAndHideByQuiz(); }catch(e){}
-          try{ checkIdentityAndHide(); }catch(e){}
-        }, 260);
-      });
-    }
-  } catch (err) {
-    console.warn('btn reveal/hide script error', err);
-  }
-});
-  </script>
-<!-- QRCode Library -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js">
-</script>
-<script>
-   // Generate QR
-      const canvas = document.getElementById("qrcodeCanvas");
-      QRCode.toCanvas(canvas, "https://andesofiani.github.io/pemetaan-profil-pola-pikir/", { width: 90 }, function (error) {
-        if (error) console.error(error);
-      });
-
-      // Tombol Unduh QR
-      document.getElementById("downloadQR").addEventListener("click", function () {
-        const link = document.createElement("a");
-        link.download = "QRCode.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-  </script>
-</p></div></body>
+</body>
 </html>
+
+
+
