@@ -2047,7 +2047,7 @@ function showAnalysis(){
     </table>
 
     <button class="btn-print" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
-  </body>
+</body>
   </html>
   `;
 
@@ -2276,12 +2276,12 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
         link.href = canvas.toDataURL("image/png");
         link.click();
       });
-      
-// Ganti URL_WEB_APP dengan URL Web App Apps Script kamu
+
+// Ganti dengan URL Web App Apps Script-mu
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec';
 
 document.getElementById('submitBtn').addEventListener('click', async function() {
-  // Ambil data identitas
+  // identitas
   const nama = document.getElementById('nama').value.trim();
   const instansi = document.getElementById('instansi').value.trim();
   const mapel = document.getElementById('mapel').value.trim();
@@ -2291,38 +2291,54 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
     return;
   }
 
-  // Ambil skor & kategori dari tampilan
+  // skor dari tampilan
   const skor = parseInt(document.querySelector('#result .score')?.textContent || '0');
-  const kategori = document.querySelector('#result .badge')?.textContent || '';
 
-  // Ambil jawaban dari radio yang dipilih
+  // fungsi ekstraksi kategori -> hanya kembalikan F / FG / GF / G
+  function extractKategoriFromBadge() {
+    const badge = document.querySelector('#result .badge');
+    if (!badge) return '';
+
+    const txt = (badge.textContent || '').trim();
+
+    // cari token FG|GF dulu, lalu F|G (case-insensitive)
+    const m = txt.match(/\b(FG|GF|F|G)\b/i);
+    if (m) return m[1].toUpperCase();
+
+    // fallback: coba cek classList (bila badge punya kelas 'F' / 'FG' dsb.)
+    for (const c of badge.classList) {
+      if (/^(F|FG|GF|G)$/i.test(c)) return c.toUpperCase();
+    }
+
+    // fallback terakhir: ambil 1-2 huruf kapital pertama bila ada
+    const caps = txt.match(/[A-Z]{1,2}/);
+    if (caps) return caps[0].toUpperCase();
+
+    // kalau tidak ketemu apa-apa, kembalikan kosong
+    return '';
+  }
+
+  const kategori = extractKategoriFromBadge();
+
+  // ambil jawaban (array)
   const jawaban = [];
   document.querySelectorAll('#quiz input[type=radio]:checked').forEach(radio => {
     jawaban.push({ pertanyaan: radio.name, jawaban: radio.value });
   });
 
-  // Buat payload JSON sesuai Apps Script
-  const payload = {
-    nama: nama,
-    instansi: instansi,
-    mapel: mapel,
-    skor: skor,
-    kategori: kategori,
-    jawaban: jawaban
-  };
+  const payload = { nama, instansi, mapel, skor, kategori, jawaban };
 
   try {
     await fetch(WEB_APP_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), {
       method: 'POST',
-      mode: 'no-cors' // agar tidak error CORS
+      mode: 'no-cors'
     });
-    Swal.fire('Berhasil di Proses');
+    Swal.fire('Berhasil!', 'Data tersimpan di Spreadsheet', 'success');
   } catch (err) {
     console.error(err);
-    Swal.fire('Gagal', 'Tidak bisa diproses', 'error');
+    Swal.fire('Gagal', 'Tidak bisa mengirim data ke server', 'error');
   }
 });
-
-  </script>
-</p></div></body>
+</script>
+</body>
 </html>
