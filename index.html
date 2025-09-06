@@ -22,7 +22,7 @@ h1 {
   text-align: center;
   font-size: 30px;
   font-weight: 970;
-  margin: 10px 0 20px;
+  margin: 1px 0 2px;
   color: #1e3a8a;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
   letter-spacing: 1px;
@@ -68,7 +68,7 @@ h1 {
 .warning { background:linear-gradient(135deg,#f59e0b,#b45309); }
 .success { background:linear-gradient(135deg,#22c55e,#15803d); }
 
-    .paket-btns{text-align:center;margin:8px 0 8px 0}
+    .paket-btns{text-align:center;margin:0px 0 8px 0}
     .paket-btns button {
   padding: px 10px;
   margin: 1px;
@@ -155,6 +155,7 @@ h1 {
     .chartHeader{text-align:center;margin-bottom:10px}
     .chartsHeader h2{color:#1e3a8a;margin:0;font-weight:800}
     .chartsGrid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media (max-width: 768px) {.chartsGrid {grid-template-columns: 1fr;}}
     .chartBox{margin-top: 40px;background:#e6f0fa;padding:10px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
     canvas{width:100%!important;height:auto!important}
     #instansiFilter{padding:8px 10px;border:1px solid #ccc;border-radius:8px;margin:0 auto 15px auto;text-align:center;font-size:9pt;display:block}
@@ -167,7 +168,7 @@ h1 {
     #judulUtama{text-align:center; font-size:11px; font-weight:970; margin-bottom:20px; color:#1e3a8a;}
     #akumulasiTitle {text-align: center; font-weight: bold; font-size: 18px; margin-bottom:10px;margin-top:2px;}
    
-    h1{text-align:center; font-size:20px; font-weight:980; margin:5px 0 15px; color:#1e3a8a;}
+    h1{text-align:center; font-size:20px; font-weight:980; margin:0px 0 15px; color:#1e3a8a;}
     h2{text-align:center; margin-bottom:20px;}
     .chart-container{display:flex; justify-content:space-around; flex-wrap:wrap; gap:20px; align-items:flex-start;}
     .chart-box{flex:1 1 45%; background:#fff; padding:20px; border-radius:16px; box-shadow:0 4px 10px rgba(0,0,0,0.1);}
@@ -253,7 +254,21 @@ h1 {
   color: #1e40af;
   line-height: 1.1;  /* rapat juga */
 }
-
+.footer {
+  text-align:center;
+  margin-top:2px;
+  margin-bottom: 5px;
+  font-size:16px;
+  line-height:1.6;
+  opacity:0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.5s;
+}
+.footer .nama {
+  font-weight:bold;
+  color:purple;
+}
   </style>
 <!-- Choices.js (CSS + JS) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
@@ -335,17 +350,7 @@ h1 {
     <span class="judul-utama">PEMETAAN</span><br>
     <span class="judul-sub">PROFIL POLA PIKIR</span>
    </h1>
-<div class="paket-btns">
-<button class="paket-dasar" onclick="setPaket('dasar')">
-    PAKET DASAR
-    </button>
-<button class="paket-menengah" onclick="setPaket('menengah')">
-     MENENGAH
-    </button>
-<button class="paket-profesional" onclick="setPaket('profesional')">
-     PROFESIONAL
-    </button>
-</div>
+
 <div class="hint">
     Pilih Paket - Jawab Pertanyaan - Tekan
     <b>
@@ -373,7 +378,20 @@ h1 {
     </label>
 <input id="mapel" placeholder="Tuliskan bidang atau mapel Anda" type="text" maxlength="50"/>
 </div>
-
+<p style="text-align:center; font-weight:bold; font-size:18px; margin-bottom:0px; margin-top:15px;">
+  Pilih Paket Soal :
+</p>
+<div class="paket-btns">
+<button class="paket-dasar" onclick="setPaket('dasar')">
+    PAKET DASAR
+    </button>
+<button class="paket-menengah" onclick="setPaket('menengah')">
+     MENENGAH
+    </button>
+<button class="paket-profesional" onclick="setPaket('profesional')">
+     PROFESIONAL
+    </button>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
   const instansiSelect = document.getElementById('instansi');
@@ -561,34 +579,42 @@ document.addEventListener('DOMContentLoaded', async function() {
 </div>
 </div>
 </div>
+
+
+
+<!-- Footer Dipersembahkan -->
+    <div class="footer">
+      <div>Dipersembahkan untuk Pendidikan oleh:</div>
+      <div class="nama">ANDE SOFIANI</div>
+<br/>
 <!-- Bagikan Link + QR -->
 <div style="text-align:center; margin-top:20px;">
 <!-- QR Code -->
 <canvas id="qrcodeCanvas">
 </canvas>
-<br/>
-<button class="btn info" id="downloadQR" style="margin-top:5px;">
+<div style="text-align:center; margin-top:20px;"></div>
+<button class="btn info" id="downloadQR" style="margin-top:-45px;">
      Unduh QR
     </button>
-
-<!-- Tulisan Dipersembahkan -->
-<p style="margin-top:30px; font-weight:bold; font-size:14px; font-family:'Arial Narrow', serif; color:#1e3a8a;">
-     Dipersembahkan oleh: Ande Sofiani SMKN 1 Bojonggede Kabupaten Bogor
-     <br/>
-     Untuk Pendidikan Indonesia
-    </p>
+      <br><br/>
+      <br><br/>
+      <div>SMKN 1 Bojonggede Kabupaten Bogor</div>
+    </div>
+  </div>
 <!-- Email Kontak -->
-<p style="margin-bottom:2px; font-size:11px; font-weight:bold; color:#374151; font-family:'Segoe UI', sans-serif;">
+<p style="text-align:center; margin-top:-4px; margin-bottom:2px; font-size:11px; font-weight:bold; color:#374151; font-family:'Segoe UI', sans-serif;">
      ✉️ Email: 
      <a href="mailto:andesofiani40@guru.smk.belajar.id" style="color:#1e3a8a; text-decoration:none;">
        andesofiani40@guru.smk.belajar.id
      </a>
-<p style="font-weight:bold; font-size:12px; margin-top:1px;">
-     Bagikan Link :
-     <a href="https://andesofiani.github.io/pemetaan-profil-pola-pikir/" target="_blank">
-      https://andesofiani.github.io/pemetaan-profil-pola-pikir/
-     </a>
+<p style="text-align:center; font-weight:bold; font-size:12px; margin-top:1px; margin-bottom:0px;">
+  Bagikan Link :
 </p>
+<div style="text-align:center; font-size:11px; margin-top:0px;">
+  <a href="https://andesofiani.github.io/pemetaan-profil-pola-pikir/" target="_blank">
+    https://andesofiani.github.io/pemetaan-profil-pola-pikir/
+  </a>
+</div>
 <script>
    let currentPaket = null;
 
@@ -1513,36 +1539,6 @@ document.getElementById("cetakTanpaAnalisisBtn").onclick = function(e) {
   if (typeof oldCetakBtn === "function") oldCetakBtn(e);
 };
 
-// --- Notifikasi saat identitas lengkap ---
-["nama","instansi","mapel"].forEach(id => {
-  document.getElementById(id).addEventListener("blur", () => {
-    const nama = document.getElementById("nama").value.trim();
-    const instansi = document.getElementById("instansi").value.trim();
-    const mapel = document.getElementById("mapel").value.trim();
-
-    if (nama && instansi && mapel) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Identitas Lengkap',
-        text: 'Terima kasih, semua identitas sudah terisi.',
-        timer: 2000,
-        showConfirmButton: true
-      });
-    }
-  });
-});
-
-// --- Notifikasi welcome saat halaman dibuka ---
-window.addEventListener("load", () => {
-  Swal.fire({
-    icon: 'info',
-    title: 'Selamat Datang!',
-    text: 'Silakan pilih paket dan isi identitas Anda.',
-    timer: 3000,
-    showConfirmButton: true
-  });
-});
-
 // PATCH: Perbaiki tombol reset agar tidak mengosongkan form saat klik BATAL
 (function() {
   const btn = document.getElementById("resetBtn");
@@ -1720,12 +1716,22 @@ let instansiSet=new Set();
    });
  }
 
- document.getElementById("grafikBtn").addEventListener("click",()=>{
-   Swal.fire({title:'Masukkan Password',input:'password',confirmButtonText:'OK',showCancelButton:true})
-   .then(res=>{if(res.value==="13a"){document.getElementById("chartArea").style.display="block";loadCharts();}
-   else if(res.value){Swal.fire("Salah","Password tidak cocok","error");}});
- });
-
+document.getElementById("grafikBtn").addEventListener("click", () => {
+  Swal.fire({
+    title: 'Masukkan Password',
+    html: '<p style="font-size:18px; color:#555; margin-top:0px; margin-bottom:0px;">Hubungi Admin via Email, <b>GRATIS!</b></p>',
+    input: 'password',
+    confirmButtonText: 'OK',
+    showCancelButton: true
+  }).then(res => {
+    if (res.value === "13a") {
+      document.getElementById("chartArea").style.display = "block";
+      loadCharts();
+    } else if (res.value) {
+      Swal.fire("Salah", "Password tidak cocok", "error");
+    }
+  });
+});
 
 // Fungsi helper untuk format tanggal ke bahasa Indonesia
 function formatTanggalIndoUS(dateStr){
@@ -2333,7 +2339,7 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
       method: 'POST',
       mode: 'no-cors'
     });
-    Swal.fire('Berhasil!', 'Data tersimpan di Spreadsheet', 'success');
+    Swal.fire('Berhasil Diproses');
   } catch (err) {
     console.error(err);
     Swal.fire('Gagal', 'Tidak bisa mengirim data ke server', 'error');
