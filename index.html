@@ -1492,7 +1492,7 @@ document.getElementById("akumulasiTitle").innerHTML =
 
 let akumulasiChart = echarts.init(document.getElementById('akumulasiChart'));
 akumulasiChart.setOption({
-  tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value} (${p.percent.toFixed(0)}%)`},
+  tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value} (${p.percent.toFixed(1)}%)`},
   series:[{
     type:'pie',
     center: ['50%','45%'],
@@ -1501,7 +1501,7 @@ akumulasiChart.setOption({
     label:{
       show:true,
       position:'inside',
-      formatter:(p)=>`{a|${p.name}}\n{b|${p.percent.toFixed(0)}%}`,
+      formatter:(p)=>`{a|${p.name}}\n{b|${p.percent.toFixed(1)}%}`,
       rich:{
         a:{fontSize:20,fontWeight:'bold',lineHeight:22},
         b:{fontSize:16,color:'#555'}
@@ -2037,5 +2037,6 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
 </script>
 </body>
 </html>
+
 
 
