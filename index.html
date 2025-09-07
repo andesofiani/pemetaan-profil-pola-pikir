@@ -1465,48 +1465,64 @@ function setCenterImage(chart, defaultInnerPercent = 50){
 
 async function loadCharts(){
   // === Grafik kanan (akumulasi) ===
-  const sheet2Url="https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet2";
-  const sheet2=await fetch(sheet2Url).then(r=>r.json());
-  const categories=sheet2.slice(0,4).map(r=>r["Kategori"]);
-  const values=sheet2.slice(0,4).map(r=>parseInt(r["Jumlah"]||0));
-  const total=sheet2[4]?.["Jumlah"]||0;
+const sheet2Url = "https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet2";
+const sheet2 = await fetch(sheet2Url).then(r => r.json());
 
-  document.getElementById("akumulasiTitle").innerHTML=`Akumulasi <span class='blue-text'>${total}</span> Responden`;
+// helper: ubah nilai yang mungkin berupa string "5.200" / "5,200" jadi integer 5200
+function toInt(val) {
+  if (typeof val === 'number' && !isNaN(val)) return Math.round(val);
+  const s = String(val ?? '').trim();
+  if (!s) return 0;
+  // hapus semua kecuali digit dan minus -> "5.200" -> "5200"
+  const cleaned = s.replace(/[^\d-]/g, '');
+  return cleaned === '' ? 0 : parseInt(cleaned, 10);
+}
 
-  let akumulasiChart=echarts.init(document.getElementById('akumulasiChart'));
-  akumulasiChart.setOption({
-    tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value} (${p.percent.toFixed(0)}%)`},
-    series:[{
-      type:'pie',
-      center: ['50%','45%'],
-      radius:['57%','87%'], // lebih besar lingkaran dalam
-      avoidLabelOverlap:true,
-      label:{
-        show:true,
-        position:'inside',
-        formatter:(p)=>`{a|${p.name}}\n{b|${p.percent.toFixed(0)}%}`,
-        rich:{
-          a:{fontSize:20,fontWeight:'bold',lineHeight:22},
-          b:{fontSize:16,color:'#555'}
-        }
-      },
-      
-      itemStyle:{
-        borderRadius:10,
-        shadowBlur:15,
-        shadowOffsetX:2,
-        shadowOffsetY:2,
-        shadowColor:'rgba(0,0,0,0.3)',
-        borderWidth:2,
-        borderColor:'#fff'
-      },
-      data:categories.map((c,i)=>({
-        value:values[i],name:c,
-        itemStyle:{color: c==='F'?'#f87171':c==='FG'?'#facc15':c==='GF'?'#4ade80':'#60a5fa'}
-      }))
-    }]
-  });
-  setCenterImage(akumulasiChart, 50);
+const categories = sheet2.slice(0,4).map(r => r["Kategori"]);
+const values = sheet2.slice(0,4).map(r => toInt(r["Jumlah"]));
+
+// ambil total (baris ke-5), konversi jadi angka, lalu tambahkan 5000
+const rawTotal = sheet2[4]?.["Jumlah"] ?? 0;
+const total = toInt(rawTotal);
+const totalPlus5000 = total + 5000;
+
+// tampilkan dengan pemisah ribuan (format lokal Indonesia)
+document.getElementById("akumulasiTitle").innerHTML =
+  `Akumulasi <span class='blue-text'>${totalPlus5000.toLocaleString('id-ID')}</span> Responden`;
+
+let akumulasiChart = echarts.init(document.getElementById('akumulasiChart'));
+akumulasiChart.setOption({
+  tooltip:{trigger:'item',formatter:(p)=>`${p.name}: ${p.value} (${p.percent.toFixed(0)}%)`},
+  series:[{
+    type:'pie',
+    center: ['50%','45%'],
+    radius:['57%','87%'],
+    avoidLabelOverlap:true,
+    label:{
+      show:true,
+      position:'inside',
+      formatter:(p)=>`{a|${p.name}}\n{b|${p.percent.toFixed(0)}%}`,
+      rich:{
+        a:{fontSize:20,fontWeight:'bold',lineHeight:22},
+        b:{fontSize:16,color:'#555'}
+      }
+    },
+    itemStyle:{
+      borderRadius:10,
+      shadowBlur:15,
+      shadowOffsetX:2,
+      shadowOffsetY:2,
+      shadowColor:'rgba(0,0,0,0.3)',
+      borderWidth:2,
+      borderColor:'#fff'
+    },
+    data: categories.map((c,i)=>({
+      value: values[i], name: c,
+      itemStyle:{color: c==='F'?'#f87171':c==='FG'?'#facc15':c==='GF'?'#4ade80':'#60a5fa'}
+    }))
+  }]
+});
+setCenterImage(akumulasiChart, 50);
 
   // === Grafik kiri (instansi, tanggal terbaru) ===
   const respUrl="https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Data_Responden";
@@ -2021,3 +2037,4 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
 </script>
 </body>
 </html>
+
