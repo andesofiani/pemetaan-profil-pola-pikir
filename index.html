@@ -1972,72 +1972,129 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
         link.click();
       });
 
-// Ganti dengan URL Web App Apps Script-mu
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec';
+// ----- Unified safe submit handler (replace all existing submit handlers) -----
 
-document.getElementById('submitBtn').addEventListener('click', async function() {
-  // identitas
-  const nama = document.getElementById('nama').value.trim();
-  const instansi = document.getElementById('instansi').value.trim();
-  const mapel = document.getElementById('mapel').value.trim();
+(function() {
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbysp9p57Sw8fP8d5HlXOztahZPO_Tt2uKDMJFb6YWEk1ZlERrMobgUGHsom3G08zN_NYQ/exec';
 
-  if (!nama || !instansi || !mapel) {
-    Swal.fire('Lengkapi data!', 'Nama, Instansi, dan Mapel harus diisi', 'warning');
-    return;
-  }
+  const submitBtn = document.getElementById('submitBtn');
+  if (!submitBtn) return;
 
-  // skor dari tampilan
-  const skor = parseInt(document.querySelector('#result .score')?.textContent || '0');
+  try { submitBtn.onclick = null; } catch(e){}
 
-  // fungsi ekstraksi kategori -> hanya kembalikan F / FG / GF / G
-  function extractKategoriFromBadge() {
-    const badge = document.querySelector('#result .badge');
-    if (!badge) return '';
+  window.__submitting = window.__submitting || false;
 
-    const txt = (badge.textContent || '').trim();
+  submitBtn.addEventListener('click', async function handler(e) {
+    try { e.stopImmediatePropagation(); e.preventDefault(); } catch(err){}
 
-    // cari token FG|GF dulu, lalu F|G (case-insensitive)
-    const m = txt.match(/\b(FG|GF|F|G)\b/i);
-    if (m) return m[1].toUpperCase();
+    if (window.__submitting) return;
+    window.__submitting = true;
+    submitBtn.disabled = true;
 
-    // fallback: coba cek classList (bila badge punya kelas 'F' / 'FG' dsb.)
-    for (const c of badge.classList) {
-      if (/^(F|FG|GF|G)$/i.test(c)) return c.toUpperCase();
+    // --- 1. Validasi identitas ---
+    const nama = document.getElementById('nama')?.value.trim() || '';
+    const instansi = document.getElementById('instansi')?.value.trim() || '';
+    const mapel = document.getElementById('mapel')?.value.trim() || '';
+
+    if (!nama || !instansi || !mapel) {
+      Swal.fire('Lengkapi data!', 'Nama, Instansi, dan Mapel harus diisi', 'warning');
+      window.__submitting = false; submitBtn.disabled = false; return;
     }
 
-    // fallback terakhir: ambil 1-2 huruf kapital pertama bila ada
-    const caps = txt.match(/[A-Z]{1,2}/);
-    if (caps) return caps[0].toUpperCase();
+    // --- 2. Validasi paket ---
+    let paket = '';
+    const paketEl = document.getElementById('paket');
+    if (paketEl) paket = (paketEl.value || '').trim();
+    else if (typeof currentPaket !== 'undefined') paket = (currentPaket || '').toString().trim();
 
-    // kalau tidak ketemu apa-apa, kembalikan kosong
-    return '';
-  }
+    if (!paket) {
+      Swal.fire('Pilih Paket', 'Anda harus memilih paket soal terlebih dahulu.', 'warning');
+      window.__submitting = false; submitBtn.disabled = false; return;
+    }
 
-  const kategori = extractKategoriFromBadge();
+    // --- 3. Validasi semua soal ---
+    const totalQuestions = document.querySelectorAll('#quiz .q, #quiz .question').length;
+    const answered = document.querySelectorAll('#quiz input[type=radio]:checked').length;
+    if (answered < totalQuestions) {
+      Swal.fire('Lengkapi Soal!', 'Semua soal harus dijawab sebelum submit.', 'warning');
+      window.__submitting = false; submitBtn.disabled = false; return;
+    }
 
-  // ambil jawaban (array)
-  const jawaban = [];
-  document.querySelectorAll('#quiz input[type=radio]:checked').forEach(radio => {
-    jawaban.push({ pertanyaan: radio.name, jawaban: radio.value });
-  });
+    // --- 4. Jalankan submitQuiz() agar skor & kategori dihitung ---
+    if (typeof submitQuiz === 'function') {
+      submitQuiz();
+    }
 
-  const payload = { nama, instansi, mapel, skor, kategori, jawaban };
+    // --- 5. Ambil skor & kategori ---
+    let skor = 0;
+    let kategori = '';
+    if (typeof lastResult !== 'undefined' && lastResult) {
+      skor = lastResult.total;
+      kategori = lastResult.kategori;
+    } else {
+      skor = parseInt(document.querySelector('#result .score')?.textContent || '0', 10) || 0;
+      kategori = (document.querySelector('#result .badge')?.textContent || '').trim();
+    }
 
-  try {
-    await fetch(WEB_APP_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), {
-      method: 'POST',
-      mode: 'no-cors'
+    // --- 6. Ambil jawaban ---
+    const jawaban = [];
+    document.querySelectorAll('#quiz input[type=radio]:checked').forEach(radio => {
+      jawaban.push({ pertanyaan: radio.name, jawaban: radio.value });
     });
-    
-  } catch (err) {
-    console.error(err);
-    Swal.fire('Gagal', 'Tidak bisa mengirim data ke server', 'error');
-  }
-});
+
+    const payload = { nama, instansi, mapel, paket, skor, kategori, jawaban };
+
+    // --- 7. Kirim ke Apps Script ---
+    try {
+      // tampilkan notifikasi loading
+      Swal.fire({
+        title: 'Sedang Proses...',
+        text: 'Mohon tunggu, data sedang dikirim ke server',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      await fetch(WEB_APP_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), {
+        method: 'POST',
+        mode: 'no-cors'
+      });
+
+      // ganti loading dengan notifikasi sukses
+      await Swal.fire({
+        icon: 'success',
+        title: 'Berhasil Diproses',
+        html: `Jawaban Anda sudah tersimpan.<br><b>Skor:</b> ${skor}<br><b>Kategori:</b> ${kategori}`
+      });
+
+      // --- 8. Reset identitas ---
+      try { document.getElementById('nama').value = ''; } catch(e){}
+      try { document.getElementById('instansi').value = ''; } catch(e){}
+      try { document.getElementById('mapel').value = ''; } catch(e){}
+      try { if (document.getElementById('paket')) document.getElementById('paket').value = ''; } catch(e){}
+
+      // --- Reset jawaban soal ---
+      document.querySelectorAll('#quiz input[type=radio]').forEach(r => { r.checked = false; });
+
+      // --- Tutup soal & kembali ke awal tampilan ---
+      try {
+        const quizEl = document.getElementById('quiz');
+        if (quizEl) quizEl.style.display = 'none';
+      } catch(e){}
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // ✅ Skor, kategori, analisis, cetak, grafik tetap tampil
+
+    } catch (err) {
+      console.error('Submit error:', err);
+      Swal.fire('Gagal', 'Tidak bisa mengirim data ke server', 'error');
+    } finally {
+      window.__submitting = false;
+      submitBtn.disabled = false;
+    }
+  }, true);
+})();
 </script>
 </body>
 </html>
-
-
-
-
