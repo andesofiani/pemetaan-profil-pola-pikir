@@ -1484,7 +1484,7 @@ const values = sheet2.slice(0,4).map(r => toInt(r["Jumlah"]));
 // ambil total (baris ke-5), konversi jadi angka, lalu tambahkan 5000
 const rawTotal = sheet2[4]?.["Jumlah"] ?? 0;
 const total = toInt(rawTotal);
-const totalPlus5000 = total + 5000;
+const totalPlus5000 = total + 1;
 
 // tampilkan dengan pemisah ribuan (format lokal Indonesia)
 document.getElementById("akumulasiTitle").innerHTML =
@@ -2037,4 +2037,5 @@ document.getElementById('submitBtn').addEventListener('click', async function() 
 </script>
 </body>
 </html>
+
 
