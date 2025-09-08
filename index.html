@@ -331,6 +331,16 @@ h1 {
 .choices[data-type*="select-one"]::after {
   display: none !important; /* sembunyikan panah */
 }
+.swal-3d {
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2), 
+              0 6px 15px rgba(0,0,0,0.15) !important;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) !important;
+  transition: all 0.3s ease !important;
+}
+.swal-3d:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(2deg) !important;
+}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -365,12 +375,9 @@ h1 {
 <input id="nama" placeholder="Tuliskan nama Anda" required="" type="text" maxlength="50"/>
 </div>
 <div class="form-group">
-<label>
-     INSTANSI / LEMBAGA:
-    </label>
-<select id="instansi" name="instansi">
-    <option value="">Memuat daftar instansi...</option>
-  </select>
+  <label>INSTANSI / LEMBAGA:</label>
+  <input id="instansi" name="instansi" list="instansiList" placeholder="Pilih atau ketik instansi baru" maxlength="50">
+  <datalist id="instansiList"></datalist>
 </div>
 <div class="form-group">
 <label>
@@ -393,93 +400,30 @@ h1 {
     </button>
 </div>
 <script>
-document.addEventListener('DOMContentLoaded', async function() {
-  const instansiSelect = document.getElementById('instansi');
 
-  // ===== === MASUKKAN ID dan NAMA SHEET DI SINI === =====
-  const SPREADSHEET_ID = '1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc';
-  const SHEET_NAME = 'Sheet4'; // ganti bila nama tab berbeda
+document.addEventListener('DOMContentLoaded', async function() {
+  const listEl = document.getElementById('instansiList');
   const url = 'https://opensheet.elk.sh/1aHPUNOFVLJoKXkKOC0HrvuZ_w_aq2xTXEQy5ffffZSc/Sheet4';
 
-  // caching sederhana (1 hari)
-  const cacheKey = 'instansi_cache_v1';
-  const cacheTTL = 24 * 3600 * 1000; // 24 jam
-
   try {
-    // gunakan cache bila ada
-    const cached = localStorage.getItem(cacheKey);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (Date.now() - parsed.t < cacheTTL) {
-        initChoicesFromData(parsed.data);
-        return;
-      }
-    }
-
-    // fetch dari OpenSheet
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
     const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) throw new Error('Data kosong');
+    const firstKey = Object.keys(data[0])[0];
+    const instansiArr = data.map(r => r[firstKey]?.trim()).filter(Boolean);
 
-    // simpan cache
-    localStorage.setItem(cacheKey, JSON.stringify({ t: Date.now(), data }));
-
-    // inisialisasi choices
-    initChoicesFromData(data);
-
-  } catch (err) {
-    console.error('Gagal memuat daftar instansi:', err);
-    // fallback: daftar kecil lokal agar UI tetap bekerja
-    const fallback = [
-      'SDN KOTABATU 03',
-      'SMPN 1 CIBINONG',
-      'SMKN 1 BOJONG GEDE'
-    ];
-    initChoicesFromData(fallback);
-    instansiSelect.innerHTML = '<option value="">Gagal memuat data dari server — memakai daftar lokal</option>';
-  }
-
-  // ===== fungsi pembantu =====
-  function initChoicesFromData(data) {
-    // Jika data adalah array object (opensheet) -> ambil kolom pertama sebagai label/value
-    let choicesArray = [];
-    if (Array.isArray(data) && data.length && typeof data[0] === 'object') {
-      const firstKey = Object.keys(data[0])[0]; // biasanya "Nama Instansi"
-      choicesArray = data.map(row => {
-        const v = row[firstKey] ? String(row[firstKey]).trim() : '';
-        return v ? { value: v, label: v } : null;
-      }).filter(Boolean);
-    } else if (Array.isArray(data) && typeof data[0] === 'string') {
-      choicesArray = data.map(v => ({ value: v, label: v }));
-    } else {
-      // fallback: kalau format tak terduga
-      choicesArray = [];
-    }
-
-    // inisialisasi Choices atau update
-    // kalau sudah ada instance Choices sebelumnya mungkin perlu destroy; 
-    // di halaman ini kita buat satu instance
-    const choices = new Choices(instansiSelect, {
-      searchEnabled: true,
-      itemSelectText: '',
-      shouldSort: false,
-      placeholderValue: 'Pilih instansi / ketik untuk mencari',
-      searchResultLimit: 100
+    // Isi datalist
+    listEl.innerHTML = '';
+    instansiArr.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      listEl.appendChild(opt);
     });
-
-    // kosongkan lalu set choices
-    choices.clearStore();
-    choices.setChoices(choicesArray, 'value', 'label', true);
-  }
-// 🔹 Batasi panjang input pencarian Choices
-  const searchInput = instansiSelect.closest('.choices').querySelector('.choices__input');
-  if (searchInput) {
-    searchInput.setAttribute('maxlength', '60'); // maksimal 60 karakter
+  } catch (err) {
+    console.error('Gagal ambil instansi:', err);
   }
 });
-</script>
 
+</script>
 
 <div id="keteranganOpsi">
     Keterangan Opsi: SS = Sangat Setuju | S = Setuju | TS = Tidak Setuju | STS = Sangat Tidak Setuju
@@ -1997,7 +1941,7 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
     const mapel = document.getElementById('mapel')?.value.trim() || '';
 
     if (!nama || !instansi || !mapel) {
-      Swal.fire('Lengkapi data!', 'Nama, Instansi, dan Mapel harus diisi', 'warning');
+      Swal.fire('Lengkapi data!', 'Identitas harus diisi semua', 'warning');
       window.__submitting = false; submitBtn.disabled = false; return;
     }
 
@@ -2048,13 +1992,21 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
     try {
       // tampilkan notifikasi loading
       Swal.fire({
-        title: 'Sedang Proses...',
-        text: 'Mohon tunggu, data sedang dikirim ke server',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
+  title: 'Mohon tunggu...',
+  text: 'Data Anda sedang diproses',
+  allowOutsideClick: false,
+  width: '340px',
+  background: 'linear-gradient(135deg, #ffffff, #f3f6ff)',
+  color: '#2c2c2c',
+  customClass: {
+    popup: 'swal-3d-modern',
+    title: 'swal-title-modern',
+    htmlContainer: 'swal-text-modern'
+  },
+  didOpen: () => {
+    Swal.showLoading();
+  }
+});
 
       await fetch(WEB_APP_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload)), {
         method: 'POST',
@@ -2063,10 +2015,22 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
 
       // ganti loading dengan notifikasi sukses
       await Swal.fire({
-        icon: 'success',
-        title: 'Berhasil Diproses',
-        html: `Jawaban Anda sudah tersimpan.<br><b>Skor:</b> ${skor}<br><b>Kategori:</b> ${kategori}`
-      });
+  icon: 'success',
+  title: 'Berhasil Diproses',
+  html: `Data siap dianalisis dan dicetak.<br><b>Skor:</b> ${skor}<br><b>Kategori:</b> ${kategori}`,
+  width: '360px',
+  background: 'linear-gradient(135deg, #ffffff, #f3f6ff)',
+  color: '#2c2c2c',
+  customClass: {
+    popup: 'swal-3d-modern',
+    title: 'swal-title-modern',
+    htmlContainer: 'swal-text-modern',
+    icon: 'swal-icon-modern'
+  },
+  confirmButtonColor: '#5d5fef',
+  confirmButtonText: 'OK'
+});
+
 
       // --- 8. Reset identitas ---
       try { document.getElementById('nama').value = ''; } catch(e){}
