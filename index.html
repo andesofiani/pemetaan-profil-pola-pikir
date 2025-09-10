@@ -270,6 +270,19 @@ h1 {
   font-size:17px;
   color:purple;
 }
+.soal {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Warna lembut */
+  .warna-SS  { background-color: #f8d7da; }   /* merah lembut */
+  .warna-S   { background-color: #fff3cd; }   /* kuning lembut */
+  .warna-TS  { background-color: #d4edda; }   /* hijau lembut */
+  .warna-STS { background-color: #e2d9f3; }   /* ungu lembut */
   </style>
 <!-- Choices.js (CSS + JS) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
@@ -2092,6 +2105,44 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
     }
   }, true);
 })();
+// === Event pewarnaan kotak soal (final fix) ===
+document.addEventListener('DOMContentLoaded', function(){
+  const quiz = document.getElementById('quiz');
+  if (!quiz) return;
+
+  quiz.addEventListener('change', function(e){
+    const t = e.target;
+    if (!t || t.type !== 'radio') return;
+
+    // Cari container soal
+    const question = t.closest('.q') || t.closest('.soal');
+    if (!question) return;
+
+    // Cari teks jawaban dari label
+    let ansLabel = '';
+    const parentLabel = t.closest('label');
+    if (parentLabel) {
+      const span = parentLabel.querySelector('span');
+      if (span) ansLabel = span.textContent.trim();
+    }
+
+    // Jika masih kosong, fallback ke mapping value angka
+    if (!ansLabel) {
+      const map = { '0':'SS', '1':'S', '2':'TS', '3':'STS' };
+      ansLabel = map[String(t.value)] || t.value;
+    }
+
+    // Reset warna lama
+    question.classList.remove('warna-SS','warna-S','warna-TS','warna-STS');
+
+    // Tambahkan warna baru
+    if (ansLabel === 'SS')  question.classList.add('warna-SS');
+    else if (ansLabel === 'S')   question.classList.add('warna-S');
+    else if (ansLabel === 'TS')  question.classList.add('warna-TS');
+    else if (ansLabel === 'STS') question.classList.add('warna-STS');
+  });
+});
+
 </script>
 </body>
 </html>
