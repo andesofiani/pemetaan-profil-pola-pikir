@@ -1656,18 +1656,26 @@ function submitQuiz(){
 }
 
 function showAnalysis(){
-  if(!lastResult){ Swal.fire('Belum Ada Hasil','Silakan isi kuis dan tekan SUBMIT dulu.','info'); return; }
+  if(!lastResult){ 
+    Swal.fire('Belum Ada Hasil','Silakan isi kuis dan tekan SUBMIT dulu.','info'); 
+    return; 
+  }
+  
+  // Tentukan paket otomatis dari skor
+  let paket = "";
+  if (lastResult.total <= 30) paket = "dasar";
+  else if (lastResult.total <= 60) paket = "menengah";
+  else paket = "profesional";
   
   const htmlContent = `
   <html>
   <head>
     <title>Hasil Analisis</title>
     <style>
-      @page { margin: 20mm 15mm 20mm 15mm; }  /* margin cetak */
+      @page { margin: 20mm 15mm 20mm 15mm; }
       body { font-family: Arial, sans-serif; background:#f8fafc; padding:20px; color:#333; }
       h2 { text-align:center; color:#2563eb; margin-bottom:20px; }
 
-      /* layout identitas + interpretasi */
       .top-section { display:flex; gap:20px; margin-bottom:20px; }
       .identitas { border-collapse:collapse; flex:1; }
       .identitas td { padding:6px 10px; border:1px solid #ccc; }
@@ -1676,7 +1684,6 @@ function showAnalysis(){
       .interpretasi-box { flex:1; display:flex; flex-direction:column; gap:10px; }
       .interpretasi, .motivasi { background:#fef3c7; padding:10px; border-radius:8px; }
 
-      /* tabel analisis */
       table { border-collapse:collapse; width:100%; margin-top:20px; }
       table th, table td { border:1px solid #ccc; padding:8px; font-size: 14px; }
       thead { display: table-header-group; }
@@ -1684,7 +1691,6 @@ function showAnalysis(){
       table tr:nth-child(even) td { background:#f9fafb; }
       table td:nth-child(2){ text-align:center; font-weight:bold; }
 
-      /* tombol cetak */
       .btn-print { display:block; margin:20px auto; padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer; }
       @media print { .btn-print { display:none; } body{background:white;} }
     </style>
@@ -1701,7 +1707,9 @@ function showAnalysis(){
       </table>
 
       <div class="interpretasi-box">
-        <div class="interpretasi"><b>Interpretasi:</b><br>${interpretasiKategori(lastResult.kategori)}</div>
+        <div class="interpretasi"><b>Interpretasi:</b><br>${
+          interpretasiKategori(lastResult.kategori, lastResult.total, paket)
+        }</div>
         <div class="motivasi"><b>Motivasi:</b><br>${motivasiKategori(lastResult.kategori)}</div>
       </div>
     </div>
@@ -1727,7 +1735,7 @@ function showAnalysis(){
     </table>
 
     <button class="btn-print" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
-</body>
+  </body>
   </html>
   `;
 
@@ -1736,15 +1744,91 @@ function showAnalysis(){
   newWin.document.close();
 }
 
-function interpretasiKategori(cat){
+
+// --- Interpretasi berdasarkan kategori, skor & paket ---
+function interpretasiKategori(cat, skor, paket){
   switch(cat){
-    case "F": return "Fixed Mindset — Pola pikir tetap membuat kemampuan dianggap bawaan dan sulit berubah. Tantangan sering dihindari sehingga perkembangan terhambat.";
-    case "FG": return "Fixed → Growth Mindset — Ada kesadaran bahwa kemampuan bisa berkembang, namun bayangan keterbatasan masih menahan langkah. Keyakinan baru belum sepenuhnya kokoh.";
-    case "GF": return "Growth → Fixed Mindset — Usaha dipercaya dapat meningkatkan kemampuan, namun keyakinan masih goyah saat menghadapi kegagalan. Perjalanan berkembang belum sepenuhnya stabil.";
-    case "G": return "Growth Mindset — Kemampuan dilihat sebagai sesuatu yang dinamis. Tantangan disambut dengan optimisme, kegagalan dianggap pelajaran berharga.";
-    default: return "";
+    // ================== FIXED ==================
+    case "F":
+      if (paket === "dasar") {
+        if (skor <= 5) return `Fixed Mindset Rendah — Tantangan dihindari, hambatan dianggap penghalang mutlak, usaha dipandang sia-sia, kritik terasa menyakitkan, dan sukses orang lain melemahkan diri.`;
+        else if (skor <= 10) return `Fixed Mindset Sedang — Usaha mulai dihargai, tapi hambatan sering membuat mundur, kritik dipahami negatif, dan keberhasilan orang lain menimbulkan rasa tertekan.`;
+        else return `Fixed Mindset Tinggi — Hambatan dianggap bukti keterbatasan, tantangan dipandang berisiko, kritik ditolak, dan sukses orang lain membuat minder.`;
+      }
+      if (paket === "menengah") {
+        if (skor <= 10) return `Fixed Mindset Rendah — Tantangan dianggap ancaman, hambatan seolah permanen, usaha diremehkan, kritik ditolak, dan sukses orang lain membuat iri hati.`;
+        else if (skor <= 15) return `Fixed Mindset Sedang — Tantangan sesekali dicoba, hambatan cepat melemahkan, kritik sulit diterima, dan keberhasilan orang lain jarang dijadikan inspirasi.`;
+        else return `Fixed Mindset Tinggi — Tantangan enggan dihadapi, usaha jarang dilakukan, kritik dianggap serangan, dan sukses orang lain memperbesar rasa rendah diri.`;
+      }
+      if (paket === "profesional") {
+        if (skor <= 10) return `Fixed Mindset Rendah — Tantangan dihindari, hambatan membuat cepat menyerah, usaha nyaris tidak tampak, kritik sangat mengganggu, dan sukses orang lain menurunkan motivasi.`;
+        else if (skor <= 15) return `Fixed Mindset Sedang — Masih sulit menerima tantangan, hambatan menimbulkan frustasi, usaha minim, kritik diabaikan, dan sukses orang lain terasa menekan.`;
+        else return `Fixed Mindset Tinggi — Hampir menolak seluruh tantangan, usaha tidak dianggap penting, kritik dipandang ancaman, dan keberhasilan orang lain memperkuat rasa gagal.`;
+      }
+      break;
+
+    // ================== FIXED → GROWTH ==================
+    case "FG":
+      if (paket === "dasar") {
+        if (skor <= 17) return `Transisi Awal — Tantangan mulai dicoba, namun hambatan masih menahan langkah, usaha belum konsisten, kritik terasa berat, dan sukses orang lain membuat ragu.`;
+        else if (skor <= 19) return `Transisi Tengah — Usaha semakin dihargai, hambatan diterima setengah hati, kritik mulai dipahami, dan sukses orang lain kadang memberi dorongan.`;
+        else return `Transisi Tinggi — Tantangan diterima lebih positif, hambatan dianggap latihan, kritik diterima, dan sukses orang lain dilihat sebagai inspirasi.`;
+      }
+      if (paket === "menengah") {
+        if (skor <= 25) return `Transisi Awal — Tantangan belum sepenuhnya disambut, hambatan menimbulkan keraguan, usaha masih terbatas, kritik terasa berat, dan sukses orang lain membebani diri.`;
+        else if (skor <= 30) return `Transisi Tengah — Tantangan lebih berani dihadapi, hambatan dijalani, usaha mulai stabil, kritik kadang diterima, dan sukses orang lain memotivasi.`;
+        else return `Transisi Tinggi — Tantangan disambut dengan percaya diri, hambatan dianggap bagian dari proses, kritik dihargai, dan sukses orang lain dijadikan dorongan.`;
+      }
+      if (paket === "profesional") {
+        if (skor <= 25) return `Transisi Awal — Tantangan masih menimbulkan cemas, hambatan sering dianggap sulit, usaha kadang goyah, kritik mudah mempengaruhi, dan sukses orang lain terasa menekan.`;
+        else if (skor <= 30) return `Transisi Tengah — Usaha sudah lebih konsisten, tantangan diterima, hambatan dilihat realistis, kritik lebih sering diterima, dan sukses orang lain mendorong langkah.`;
+        else return `Transisi Tinggi — Tantangan dijalani penuh keyakinan, hambatan dilihat sebagai peluang belajar, usaha berkelanjutan, kritik diapresiasi, dan sukses orang lain jadi inspirasi kuat.`;
+      }
+      break;
+
+    // ================== GROWTH → FIXED ==================
+    case "GF":
+      if (paket === "dasar") {
+        if (skor <= 22) return `Growth Awal — Usaha dipercaya, tapi hambatan mudah melemahkan, kritik menurunkan semangat, dan sukses orang lain kadang memunculkan perbandingan negatif.`;
+        else if (skor <= 24) return `Growth Sedang — Tantangan diterima, hambatan dijalani, kritik mulai dimanfaatkan, dan sukses orang lain sesekali menginspirasi meski masih ada keraguan.`;
+        else return `Growth Kuat — Hambatan diterima sebagai proses, usaha konsisten, kritik dipandang bermanfaat, dan sukses orang lain menjadi energi untuk berkembang.`;
+      }
+      if (paket === "menengah") {
+        if (skor <= 37) return `Growth Awal — Usaha dianggap penting, tapi hambatan besar membuat cepat menyerah, kritik terasa berat, dan sukses orang lain menurunkan keyakinan.`;
+        else if (skor <= 41) return `Growth Sedang — Tantangan dihadapi dengan optimisme, hambatan menguji kesabaran, kritik lebih diterima, dan sukses orang lain mendorong usaha lebih lanjut.`;
+        else return `Growth Kuat — Hambatan diterima positif, usaha terjaga, kritik dicari sebagai masukan, dan sukses orang lain semakin menguatkan tekad.`;
+      }
+      if (paket === "profesional") {
+        if (skor <= 37) return `Growth Awal — Tantangan diterima sebagian, hambatan membuat ragu, usaha tidak konsisten, kritik sering terasa berat, dan sukses orang lain menimbulkan tekanan.`;
+        else if (skor <= 41) return `Growth Sedang — Usaha makin stabil, hambatan dianggap ujian, kritik mulai diapresiasi, dan sukses orang lain cukup menguatkan semangat.`;
+        else return `Growth Kuat — Tantangan disambut penuh keyakinan, hambatan dipandang membangun, usaha konsisten, kritik dihargai, dan sukses orang lain jadi inspirasi nyata.`;
+      }
+      break;
+
+    // ================== GROWTH ==================
+    case "G":
+      if (paket === "dasar") {
+        if (skor <= 27) return `Growth Stabil — Tantangan diterima wajar, hambatan dijalani tekun, usaha konsisten, kritik dipahami, dan sukses orang lain dijadikan teladan.`;
+        else if (skor <= 29) return `Growth Kuat — Tantangan dicari, hambatan memperkuat, usaha penuh semangat, kritik dihargai, dan sukses orang lain mendorong kepercayaan diri.`;
+        else return `Growth Sangat Kuat — Tantangan disambut antusias, hambatan membuat tangguh, usaha pantang menyerah, kritik dipelajari, dan sukses orang lain menjadi bahan bakar semangat.`;
+      }
+      if (paket === "menengah") {
+        if (skor <= 48) return `Growth Stabil — Tantangan dihadapi berani, hambatan memperkuat, usaha tekun, kritik diterima positif, dan sukses orang lain menginspirasi langkah.`;
+        else if (skor <= 55) return `Growth Kuat — Tantangan menumbuhkan gairah, hambatan jadi latihan, usaha terus berlanjut, kritik dijadikan masukan, dan sukses orang lain memperkuat semangat.`;
+        else return `Growth Sangat Kuat — Tantangan dipandang peluang, hambatan menumbuhkan daya tahan, usaha berkesinambungan, kritik jadi hadiah, dan sukses orang lain menjadi energi kolektif.`;
+      }
+      if (paket === "profesional") {
+        if (skor <= 48) return `Growth Stabil — Tantangan dijalani penuh keyakinan, hambatan membuat matang, usaha konsisten, kritik dihargai, dan sukses orang lain menguatkan visi.`;
+        else if (skor <= 55) return `Growth Kuat — Tantangan dipandang sebagai jalan berkembang, hambatan menambah pengalaman, usaha teguh, kritik dicari, dan sukses orang lain menjadi inspirasi kuat.`;
+        else return `Growth Sangat Kuat — Tantangan selalu dicari, hambatan dianggap peluang, usaha tak tergoyahkan, kritik sangat dihargai, dan sukses orang lain menjadi energi positif untuk berkembang.`;
+      }
+      break;
+
+    default:
+      return "";
   }
 }
+
 function motivasiKategori(cat){
   switch(cat){
     case "F": return "Setiap usaha sekecil apapun membuka peluang untuk tumbuh. Beranilah melangkah, karena perubahan selalu mungkin terjadi.";
@@ -1991,17 +2075,6 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
       window.__submitting = false; submitBtn.disabled = false; return;
     }
 
-    // --- 2. Validasi paket ---
-    let paket = '';
-    const paketEl = document.getElementById('paket');
-    if (paketEl) paket = (paketEl.value || '').trim();
-    else if (typeof currentPaket !== 'undefined') paket = (currentPaket || '').toString().trim();
-
-    if (!paket) {
-      Swal.fire('Pilih Paket', 'Anda harus memilih paket soal terlebih dahulu.', 'warning');
-      window.__submitting = false; submitBtn.disabled = false; return;
-    }
-
     // --- 3. Validasi semua soal ---
     const totalQuestions = document.querySelectorAll('#quiz .q, #quiz .question').length;
     const answered = document.querySelectorAll('#quiz input[type=radio]:checked').length;
@@ -2016,15 +2089,45 @@ document.getElementById("cetakTanpaAnalisisBtn").addEventListener("click", cetak
     }
 
     // --- 5. Ambil skor & kategori ---
-    let skor = 0;
-    let kategori = '';
-    if (typeof lastResult !== 'undefined' && lastResult) {
-      skor = lastResult.total;
-      kategori = lastResult.kategori;
-    } else {
-      skor = parseInt(document.querySelector('#result .score')?.textContent || '0', 10) || 0;
-      kategori = (document.querySelector('#result .badge')?.textContent || '').trim();
-    }
+// --- 5. Ambil skor & kategori ---
+let skor = 0;
+let kategori = '';
+if (typeof lastResult !== 'undefined' && lastResult) {
+  skor = lastResult.total;
+  kategori = lastResult.kategori;
+} else {
+  skor = parseInt(document.querySelector('#result .score')?.textContent || '0', 10) || 0;
+  kategori = (document.querySelector('#result .badge')?.textContent || '').trim();
+}
+
+// --- Tentukan paket otomatis berdasarkan skor ---
+let paket = "";
+if (skor <= 30) paket = "dasar";
+else if (skor <= 60) paket = "menengah";
+else paket = "profesional";
+
+// --- Panggil interpretasi ---
+const interpretasi = interpretasiKategori(kategori, skor, paket);
+
+// --- Tambahkan interpretasi ke dalam hasil ---
+const resultDiv = document.getElementById("result");
+if (resultDiv) {
+  const oldInterpretasi = resultDiv.querySelector(".interpretasi-text");
+  if (oldInterpretasi) oldInterpretasi.remove();
+
+  const interpretasiEl = document.createElement("p");
+  interpretasiEl.className = "interpretasi-text";
+  interpretasiEl.style.marginTop = "12px";
+  interpretasiEl.style.fontSize = "16px";                 // sedikit lebih besar
+  interpretasiEl.style.fontWeight = "bold";
+  interpretasiEl.style.color = "#1e3a8a";
+  interpretasiEl.style.fontFamily = '"Monotype Corsiva", cursive, serif'; // font diganti
+  interpretasiEl.textContent = `“${interpretasi || "Interpretasi tidak tersedia."}”`;
+
+
+  resultDiv.appendChild(interpretasiEl);
+}
+
 
     // --- 6. Ambil jawaban ---
     const jawaban = [];
@@ -2145,6 +2248,3 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
-
-
-
