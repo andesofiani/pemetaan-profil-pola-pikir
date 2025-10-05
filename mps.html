@@ -1,0 +1,3245 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MPS Mobile</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #f0f9ff);
+  color: #222;
+}
+
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 55px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  justify-content: space-between;
+}
+header img.logo {
+  height: 45px;
+  margin-right: 10px;
+  flex: 0 0 auto;
+}
+header span.instansi {
+  font-weight: bold;
+  font-size: 30px;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+  flex: 1;
+  text-align: center;
+  white-space: normal; /* biar bisa wrap */
+  word-wrap: break-word;
+  margin: 0 10px;
+}
+
+/* Layout dasar */
+.layout {
+  display: flex;
+  min-height: calc(100vh - 50px);
+}
+
+/* Sidebar kiri */
+.sidebar-left {
+  width: 280px;
+  background: #f8fcff;
+  border-right: 1px solid #cfdff5;
+  padding: 10px;
+  overflow-y: auto;
+  box-shadow: inset -2px 0 8px rgba(0,0,0,0.05);
+}
+
+/* Konten utama */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #ffffffd9;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  backdrop-filter: blur(6px);
+}
+
+/* Sidebar kanan */
+.sidebar-right {
+  width: 250px;
+  background: #f0f7ff;
+  border-left: 1px solid #cfdff5;
+  padding: 15px;
+  box-shadow: inset 2px 0 8px rgba(0,0,0,0.05);
+}
+
+/* Accordion menu */
+.accordion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px;
+  margin: 6px 0;
+  background: linear-gradient(135deg, #dff1ff, #cbe8ff);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  transition: all 0.2s ease-in-out;
+}
+.accordion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.18);
+}
+.accordion:active {
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.25);
+}
+
+/* Panel isi */
+.panel {
+  display: none;
+}
+.panel-inner {
+  background: #ffffff;
+  border: 1px solid #a5d4ff;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+  padding: 10px;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+/* Level H2, H3, H4 */
+.h2-accordion,
+.h3-accordion,
+.h4-button {
+  display: block;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  width: 80%;
+}
+
+.h2-accordion {
+  padding: 4px 6px;
+  font-weight: bold;
+  color: #0b3b82;
+  position: relative;
+}
+.h3-accordion {
+  padding: 3px 6px;
+  font-weight: 600;
+  color: #1e3a8a;
+  position: relative;
+}
+.h4-button {
+  padding: 2px 6px;
+  color: #184b8a;
+  margin: 2px 0;
+  border-bottom: 2px solid #c9d7e5;
+}
+
+/* Arrow icon */
+.h2-accordion::after,
+.h3-accordion::after {
+  content: "▸";
+  position: absolute;
+  right: 8px;
+  transition: transform 0.2s;
+}
+.h2-accordion.active::after,
+.h3-accordion.active::after {
+  transform: rotate(90deg);
+}
+
+/* Subpanel */
+.subpanel {
+  display: none;
+  margin-left: 10px;
+}
+
+/* Responsive */
+@media(max-width:768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar-left {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    width: 100%;
+  }
+  .accordion {
+    white-space: nowrap;
+  }
+  .panel {
+    position: fixed;
+    z-index: 2147483647;
+    display: none;
+  }
+  .panel-inner {
+    max-height: calc(100vh - 120px);
+    min-width: 200px;
+    max-width: 90vw;
+  }
+  .sidebar-right {
+    display: none;
+  }
+}
+
+/* Pastikan tidak bisa digeser kiri kanan */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header dan sidebar simetris */
+header {
+  justify-content: space-between;
+}
+
+/* Menu agar sejajar rapi di HP */
+@media(max-width:768px) {
+  .sidebar-left {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  header span.instansi {
+    font-size: 0.95rem;
+  }
+}
+
+/* Area logo */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 4px;
+  margin-top: 20px;
+  padding: 0px;
+  background: #f9fcff;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  flex-wrap: nowrap;
+}
+.logo-grid img {
+  width: auto;
+  height: 20px;
+  display: block;
+  margin: auto;
+}
+
+
+/* Sidebar menu lebih rapat dan proporsional */
+.accordion {
+  padding: 4px 6px;
+  margin: 4px 0;
+  font-size: 0.87rem;
+  border-radius: 8px;
+}
+.h2-accordion {
+  padding: 3px 5px;
+  font-size: 0.9rem;
+}
+.h3-accordion {
+  padding: 2px 5px;
+  font-size: 0.85rem;
+}
+.h4-button {
+  padding: 2px 4px;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .logo-grid {
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;          /* tetap 1 baris */
+    justify-content: center !important; /* logo di tengah */
+    align-items: center;
+    gap: 0 !important;
+    overflow-x: hidden !important; /* tidak perlu scroll kalau sudah proporsional */
+    padding: 6px 8px !important;
+    width: 100% !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 2147483646 !important;
+    background: #f9fcff !important;
+  }
+  .logo-grid img {
+    flex: 1 1 auto !important;   /* masing-masing logo fleksibel */
+    max-height: 35px !important; /* kontrol tinggi maksimal */
+    height: auto !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin: 0 4px !important;
+  }
+
+
+/* --- ADDED (no deletions): fixed header/footer + scrollable middle for mobile --- */
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  /* preserve original height if set, fallback to 55px */
+  height: 55px;
+}
+.logo-grid {
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  /* ensure logos don't overlap content */
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: inherit;
+}
+.layout {
+  /* keep original markup intact; make the layout area scrollable and not hide behind header/footer */
+  position: relative !important;
+  margin-top: 55px !important;   /* compensate header */
+  margin-bottom: 100px !important; /* compensate footer (logo-grid) */
+  height: calc(100vh - 155px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+/* hide sidebars on small screens to avoid narrow menu disappearance */
+@media (max-width: 768px) {
+  .sidebar-left,
+  .sidebar-right {
+    display: none !important;
+  }
+  .content {
+    margin: 10px !important;
+  }
+  .accordion {
+    white-space: normal !important;
+  }
+}
+/* prevent horizontal scroll */
+html, body {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+
+
+/* --- FIX: tampilkan menu DIKLAT, BINTAL, BINTUR, FORM di HP --- */
+@media (max-width: 768px) {
+  .sidebar-left {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 8px;
+    width: 100% !important;
+    padding: 6px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #f9fcff;
+  }
+  .accordion {
+    flex: 0 0 auto;  /* tombol menu sejajar horizontal */
+    white-space: nowrap;
+  }
+}
+
+
+
+/* --- FIX: Menu utama tetap statis di bawah header --- */
+.menu-bar {
+  position: fixed;
+  top: 55px; /* tepat di bawah header */
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 6px;
+  background: #f9fcff;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Sesuaikan margin top konten agar tidak ketutupan menu */
+.layout {
+  margin-top: 100px !important; /* 55 header + ±45 menu */
+}
+
+
+
+/* --- FIX v2: gunakan sidebar-left asli sebagai menu bar fixed --- */
+.sidebar-left {
+  position: fixed !important;
+  top: 55px;   /* tepat di bawah header */
+  left: 0;
+  right: 0;
+  z-index: 2000;
+  display: flex !important;
+  flex-direction: row !important;
+  overflow-x: auto !important;
+  gap: 8px;
+  padding: 6px;
+  background: #f9fcff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 45px;
+}
+
+/* Konten utama geser ke bawah agar tidak ketutupan menu */
+.layout {
+  margin-top: 100px !important; /* 55 header + 45 menu */
+}
+
+
+/* ====== Desktop Layout ala layout3.png ====== */
+@media (min-width: 769px) {
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* cegah scroll global */
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+    z-index: 1000;
+  }
+
+  .layout {
+    display: flex;
+    position: fixed;
+    top: 55px;   /* tepat di bawah header */
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .sidebar-left {
+    width: 260px;
+    background: #f6fbff;
+    border-right: 1px solid #cfdff5;
+    overflow-y: auto;
+  }
+
+  .sidebar-right {
+    width: 260px;
+    background: #f7fbff;
+    border-left: 1px solid #cfdff5;
+    overflow-y: auto;
+  }
+
+  .content {
+    flex: 1;
+    overflow-y: auto;   /* hanya konten yang discroll */
+    padding: 20px;
+    background: #ffffffd9;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+
+
+/* ====== Desktop Layout Fix sejajarkan konten dan sidebar kanan ====== */
+@media (min-width: 769px) {
+  .layout {
+    top: 55px !important; /* sejajar header */
+  }
+  .content {
+    margin-top: 0 !important;
+    border-radius: 0 !important;
+  }
+  .sidebar-right {
+    margin-top: 0 !important;
+  }
+}
+/* ====== Desktop fix: header + sidebars statis, konten scroll ====== */
+@media (min-width: 769px) {
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* cegah scroll global */
+  }
+
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+    z-index: 2000;
+  }
+
+  .layout {
+    display: flex;
+    position: fixed;
+    top: 55px;   /* tepat di bawah header */
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .sidebar-left {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: #f8fcff;
+    border-right: 1px solid #cfdff5;
+    overflow-y: auto;
+  }
+
+  .sidebar-right {
+    position: fixed;
+    top: 55px;
+    right: 0;
+    bottom: 0;
+    width: 250px;
+    background: #f0f7ff;
+    border-left: 1px solid #cfdff5;
+    overflow-y: auto;
+  }
+
+  .content {
+    position: fixed;
+    top: 55px;
+    left: 260px;
+    right: 250px;
+    bottom: 0;
+    overflow-y: auto; /* hanya konten utama yang scroll */
+    padding: 20px;
+    background: #ffffffd9;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+
+/* Visitor counter di kanan */
+header .visitor-counter {
+  flex: 0 0 auto;
+}
+/* Visitor Counter */
+.visitor-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  padding: 0 10px;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+.visitor-counter .label {
+  font-size: 12px;
+  font-weight: bold;
+}
+.visitor-counter .number {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+@media(max-width:768px) {
+  .visitor-counter {
+    padding: 0 6px;
+  }
+  .visitor-counter .label {
+    font-size: 11px;
+  }
+  .visitor-counter .number {
+    font-size: 18px;
+  }
+}
+}
+/* ===== Submenu embos dalam + container + beda warna + lebarkan ===== */
+@media (min-width: 769px) {
+
+  /* Perlebar agar tidak ada celah kosong */
+  .sidebar-left .accordion,
+  .sidebar-left .panel-inner,
+  .sidebar-left .h2-accordion,
+  .sidebar-left .h3-accordion,
+  .sidebar-left .h4-button {
+    width: 95%;
+  }
+
+  /* Submenu default */
+  .sidebar-left .h2-accordion,
+  .sidebar-left .h3-accordion,
+  .sidebar-left .h4-button {
+    border-radius: 8px;
+    margin: 4px auto;
+    padding: 8px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: clamp(0.65rem, 1vw, 0.9rem);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  /* Klik submenu → embos lebih dalam */
+  .sidebar-left .h2-accordion.active,
+  .sidebar-left .h3-accordion.active,
+  .sidebar-left .h4-button.active {
+    box-shadow: inset 4px 4px 7px rgba(0,0,0,0.35),
+                inset -4px -4px 7px rgba(255,255,255,0.95);
+    background: #e2e8f0;
+  }
+
+  /* Container submenu */
+  .sidebar-left .panel-inner {
+    padding: 10px;
+    background: #fafafa;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2),
+                inset -3px -3px 6px rgba(255,255,255,0.9);
+  }
+
+  /* Container sub-submenu */
+  .sidebar-left .subpanel {
+    margin-left: 8px;
+    padding: 6px;
+    border-radius: 8px;
+    background: #f4f4f4;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.15),
+                inset -2px -2px 5px rgba(255,255,255,0.9);
+  }
+
+  /* Warna per level */
+  .sidebar-left .h2-accordion {
+    background: linear-gradient(145deg, #e0f2fe, #bae6fd);
+  }
+  .sidebar-left .h3-accordion {
+    background: linear-gradient(145deg, #ede9fe, #ddd6fe);
+  }
+  .sidebar-left .h4-button {
+    background: linear-gradient(145deg, #fef9c3, #fef08a);
+    border: none !important;
+  }
+}
+
+</style>
+<!-- STRONG DESKTOP OVERRIDES: buat header, kedua sidebar, dan footer logo FIXED (hanya .content yang scroll) -->
+<style>
+@media (min-width: 769px) {
+  html, body {
+    height: 100% !important;
+    margin: 0 !important;
+    overflow: hidden !important; /* matikan scroll global */
+  }
+
+  /* Header tetap di atas */
+  header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 55px !important;
+    z-index: 9999 !important;
+  }
+
+  /* Sidebar kiri dan kanan fixed antara header dan footer */
+  .sidebar-left {
+    position: fixed !important;
+    top: 55px !important;
+    bottom: 70px !important; /* ruang untuk logo-grid footer */
+    left: 0 !important;
+    width: 260px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 900 !important;
+  }
+
+  .sidebar-right {
+    position: fixed !important;
+    top: 55px !important;
+    bottom: 70px !important; /* ruang untuk logo-grid footer */
+    right: 0 !important;
+    width: 250px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 900 !important;
+  }
+
+  /* Footer logo fixed di bawah, namun hanya mengisi ruang di antara sidebars */
+  .logo-grid {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 260px !important;  /* lebarnya sama dengan sidebar-left */
+    right: 250px !important; /* lebarnya sama dengan sidebar-right */
+    height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    padding: 6px 12px !important;
+    background: #f9fcff !important;
+    border-top: 1px solid #e6eefc !important;
+    overflow-x: auto !important;
+    z-index: 850 !important;
+  }
+  .logo-grid img {
+    max-height: 48px !important;
+    height: auto !important;
+    margin: 0 6px !important;
+  }
+
+  /* Konten utama fixed di area yang tersisa; hanya area ini yang scroll */
+  .content {
+    position: fixed !important;
+    top: 55px !important;            /* di bawah header */
+    left: 260px !important;          /* setelah sidebar-left */
+    right: 250px !important;         /* sebelum sidebar-right */
+    bottom: 70px !important;         /* di atas logo-grid */
+    overflow-y: auto !important;     /* hanya konten yang bisa discroll */
+    -webkit-overflow-scrolling: touch !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Kalau ada menu-bar fixed di mobile, sembunyikan pada desktop */
+  .menu-bar { display: none !important; }
+
+  /* Jaga tampilan sidebar pada desktop */
+  .sidebar-left, .sidebar-right, header, .logo-grid { transform: none !important; }
+
+}
+
+/* ===== Efek Embos Sidebar Kiri (Desktop saja) ===== */
+@media (min-width: 769px) {
+  .sidebar-left {
+    background: #f4faff;
+    padding: 12px;
+    box-shadow: inset -2px 0 6px rgba(0,0,0,0.08);
+    border-right: 1px solid #cfdff5;
+  }
+
+  /* Menu utama (accordion) */
+  .sidebar-left .accordion {
+    border-radius: 12px;
+    margin: 6px 0;
+    padding: 10px;
+    font-weight: bold;
+    color: #0b3b82;
+    background: linear-gradient(145deg, #f9f9f9, #e3edf7);
+    box-shadow: inset 2px 2px 5px rgba(255,255,255,0.8),
+                inset -2px -2px 5px rgba(0,0,0,0.1);
+    transition: all 0.25s ease-in-out;
+  }
+  .sidebar-left .accordion:hover {
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.15),
+                inset -3px -3px 6px rgba(255,255,255,0.8);
+    transform: translateY(-1px);
+  }
+
+  /* Panel isi */
+  .sidebar-left .panel-inner {
+    background: #fefefe;
+    border-radius: 12px;
+    padding: 8px;
+    margin: 4px 0 10px;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.12),
+                inset -2px -2px 5px rgba(255,255,255,0.9);
+  }
+
+  /* Warna berbeda tiap menu utama */
+  .sidebar-left .accordion:nth-child(1) {
+    background: linear-gradient(145deg, #eef6ff, #d6e6ff);
+  }
+  .sidebar-left .accordion:nth-child(2) {
+    background: linear-gradient(145deg, #fef7f0, #fde5cc);
+  }
+  .sidebar-left .accordion:nth-child(3) {
+    background: linear-gradient(145deg, #f0fdf4, #d1fae5);
+  }
+  .sidebar-left .accordion:nth-child(4) {
+    background: linear-gradient(145deg, #fdf2f8, #fce7f3);
+  }
+  .sidebar-left .accordion:nth-child(5) {
+    background: linear-gradient(145deg, #fff7ed, #ffedd5);
+  }
+
+  /* Submenu (H2, H3, H4) */
+  .sidebar-left .h2-accordion,
+  .sidebar-left .h3-accordion,
+  .sidebar-left .h4-button {
+    background: #ffffff;
+    border-radius: 8px;
+    margin: 3px 0;
+    padding: 6px 8px;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.08),
+                inset -1px -1px 3px rgba(255,255,255,0.8);
+    transition: background 0.2s;
+  }
+  .sidebar-left .h2-accordion:hover,
+  .sidebar-left .h3-accordion:hover,
+  .sidebar-left .h4-button:hover {
+    background: #f1f5f9;
+  }
+}
+
+
+/* ===== Efek Embos Sidebar Kiri (Desktop dengan submenu menyatu & state aktif) ===== */
+@media (min-width: 769px) {
+  .sidebar-left {
+    background: #f0f6fb;
+    padding: 12px;
+    box-shadow: inset -3px 0 8px rgba(0,0,0,0.12);
+    border-right: 1px solid #cfdff5;
+    max-width: 260px;
+  }
+
+  /* Menu utama (accordion) */
+  .sidebar-left .accordion {
+    width: 100%;
+    border-radius: 10px;
+    margin: 6px 0;
+    padding: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: linear-gradient(145deg, #dbeafe, #bfdbfe);
+    box-shadow: inset 5px 5px 10px rgba(0,0,0,0.35),
+                inset -5px -5px 10px rgba(255,255,255,0.95);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .sidebar-left .accordion.active {
+    background: linear-gradient(145deg, #93c5fd, #60a5fa);
+    box-shadow: inset 6px 6px 12px rgba(0,0,0,0.45),
+                inset -6px -6px 12px rgba(255,255,255,0.95);
+  }
+
+  /* Container submenu */
+  .sidebar-left .panel-inner {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-shadow: inset 4px 4px 8px rgba(0,0,0,0.25),
+                inset -4px -4px 8px rgba(255,255,255,0.9);
+  }
+
+  /* Warna berbeda tiap menu utama */
+  .sidebar-left .accordion:nth-of-type(1) {
+    background: linear-gradient(145deg, #d9e9ff, #bcd6ff);
+  }
+  .sidebar-left .accordion:nth-of-type(2) {
+    background: linear-gradient(145deg, #ffe9d6, #fcd1a8);
+  }
+  .sidebar-left .accordion:nth-of-type(3) {
+    background: linear-gradient(145deg, #dcfce7, #a7f3d0);
+  }
+  .sidebar-left .accordion:nth-of-type(4) {
+    background: linear-gradient(145deg, #fce7f3, #f9a8d4);
+  }
+  .sidebar-left .accordion:nth-of-type(5) {
+    background: linear-gradient(145deg, #ffedd5, #fdba74);
+  }
+
+  /* Submenu */
+  .sidebar-left .h2-accordion,
+  .sidebar-left .h3-accordion,
+  .sidebar-left .h4-button {
+    background: #ffffff;
+    border-radius: 6px;
+    margin: 4px 0;
+    padding: 6px 8px;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15),
+                inset -2px -2px 4px rgba(255,255,255,0.85);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .sidebar-left .h2-accordion.active,
+  .sidebar-left .h3-accordion.active,
+  .sidebar-left .h4-button.active {
+    background: #f1f5f9;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.25),
+                inset -3px -3px 6px rgba(255,255,255,0.9);
+  }
+}
+
+
+/* ===== Submenu dengan warna embos sesuai parent, tanpa segitiga, single line ===== */
+@media (min-width: 769px) {
+
+  /* Hilangkan segitiga default */
+  .sidebar-left .h2-accordion::after,
+  .sidebar-left .h3-accordion::after {
+    content: none !important;
+  }
+
+  /* Submenu (H2/H3) */
+  .sidebar-left .h2-accordion,
+  .sidebar-left .h3-accordion {
+    width: 100%;
+    border-radius: 8px;
+    margin: 4px 0;
+    padding: 8px;
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: linear-gradient(145deg, #fef3c7, #fde68a);
+    box-shadow: inset 4px 4px 8px rgba(0,0,0,0.25),
+                inset -4px -4px 8px rgba(255,255,255,0.9);
+    transition: all 0.25s ease-in-out;
+  }
+  .sidebar-left .h2-accordion.active,
+  .sidebar-left .h3-accordion.active {
+    background: linear-gradient(145deg, #fcd34d, #fbbf24);
+    box-shadow: inset 6px 6px 12px rgba(0,0,0,0.4),
+                inset -6px -6px 12px rgba(255,255,255,0.95);
+  }
+
+  /* Container sub-submenu */
+  .sidebar-left .subpanel {
+    background: #f3f4f6;
+    padding: 6px;
+    border-radius: 6px;
+    margin-left: 8px;
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.25),
+                inset -3px -3px 6px rgba(255,255,255,0.9);
+  }
+@media (min-width: 769px) {
+  .sidebar-left .h3-accordion {
+    margin-left: 12px;    /* geser ke kanan sedikit */
+    max-width: calc(100% - 16px); /* supaya tidak melebihi container */
+    background: linear-gradient(145deg, #d6f0f8, #b6d1d1);
+    box-shadow: inset 6px 6px 12px rgba(0,0,0,0.4),
+                inset -6px -6px 12px rgba(255,255,255,0.95);
+  }
+}
+
+  /* Sub-submenu (H4) */
+  .sidebar-left .h4-button {
+    width: 100%;
+    border-radius: 6px;
+    margin: 3px 0;
+    padding: 6px 8px;
+    font-size: clamp(0.65rem, 0.8vw, 0.8rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: linear-gradient(145deg, #ecfccb, #bef264);
+    box-shadow: inset 3px 3px 7px rgba(0,0,0,0.25),
+                inset -3px -3px 7px rgba(255,255,255,0.9);
+  }
+  .sidebar-left .h4-button.active {
+    background: linear-gradient(145deg, #a3e635, #84cc16);
+    box-shadow: inset 5px 5px 9px rgba(0,0,0,0.4),
+                inset -5px -5px 9px rgba(255,255,255,0.95);
+  }
+}
+/* Hilangkan container subpanel untuk H4 */
+@media (min-width: 769px) {
+  .sidebar-left .subpanel {
+    background: none !important;
+    padding: 0 !important;
+    margin-left: 0 !important;
+    box-shadow: none !important;
+  }
+
+   .sidebar-left .h4-button {
+    display: block;
+    max-width: calc(100% - 24px); /* tidak melebihi header/container */
+    margin-left: 16px;            /* indentasi */
+    margin-right: auto;           /* supaya tidak keluar ke kanan */
+    border: none;
+    border-radius: 6px;
+    padding: 6px 8px;
+    background: linear-gradient(145deg, #ecfccb, #bef264);
+    box-shadow: inset 3px 3px 7px rgba(0,0,0,0.25),
+                inset -3px -3px 7px rgba(255,255,255,0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sidebar-left .h4-button.active {
+    background: linear-gradient(145deg, #a3e635, #84cc16);
+    box-shadow: inset 5px 5px 9px rgba(0,0,0,0.4),
+                inset -5px -5px 9px rgba(255,255,255,0.95);
+  }
+}
+@media (min-width: 769px) {
+  .sidebar-left {
+    overflow-y: auto;   /* tetap bisa scroll */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .sidebar-left .panel-inner {
+    overflow-y: auto;       /* tetap bisa digulir */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .sidebar-left::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Edge */
+  }
+  .sidebar-left .panel-inner::-webkit-scrollbar {
+    display: none;          /* Chrome, Safari, Edge */
+  }
+}
+@media (min-width: 769px) {
+  .sidebar-left .sidebar-title {
+    font-size: 1.3rem;         /* ukuran proporsional */
+    font-weight: bold;         /* cetak tebal */
+    color: #080077;            /* warna teks */
+    text-align: center;        /* rata tengah */
+    padding: 12px 0 14px 0;
+    margin: 8px 0px 16px 0;      /* jarak proporsional */
+    border-bottom: 5px solid #93c5fd; /* garis batas */
+    letter-spacing: 1px;       /* jarak antar huruf */
+  }
+}
+@media (max-width: 768px) {
+  .footer-logo img {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .footer-logo {
+    display: flex;
+    justify-content: center; /* rapat di tengah */
+    gap: 0;                  /* hilangkan celah antar logo */
+  }
+}
+/* Sembunyikan NAVIGASI UTAMA di mobile */
+@media (max-width: 768px) {
+  .sidebar-left .sidebar-title {
+    display: none !important;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+<img alt="Logo Instansi" class="logo" src="Logo_MPS.png"/>
+<span class="instansi">MANAGER PASKIBRA SOLUTION</span>
+<div class="visitor-counter"><div class="label">Visitors:</div><div class="number" id="visitorNumber">0</div></div></header>
+<div class="layout">
+<aside class="sidebar-left" id="sidebar-left"><div class="sidebar-title">NAVIGASI UTAMA</div>
+</aside>
+<main class="content" id="content">
+<h2>Selamat Datang</h2>
+<p>Di Manajer Paskibra Solution (MPS) Mobile.</p>
+</main>
+<aside class="sidebar-right">
+    Sidebar Kanan
+  </aside>
+</div>
+<div class="logo-grid">
+<!-- Sisipkan hingga 10 logo kecil di sini -->
+<img alt="Logo 1" src="12-removebg-preview.png"/>
+<img alt="Logo 2" src="16-removebg-preview.png"/>
+<img alt="Logo 3" src="6-removebg-preview (1).png"/>
+<img alt="Logo 4" src="8-removebg-preview.png"/>
+<img alt="Logo 5" src="31-removebg-preview.png"/>
+<img alt="Logo 6" src="7.png"/>
+<img alt="Logo 7" src="1_Citeureup.png"/>
+<img alt="Logo 8" src="SMP_32.png"/>
+</div>
+
+<script>
+  
+const jurlamChildren = [
+  {
+    title: "DIKLAT", // H1
+    content: `<h2>DIKLAT (Pendidikan dan Pelatihan)</h2><p>Diklat Paskibra bertujuan membentuk karakter anggota yang disiplin, tangguh, dan berwawasan kebangsaan melalui serangkaian materi teoritis dan praktik lapangan.</p>`,
+    children: [
+      // 1. Spiritual & Karakter 
+      {
+        title: "Spiritual & Karakter", 
+        content: "Fokus utama BINTAL untuk membangun kecerdasan spiritual, integritas, dan kedewasaan emosional peserta.",
+        children: [
+          {
+            title: "Renungan Malam", 
+            content: "<h4>Refleksi dan Introspeksi Diri</h4><p>Sesi hening untuk merenungkan pengalaman dan pelajaran hari itu, menguatkan komitmen diri, serta menyadari peran dan tujuan hidup.</p>"
+          },
+          {
+            title: "Simulasi Kehidupan", 
+            content: "<h4>Mengenal Konflik dan Dilema</h4><p>Permainan peran atau skenario singkat yang menempatkan peserta pada situasi sulit atau dilema moral. Tujuannya adalah melatih pengambilan keputusan beretika dan menumbuhkan rasa syukur.</p>"
+          },
+          {
+            title: "Surat untuk Diri & OrTu", 
+            content: "<h4>Membangun Koneksi Emosional</h4><p>Aktivitas menulis surat yang diarahkan untuk mengekspresikan harapan, ketakutan, dan rasa terima kasih kepada diri sendiri dan orang tua. Membantu peserta menyadari pengorbanan dan dukungan keluarga.</p>"
+          },
+          {
+            title: "Akhlak & Mental", 
+            content: "<h4>Nilai-nilai Dasar Karakter</h4><p>Sesi diskusi mengenai pentingnya akhlak mulia, etika pergaulan, dan cara menjaga kesehatan mental (mental toughness) dalam menghadapi tekanan dan tantangan Paskibra.</p>"
+          }
+        ]
+      },
+      // 2. Intelektual & Analisis
+      {
+        title: "Intelektual & Analisis", 
+        content: "Meningkatkan kemampuan berpikir kritis, analisis kasus, dan mengasah keterampilan menyampaikan ide secara terstruktur dan logis.",
+        children: [
+	  {
+            title: "Bedah Film", 
+            content: "<h4>Diskusi Film Bertema Kepemimpinan</h4><p>Menonton film pendek atau cuplikan video yang mengangkat tema kepemimpinan, etika, atau nasionalisme. Dilanjutkan dengan sesi diskusi kritis untuk menganalisis pelajaran moral dan strategi kepemimpinan yang ditampilkan.</p>"
+          },
+          {
+            title: "Case Study Leadership", 
+            content: "<h4>Simulasi Kasus Nyata</h4><p>Peserta diberikan studi kasus yang berhubungan dengan masalah kepemimpinan dalam organisasi Paskibra atau situasi nyata. Kelompok ditugaskan menganalisis masalah, merumuskan solusi, dan mempresentasikan argumen mereka.</p>"
+          },
+          {
+            title: "Forum Inspirasi", 
+            content: "<h4>Membangun Visi Masa Depan</h4><p>Sesi panel atau kuliah singkat dari tokoh inspiratif (alumni sukses, akademisi, atau profesional) yang berbagi wawasan tentang pengembangan diri, karir, dan peran pemuda dalam pembangunan bangsa. Dilanjutkan dengan sesi tanya jawab interaktif.</p>"
+          }
+	]
+      },
+      // 3. Emosi, Empati, Kebersamaan
+      {
+        title: "Empati & Kebersamaan", 
+        content: "Fokus pada pengembangan kecerdasan emosional, kemampuan memahami perasaan orang lain, dan penguatan ikatan soliditas tim.",
+        children: [
+          {
+            title: "Jembatan Emosi", 
+            content: "<h4>Komunikasi Non-Verbal</h4><p>Latihan yang dirancang untuk menyampaikan atau mengenali emosi melalui ekspresi wajah, bahasa tubuh, atau tindakan tanpa kata-kata. Tujuannya adalah meningkatkan kepekaan sosial dan komunikasi efektif.</p>"
+          },
+          {
+            title: "Sharing Circle", 
+            content: "<h4>Lingkaran Berbagi Pengalaman</h4><p>Sesi di mana peserta duduk melingkar dan didorong untuk berbagi perasaan, tantangan, atau pandangan pribadi dalam suasana aman dan saling mendukung. Membangun rasa percaya dan penerimaan.</p>"
+          },
+          {
+            title: "Simulasi Kehidupan", 
+            content: "<h4>Memposisikan Diri pada Orang Lain</h4><p>Skenario atau permainan peran yang mengharuskan peserta bertukar posisi dan melihat situasi dari sudut pandang anggota tim lain. Memperkuat empati dan mengurangi prasangka.</p>"
+          }
+        ]
+      },
+      // 4. Tetap Ada, Tapi Ringan
+      {
+        title: "Tetap Ada, Tapi Ringan", 
+        content: "Materi yang berfokus pada keseimbangan fisik-mental melalui aktivitas kebugaran ringan, relaksasi, dan fokus diri untuk menjaga daya tahan mental.",
+        children: [
+          {
+            title: "Yoga / Relaksasi", 
+            content: "<h4>Latihan Ketenangan Jiwa</h4><p>Sesi panduan singkat untuk meditasi, teknik pernapasan, atau gerakan yoga ringan. Tujuannya adalah meredakan stres, meningkatkan fokus, dan memulihkan energi.</p>"
+          },
+          {
+            title: "Long March Misi", 
+            content: "<h4>Jalan Jauh Bertujuan</h4><p>Aktivitas jalan kaki atau long march santai dengan membawa misi kelompok yang spesifik (misalnya, mengumpulkan data atau berinteraksi dengan lingkungan). Fokus pada kebersamaan dan ketahanan ringan, bukan kecepatan.</p>"
+          },
+          {
+            title: "Konsentrasi & Dayatahan", 
+            content: "<h4>Asah Fokus Mental</h4><p>Permainan atau tugas yang menuntut konsentrasi tinggi dalam jangka waktu tertentu (misalnya: memecahkan teka-teki kelompok atau menjaga keseimbangan). Bertujuan melatih daya tahan mental dan ketekunan.</p>"
+          }
+        ]
+      },
+      // 5. Jurit Malam
+      {title: "Jurit Malam", 
+        content: "Jurit Malam adalah.",
+        children: [
+          {
+            title: "Pendahuluan", 
+            content: "<h4>Gambaran Umum</h4><p>Pendahuluan berisi gambaran umum mengenai kegiatan Jurit Malam Paskibra, meliputi latar belakang, jaminan keselamatan dan etika, tujuan, serta manfaat kegiatan.</p>",
+            children: [
+               {
+                title: "Latar Belakang",
+                content: "Kegiatan Jurit Malam Paskibra merupakan salah satu bentuk pendidikan non-formal yang dirancang untuk menanamkan nilai-nilai disiplin, kepemimpinan, keberanian, kebersamaan, dan tanggung jawab pada peserta didik. Kegiatan ini memiliki landasan kuat dalam Undang-Undang Nomor 20 Tahun 2003 tentang Sistem Pendidikan Nasional, yang menekankan bahwa pendidikan adalah usaha sadar dan terencana untuk mewujudkan suasana belajar dan proses pembelajaran agar peserta didik secara aktif mengembangkan potensi diri untuk memiliki kekuatan spiritual keagamaan, pengendalian diri, kepribadian, kecerdasan, akhlak mulia, serta keterampilan yang diperlukan dirinya, masyarakat, bangsa, dan negara.</p><p>Jurit malam, bukan sekadar aktivitas malam yang penuh tantangan, melainkan sarana pembelajaran karakter yang holistik. Melalui rangkaian pos dan tugas, peserta dilatih olah pikir (analisis, pengambilan keputusan), olah rasa (empati, kepedulian, keberanian moral), olah hati (keimanan, integritas, dan nilai-nilai kebangsaan), serta olah raga (ketahanan fisik dan kesehatan). Empat pilar ini sejalan dengan arah kebijakan nasional, termasuk Permendikdasmen Nomor 10 Tahun 2025 tentang Standar Kompetensi Lulusan (SKL) yang menetapkan 8 dimensi profil lulusan yang mencakup dimensi keimanan, kewargaan, penalaran kritis, kreativitas, kolaborasi, kemandirian, kesehatan, dan komunikasi",
+               },
+               {
+                title: "Keselamatan & Etika",
+                content: `
+                <h4>Kegiatan ini:</h4>
+                <ul>
+                  <li>Dirancang dengan standar keselamatan: panitia berpengalaman, peralatan P3K, komunikasi darurat.</li>
+                  <li>Memiliki izin resmi dari sekolah dan pembina, serta mendapat pendampingan guru.</li>
+                  <li>Menghindari perploncoan/kekerasan. Seluruh aktivitas adalah simulasi pembelajaran positif.</li>
+                  <li>Memasukkan unsur refleksi & diskusi setelah kegiatan agar pembelajaran menjadi nyata.</li>
+                </ul>
+                `,
+               },
+               {
+                title: "Tujuan Umum",
+                content: `
+                <h4>Tujuan kegiatan Jurit Malam</h4>
+                <p>Memberikan pemahaman kepada orang tua, sekolah, dan pemangku kebijakan bahwa jurit malam bukanlah aktivitas yang berisiko tanpa arah, melainkan kegiatan yang dirancang, diawasi, dan dievaluasi dengan cermat. Tujuannya antara lain:</p>
+                <ul>
+                  <li>Membentuk pribadi yang tangguh, disiplin, dan berkarakter.</li>
+                  <li>Mengembangkan kemampuan kerja sama, komunikasi, dan kepemimpinan.</li>
+                  <li>Mengasah kecerdasan emosional dan kemampuan mengambil keputusan dalam situasi menantang.</li>
+                  <li>Menumbuhkan **Growth Mindset** pada peserta didik – keyakinan bahwa kemampuan bisa berkembang melalui latihan dan pengalaman.</li>
+                  <li>Memberikan pengalaman belajar yang berkesadaran, bermakna, dan menggembirakan, sehingga membekas positif di memori peserta.</li>
+                </ul>
+                 `,
+                },
+                {
+                title: "Tujuan Khusus",
+                content: `
+                <h4>Setelah mengikuti rangkaian Jurit Malam, peserta diharapkan:</h4>    
+                <ul>
+                  <li>Mengembangkan disiplin diri dan keberanian dalam menghadapi situasi yang menantang secara positif dan terarah.</li>
+                  <li>Menumbuhkan Growth Mindset: keyakinan bahwa kemampuan dapat berkembang melalui pengalaman dan latihan.</li>
+                  <li>Mengasah keterampilan kepemimpinan (leadership) dan komunikasi efektif dalam tim.</li>
+                  <li>Meningkatkan empati dan solidaritas dengan sesama peserta melalui aktivitas kerja sama dan tolong-menolong di setiap pos.</li>
+                  <li>Menguatkan nilai-nilai kebangsaan dan cinta tanah air melalui penugasan yang mengangkat sejarah perjuangan dan semangat nasionalisme.</li>
+                  <li>Mengembangkan kecerdasan emosional (pengendalian diri, pengelolaan emosi, dan kemampuan mengambil keputusan bijak dalam tekanan).</li>
+                  <li>Meningkatkan kesiapan fisik (ketahanan, kecepatan, dan keterampilan dasar P3K) dengan tetap menjaga aspek kesehatan dan keselamatan.</li>
+                  <li>Membentuk komitmen pribadi untuk menjadi anggota Paskibra yang disiplin, tangguh, dan berkarakter unggul, yang dibuktikan dengan pernyataan komitmen di akhir kegiatan.</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Manfaat Kegiatan",
+                content: `
+                <h4>Manfaat bagi Peserta</h4>
+                <ul>
+                 <li><b>Pembentukan Karakter Positif</b> Peserta memperoleh pengalaman langsung dalam disiplin, kepemimpinan, keberanian, tanggung jawab, kerja sama, serta nilai-nilai kebangsaan. Ini menjadi bekal nyata bagi kehidupan sekolah maupun di luar sekolah.</li>
+                 <li><b>Penguatan Growth Mindset</b> Dengan menghadapi berbagai tantangan yang dirancang aman dan edukatif, peserta belajar bahwa kemampuan bisa berkembang jika mau berlatih, mencoba, dan bekerja sama.</li>
+                 <li><b>Pengembangan Kecakapan Abad 21</b> Seperti komunikasi efektif, kolaborasi, berpikir kritis, pemecahan masalah, serta pengendalian diri dalam situasi tertekan.</li>
+                 <li><b>Peningkatan Kesehatan Jasmani dan Ketahanan Mental</b> Melalui aktivitas fisik yang terukur dan permainan di tiap pos, peserta terlatih menjaga kesehatan, ketahanan, dan fokus.</li>
+                 <li><b>Pembelajaran Berkesadaran, Bermakna, dan Menggembirakan</b> Peserta tidak hanya mendapat pengalaman menantang, tetapi juga refleksi diri, renungan, serta komitmen untuk menerapkan nilai-nilai yang dipelajari dalam kehidupan sehari-hari.</li>
+                </ul>
+          
+                <h4>Manfaat bagi Sekolah dan Pemangku Kebijakan</h4>
+                <ul>
+                  <li><b>Penguatan 8 Dimensi Profil Lulusan</b> Sekolah mampu menunjukkan implementasi nyata penguatan pendidikan karakter (PPK) sesuai arah kebijakan nasional.</li>
+                  <li><b>Citra Positif Sekolah</b> Kegiatan ini mencerminkan bahwa sekolah bukan hanya fokus pada aspek akademik, tetapi juga membina kepribadian dan keterampilan sosial siswa.</li>
+                  <li><b>Menjadi Praktik Baik (Best Practice)</b> Program ini bisa dijadikan contoh dan diadopsi oleh sekolah lain sebagai inovasi pendidikan nonformal yang efektif.</li>
+                  <li><b>Meningkatkan Partisipasi Orang Tua dan Komunitas</b> Dengan komunikasi yang baik sebelum kegiatan, orang tua dan pemangku kebijakan akan lebih percaya, mendukung, dan bahkan ikut berkontribusi.</li>
+                  <li><b>Konsistensi dengan Regulasi Pendidikan Nasional</b> Kegiatan ini mendukung implementasi Undang-Undang No. 20 Tahun 2003 tentang Sistem Pendidikan Nasional, Perpres No. 87 Tahun 2017 tentang PPK, dan kebijakan pembinaan kesiswaan.</li>
+                </ul>
+                `,
+              }
+            ]            
+          },
+          {
+            title: "Struktur Kegiatan", 
+            content: "<h4>Struktur Kegiatan Jurit Malam</h4><p>Aktivitas jalan kaki atau long march santai dengan membawa misi kelompok yang spesifik (misalnya, mengumpulkan data atau berinteraksi dengan lingkungan). Fokus pada kebersamaan dan ketahanan ringan, bukan kecepatan.</p>",
+            children: [
+               {
+                title: "Pembukaan",
+                content: `
+                <ul>
+                  <li>Penyampaian Materi “Mindset Tangguh & Kerja Sama dalam Situasi Tantangan”.</li>
+                  <li>Apel malam, doa bersama, dan pembacaan komitmen kelompok.</li>
+                  <li>Penjelasan teknis jalur, aturan keselamatan, dan pembagian kelompok.</li>
+                </ul>
+                `,
+               },
+               {
+               title: "Pelaksanaan Kegiatan",
+               content: `
+               <h4>Setiap pos berlangsung selama 15–20 menit dengan materi dan tujuan pembelajaran yang berbeda. 
+                   Berikut rincian kegiatan per pos:</h4>
+               <table border="1" cellpadding="6" cellspacing="0" 
+                style="border-collapse:collapse; width:100%; table-layout:fixed;">
+               <thead style="background:#e5e7eb;">
+                 <tr>
+                  <th style="width:8%; text-align:center;">POS</th>
+                  <th style="width:22%; text-align:center;">MATERI/KEGIATAN</th>
+                  <th style="width:12%; text-align:center;">DURASI</th>
+                  <th style="width:58%; text-align:center;">TUJUAN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:center;">Pos 1</td>
+                  <td>“Tantangan PBB”</td>
+                  <td style="text-align:center;">15 menit</td>
+                   <td>Menunjukkan bahwa dengan latihan dan fokus, kemampuan bertambah.</td>
+                 </tr>
+                 <tr>
+                  <td style="text-align:center;">Pos 2</td>
+                  <td>“Puzzle Kebangsaan”</td>
+                  <td style="text-align:center;">15–20 menit</td>
+                  <td>Kerja sama menumbuhkan rasa mampu dan kepercayaan diri.</td>
+                 </tr>
+                 <tr>
+                  <td style="text-align:center;">Pos 3</td>
+                  <td>“Simulasi Penyelamatan”</td>
+                  <td style="text-align:center;">20 menit</td>
+                  <td>Melatih empati dan kepemimpinan.</td>
+                 </tr>
+                 <tr>
+                  <td style="text-align:center;">Pos 4</td>
+                  <td>“Refleksi Nilai Juang”</td>
+                  <td style="text-align:center;">15 menit</td>
+                  <td>Memberi ruang refleksi nilai, memperkuat growth mindset (fokus proses belajar, bukan hasil instan).</td>
+                 </tr>
+                 <tr>
+                  <td style="text-align:center;">Pos 5</td>
+                  <td>“Strategi Tim”</td>
+                  <td style="text-align:center;">15–20 menit</td>
+                  <td>Menguji kemampuan berpikir adaptif.</td>
+                </tr>
+              </tbody>
+              </table>
+              `,
+              },
+              {
+              title: "Refleksi",
+              content: `
+              <ul>
+                <li>Semua peserta berkumpul kembali.</li>
+                <li>Panitia/narasumber memandu refleksi: apa yang dipelajari, apa yang paling berkesan, dan bagaimana menerapkannya di sekolah/kehidupan sehari-hari.</li>
+                <li>Pembacaan ulang komitmen kelompok dan penyerahan simbolis (misalnya pin atau pita “Growth Mindset”).</li>
+              </ul>
+              `,
+              }
+            ]
+          },
+          {
+            title: "Materi Penunjang", 
+            content: `
+              <p>Materi Pra Jurit Malam disusun untuk memberikan bekal awal kepada peserta 
+              agar siap mengikuti kegiatan dengan penuh kesadaran, semangat, dan tanggung jawab.</p>
+            `,
+            children: [
+              {
+              title: "Identitas",
+              content: `
+              <p><b>Tema: MINDSET TANGGUH & KERJA SAMA DALAM SITUASI TANTANGAN</b></p>
+              <h4>Tujuan</h4>
+              <ul>
+                <li>Peserta mengenal Fixed Mindset vs Growth Mindset.</li>
+                <li>Peserta berlatih komunikasi, kepemimpinan, dan kerja sama.</li>
+                <li>Peserta membuat komitmen pribadi dan kelompok sebelum jurit malam.</li>
+              </ul>
+              <h4>Alur 60 Menit</h4>
+              <ul>
+                <li>Ice Breaking “Jembatan Manusia” (5’)</li>
+                <li>Materi Inti Fixed Mindset vs Growth Mindset (20’)</li>
+                <li>Refleksi Cepat (5’)</li>
+                <li>Mini Materi Komunikasi & Kepemimpinan Situasional (10’)</li>
+                <li>Simulasi “Blind Navigation” (10’)</li>
+                <li>Komitmen Kelompok (10’)</li>
+                <li>	Penutup (5’)</li>
+              </ul>
+              `,
+              },
+              {
+              title: "Pembukaan",
+              content: `
+                <p>“Selamat malam adik-adik Paskibra. Malam ini kita akan memasuki salah satu tradisi yang sering kita tunggu: Jurit Malam.
+                Jurit malam bukan untuk menakut-nakuti, tetapi latihan mental dan karakter. Kita akan mengasah empat hal: olah pikir, olah rasa, olah hati, dan olah raga. Sebelum itu, mari kita siapkan diri lewat materi ini supaya nanti pengalaman jurit malam menjadi berkesadaran, bermakna, dan menggembirakan.”</p>
+              <h4>Ice Breaking “Jembatan Manusia” (5 menit).</h4>
+              <ul>
+                <li>Gunakan bola kecil, simpan diujung botol kosong.</li>
+                <li>Tiap anggota meniup bola ke arah depan.</li>
+                <li>Peserta yang mendapat bola menyebutkan satu sikap positif saat menghadapi tantangan (contoh: “berani mencoba”, “kerja sama”).</li>
+                <li>Lanjutkan hingga semua mendapat giliran.</li>
+                <li>Narasumber menguatkan: “Inilah bekal pertama kita malam ini.”</li>
+              </ul>
+              `,
+              },
+              {
+              title: "Materi Inti",
+              content: `
+              <h4>a.	Mengapa Mindset Penting.</h4>
+              <ul>
+                <li>Mindset adalah cara kita memaknai situasi.</li>
+                <li>Dua orang menghadapi tugas yang sama bisa bereaksi sangat berbeda karena mindsetnya berbeda.</li>
+                <li>Di jurit malam, ada kegelapan, ada tugas mendadak. Yang satu mungkin takut dan menyerah, yang satu lagi merasa tertantang dan belajar. Bedanya di mindset.</li>
+              </ul>
+              <h4>b.	Fixed Mindset vs Growth Mindset</h4>
+                <p>Penyampaian materi pokok mengenai nilai kebersamaan, disiplin, kepemimpinan, 
+                serta kesiapan mental menghadapi kegiatan. Salah satu fokus penting adalah memahami 
+                perbedaan antara <em>Fixed Mindset</em> dan <em>Growth Mindset</em>:</p>
+
+              <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%;">
+              <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                <th style="width:50%;">FIXED MINDSET</th> <th style="width:50%;">GROWTH MINDSET</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:left;">Menganggap kemampuan bawaan.<br>“Aku memang nggak bisa.”</td>
+                  <td style="text-align:left;">Menganggap kemampuan bisa berkembang.<br>“Aku belum bisa, tapi aku bisa belajar.”</td>
+                </tr>
+                <tr>
+                  <td style="text-align:left;">Takut salah, menghindari tantangan.</td>
+                  <td style="text-align:left;">Melihat kesalahan sebagai pembelajaran.</td>
+                </tr>
+                <tr>
+                  <td style="text-align:left;">Fokus pada hasil instan.</td>
+                  <td style="text-align:left;">Fokus pada proses dan usaha.</td>
+                </tr>
+              </tbody>
+              </table>
+                <h4>c.	Pola Pikir Campuran (Mixed Mindset)</h4>
+                <ul>
+                  <li>Kadang kita campuran: ada aspek yang Fixed, ada yang Growth.</li>
+                  <li>Ini wajar. Tujuannya bukan langsung sempurna Growth, tapi menyadari lalu menggeser sedikit demi sedikit.</li>
+                </ul>
+                <h4>d.	Kaitannya dengan Jurit Malam</h4>
+                <ul>
+                  <li>Gelap = situasi tidak pasti → belajar mengelola rasa takut (olah rasa).</li>
+                  <li>Tugas mendadak = peluang melatih keberanian dan improvisasi (olah pikir).</li>
+                  <li>Kerja tim = mengasah komunikasi dan kepemimpinan (olah hati).</li>
+                  <li>Berjalan, bergerak = melatih ketahanan fisik (olah raga).</li>
+                </ul>
+                  <p>Narasumber bisa bertanya: “Kalau kalian nanti menghadapi pos sulit, apa yang akan kalian katakan pada diri sendiri? ‘Aku nggak bisa’ atau ‘Aku belajar mencoba’?”</p>
+                <h4>e.	Strategi Mengubah Mindset</h4>
+                <ul>
+                  <li>Ganti kata “Aku nggak bisa” → “Aku belum bisa”.</li>
+                  <li>Ingatkan diri sendiri: kesalahan = bahan latihan.</li>
+                  <li>Fokus pada usaha dan strategi, bukan hanya hasil.</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Refleksi Cepat",
+                content: `
+                <ul>
+                  <li>Melakukan Pemetaan Pola Pikir dari link http://andesofiani40.github.io/pemetaan-profil-pola-pikir/.</li>
+                  <li>Minta mereka menjawab pertanyaan.</li>
+                  <li>Penguatan Narasumber: “Tidak ada benar atau salah. Ini hanya peta awal kita.”</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Komunikasi Pemimpin",
+                content: `
+                <h4>a.	Prinsip Komunikasi Saat Situasi Menekan</h4>
+                <ul>
+                  <li>Dengarkan dulu, baru bicara.</li>
+                  <li>Gunakan kata-kata jelas dan singkat.</li>
+                  <li>Hindari teriak panik.</li>
+                </ul>
+                <h4>b.	Kepemimpinan Situasional</h4>
+                  <p>Dalam kelompok, bagi peran:</p>
+                <ul>
+                  <li>Leader = memberi arah.</li>
+                  <li>Navigator = mengingat rute.</li>
+                  <li>Pengawas = memastikan keselamatan.</li>
+                </ul>
+                <h4>c.	Mengelola Emosi</h4>
+                <ul>
+                  <li>Jika takut, tarik napas dalam, ucapkan kalimat positif.</li>
+                  <li>Dorong teman yang tampak ragu.</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Simulasi Blind Nav",
+                content: `
+                <h4>Cara main:</h4>
+                <ul>
+                  <li>Bagi peserta 5–6 orang per kelompok.</li>
+                  <li>Posisikan menjadi berbanjar.</li>
+                  <li>Panitia memberikan amanat kepada orang belakang “dinukiwari ngancik nu bihari saja ayeuna sampeuren jaga”.</li>
+                  <li>Orang belakang melakukan aba-aba mandiri (1 kanan, 2 Depan, hadap K/Q, Laksanakan).</li>
+                  <li>Kemudian menyampaikan pesan lewat bisikan.</li>
+                  <li>Setelah itu aba-aba mandiri lagi (hadap Q/K, 2 Belakang, 1 Kiri).</li>
+                  <li>Dilanjutkan orang kedua dst, kecuali orang depan tinggal menyebutkan pesan.</li>
+                </ul>
+                <h4>Diskusi:</h4>
+                <ul>
+                  <li>Apa yang paling sulit?</li>
+                  <li>Bagaimana komunikasi agar lancar?</li>
+                  <li>Apa yang terasa menyenangkan?</li>
+                  <p>Penguatan Narasumber: “Ini latihan kepercayaan. Sama seperti jurit malam nanti, kita perlu saling memandu.”</p>
+                </ul>
+                `,
+                },
+                {
+                title: "Komitmen Kelompok",
+                content: `
+                <h4>Minta tiap kelompok menuliskan:</h4>
+                <ul>
+                  <li>“Kami berkomitmen saat jurit malam untuk…” (misalnya: menjaga teman, berpikir positif, berani mencoba hal baru).</li>
+                  <li>Kertas ini nanti dibawa ke jurit malam dan dibacakan sebelum start.</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Penutup",
+                content: `
+                  <p>“Jurit malam bukan untuk menakut-nakuti, tapi untuk mengasah pikiran, rasa, hati, dan raga. Tantangan yang datang = kesempatan untuk tumbuh. Mari kita jalani dengan semangat positif, berani mencoba, dan menjaga teman.”</p>
+                <ul>
+                  <li>Ajak peserta teriak yel-yel:</li>
+                  <li>Jurit malam… Siap belajar!</li>
+                  <li>Jurit malam… Siap bekerja sama!</li>
+                  <li>Jurit malam… Siap berani!</li>
+                </ul>
+                <p>Tips untuk Narasumber:</p>
+                <ul>
+                  <li>Gunakan cerita nyata (contoh pengalaman paskibra)</li>
+                  <li>Gunakan slide/gambar sederhana agar mudah dicerna</li>
+                  <li>Berikan humor ringan agar suasana cair</li>
+                  <li>Saat refleksi & komitmen, bisa putar musik instrumental untuk suasana lebih khidmat</li>
+                </ul>
+                `,
+                }
+              ]
+          },
+          {
+            title: "Pelaksanaan", 
+            content: `
+              <p>Pelaksanaan Jurit Malam dilakukan secara terstruktur agar peserta memperoleh pengalaman belajar yang bermakna, aman, dan menyenangkan.</p>
+            `,
+            children: [
+              {
+              title: "Pra Pelaksanaan",
+              content: `
+              <h4>Pembentukan Panitia & Tugas</h4>
+              <ul>
+                <li>Menentukan koordinator umum, koordinator lapangan</li>
+                <li>Koordinator tiap pos, tim medis/P3K, dokumentasi</li>
+                <li>Konsumsi</li>
+                <li>Keamanan</li>
+                <li>Menyusun daftar panitia tiap pos sesuai jumlah peserta</li>
+              </ul>
+              <h4>Perizinan & Sosialisasi</h4>
+              <ul>
+                <li>Mengajukan izin kegiatan ke kepala sekolah/dinas.</li>
+                <li>Mengajukan izin kegiatan ke Perangkat Desa.</li>
+                <li>Menyampaikan surat pemberitahuan dan izin kepada orang tua/wali.</li>
+                <li>Memberi penjelasan tentang tujuan, jadwal, prosedur keselamatan, dan barang yang harus dibawa peserta.</li>
+              </ul>
+              <h4>Penyusunan Rute & Pos</h4>
+              <ul>
+                <li>Menentukan jalur jurit malam, titik kumpul awal dan akhir.</li>
+                <li>Menyiapkan tanda penunjuk arah dan pencahayaan seperlunya.</li>
+                <li>Menyiapkan peralatan masing-masing pos (aba-aba, surat perjuangan, teka-teki, lilin untuk renungan, dll.).</li>
+              </ul>
+              <h4>Pembekalan Narasumber & Panitia</h4>
+              <ul>
+                <li>Memberi materi 60 menit sebelum jurit malam: mindset, kepemimpinan, kerja sama.</li>
+                <li>Briefing panitia tentang SOP keselamatan, komunikasi darurat, dan mekanisme penilaian rubrik.</li>
+              </ul>
+              `,
+              },
+              {
+              title: "Pelaksanaan Umum",
+              content: `
+                <p>Peserta mengikuti kegiatan sesuai jadwal yang telah ditetapkan dengan pendampingan panitia di setiap pos. 
+                Berikut adalah rincian jadwal pelaksanaan jurit malam:</p>
+
+              <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%; text-align:center; font-size:0.8rem;">
+              <thead style="background:#e5e7eb;">
+                <tr>
+                  <th style="width:10%;">WAKTU</th>
+                  <th style="width:25%;">KEGIATAN</th>
+                  <th style="width:25%;">PENANGGUNG JAWAB</th>
+                  <th style="width:40%;">KETERANGAN</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>16.00</td>
+                  <td>Persiapan Panitia & Peralatan</td>
+                  <td>Koordinator Umum & Koordinator Pos</td>
+                  <td>Briefing panitia, cek logistik, peralatan pos, jalur, komunikasi</td>
+                </tr>
+                <tr>
+                  <td>17.00</td>
+                  <td>Registrasi Peserta</td>
+                  <td>Sekretariat & Dokumentasi</td>
+                  <td>Peserta mengisi daftar hadir, pembagian kelompok, cek peralatan pribadi</td>
+                </tr>
+                <tr>
+                  <td>17.30</td>
+                  <td>Apel Pembukaan & Doa Bersama</td>
+                  <td>MC / Pembina</td>
+                  <td>Menyanyikan lagu kebangsaan, pembacaan komitmen, penjelasan tujuan kegiatan</td>
+                </tr>
+                <tr>
+                  <td>18.00</td>
+                  <td>Materi Narasumber 60 Menit: “Mindset Tangguh & Kerja Sama dalam Situasi Tantangan”</td>
+                  <td>Narasumber</td>
+                  <td>Disertai ice breaking dan tes singkat</td>
+                </tr>
+                <tr>
+                  <td>19.00</td>
+                  <td>Persiapan Start Jurit Malam</td>
+                  <td>Koordinator Lapangan & Panitia</td>
+                  <td>Pembagian rute, briefing keselamatan, pembacaan aturan</td>
+                </tr>
+                <tr>
+                  <td>19.30</td>
+                  <td>Start Jurit Malam Menuju Pos 1</td>
+                  <td>Koordinator Lapangan</td>
+                  <td>Peserta mulai berjalan sesuai jalur</td>
+                </tr>
+                <tr>
+                  <td>19.45</td>
+                  <td>Pos 1 “Tantangan PBB”</td>
+                  <td>Panitia Pos 1</td>
+                  <td>Menunjukkan bahwa dengan latihan dan fokus, kemampuan bertambah</td>
+                </tr>
+                <tr>
+                  <td>20.00</td>
+                  <td>Pos 2 “Puzzle Kebangsaan”</td>
+                  <td>Panitia Pos 2</td>
+                  <td>Kerja sama menumbuhkan rasa mampu dan kepercayaan diri</td>
+                </tr>
+                <tr>
+                  <td>20.20</td>
+                  <td>Pos 3 “Simulasi Penyelamatan”</td>
+                  <td>Panitia Pos 3 & Tim Medis</td>
+                  <td>Melatih empati dan kepemimpinan</td>
+                </tr>
+                <tr>
+                  <td>20.40</td>
+                  <td>Pos 4 “Refleksi Nilai Juang”</td>
+                  <td>Panitia Pos 4</td>
+                  <td>Memberi ruang refleksi nilai, memperkuat growth mindset (fokus proses belajar, bukan hasil instan)</td>
+                </tr>
+                <tr>
+                  <td>21.00</td>
+                  <td>Pos 5 “Strategi Tim”</td>
+                  <td>Panitia Pos 5</td>
+                  <td>Menguji kemampuan berpikir adaptif</td>
+                </tr>
+                <tr>
+                  <td>21.20</td>
+                  <td>Peserta Kembali ke Titik Kumpul Akhir</td>
+                  <td>Koordinator Lapangan</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>21.40</td>
+                  <td>Umpan Balik & Refleksi Akhir</td>
+                  <td>Narasumber & Koordinator Umum</td>
+                  <td>Diskusi hasil belajar, pembacaan ulang komitmen, penyerahan simbolis/pin</td>
+                </tr>
+                <tr>
+                  <td>22.10</td>
+                  <td>Doa Penutup & Foto Dokumentasi</td>
+                  <td>MC / Dokumentasi</td>
+                  <td>Kegiatan selesai</td>
+                </tr>
+                <tr>
+                  <td>23.00</td>
+                  <td>Selesai</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+              </table>
+              `,
+              },
+              {
+              title: "Pelaksanaan Khusus",
+              content: `
+                <p>Terdiri dari 5 pos dengan tantangan berbeda. Setiap pos dirancang 
+                    untuk melatih aspek fisik, mental, sosial, dan spiritual peserta. 
+                    Berikut rincian kegiatan khusus per pos:</p>
+
+                <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%; text-align:center; font-size:0.8rem;">
+                <thead style="background:#e5e7eb;">
+                  <tr>
+                    <th style="width:10%;">POS</th>
+                    <th style="width:20%;">FOKUS OLAH</th>
+                    <th style="width:35%;">BENTUK KEGIATAN</th>
+                    <th style="width:35%;">KAITAN MINDSET</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Pos 1 “Tantangan PBB”</td>
+                    <td>Olah Raga & Olah Pikir</td>
+                    <td>Baris berbaris dalam kondisi minim cahaya dengan variasi aba-aba tak biasa</td>
+                    <td>Menunjukkan bahwa dengan latihan dan fokus, kemampuan bertambah (menggeser fixed mindset).</td>
+                  </tr>
+                  <tr>
+                    <td>Pos 2 “Puzzle Kebangsaan”</td>
+                    <td>Olah Pikir & Olah Rasa</td>
+                    <td>Menyusun puzzle lambang negara atau kutipan teks proklamasi sambil bekerja sama</td>
+                    <td>Kerja sama menumbuhkan rasa mampu dan kepercayaan diri.</td>
+                  </tr>
+                  <tr>
+                    <td>Pos 3 “Simulasi Penyelamatan”</td>
+                    <td>Olah Raga & Olah Rasa</td>
+                    <td>P3K pada “korban” simulasi; harus membagi tugas</td>
+                    <td>Melatih empati dan kepemimpinan.</td>
+                  </tr>
+                  <tr>
+                    <td>Pos 4 “Refleksi Nilai Juang”</td>
+                    <td>Olah Hati</td>
+                    <td>Renungan singkat, membaca surat perjuangan pahlawan, lalu peserta menuliskan satu komitmen pribadi</td>
+                    <td>Memberi ruang refleksi nilai, memperkuat growth mindset (fokus proses belajar, bukan hasil instan).</td>
+                  </tr>
+                  <tr>
+                    <td>Pos 5 “Strategi Tim”</td>
+                    <td>Olah Pikir & Olah Hati</td>
+                    <td>Memecahkan teka-teki strategi untuk mencapai “titik aman” terakhir</td>
+                    <td>Menguji kemampuan berpikir adaptif.</td>
+                  </tr>
+                </tbody>
+                </table>
+                `,
+                },
+                {
+                title: "Start–Ice Breaking",
+                content: `
+                <h4>Pembukaan</h4>
+                    <p>Peserta diajak melakukan permainan singkat sebagai pemanasan dan membangun kekompakan sebelum memasuki pos pertama.</p>
+                <h4>Tujuan:</h4>
+                    <p>mencairkan suasana, mengurangi tegang, membangun keakraban sebelum penjelajahan malam.</p>
+                <h4>Contoh permainan singkat:</h4>
+                <ul>
+                  <li>“Salam Komando”: tiap kelompok saling memberi salam khas Paskibra (atau tepuk semangat) secara berantai.</li>
+                  <li>“Nama & Gerakan”: peserta menyebut nama dan membuat satu gerakan; teman berikutnya mengulang nama + gerakan sebelumnya lalu menambah gerakannya.</li>
+                  <li>Durasi: 5–10 menit.</li>
+                </ul>
+                `,
+                },
+                {
+                title: "Pos 1–PBB Minim Cahaya",
+                content: `
+                <h4>(Olah Raga & Pikir)</h4>
+                <p><b>Materi:</b> Latihan baris berbaris dalam kondisi minim cahaya dengan variasi aba-aba untuk melatih konsentrasi dan disiplin.</p>
+                <h4>Variasi aba-aba tak biasa (contoh):</h4>
+                <ul>
+                  <li>Biasanya: “Hadap kanan!” diganti “Hadap bintang!” (peserta harus mengingat bahwa “bintang” = kanan).</li>
+                  <li>“Langkah tegap maju!” diganti “Langkah semangat maju!”.</li>
+                  <li>“Balik kanan!” diganti “Putar balik!”.</li>
+                  <li>Peserta harus menyesuaikan aba-aba baru dan tetap kompak.</li>
+                </ul>
+                  <p><b>Tujuan:</b> Melatih fokus, disiplin, fleksibilitas berpikir, mendobrak fixed mindset (“saya hanya bisa PBB standar”).</p>
+                `,
+                },
+                {
+                title: "Pos 2–Puzzle Kebangsaan",
+                content: `
+                <h4>(Olah Pikir & Rasa)</h4>
+                  <p>Peserta menyusun puzzle lambang negara atau kutipan teks proklamasi untuk menumbuhkan rasa nasionalisme dan kerjasama.</p>
+                  <p><b>Materi:</b> Menyusun puzzle besar (A3/A2) berisi potongan gambar Garuda Pancasila, bendera, teks Proklamasi atau pahlawan nasional.
+                  <p><b>Pelaksanaan:</b> Setiap kelompok diberi amplop potongan puzzle, menyusunnya di meja/alas, lalu menyebutkan makna simbol.
+                  <p><b>Tujuan:</b> Melatih kerja sama, komunikasi, mengaitkan simbol kebangsaan dengan tugas Paskibra.
+                `,
+                },
+                {
+                title: "Pos 3–Simulasi Penyelamatan",
+                content: `
+                <h4>(Olah Raga & Rasa)</h4>
+                  <p>Peserta melakukan simulasi pertolongan pertama (P3K) terhadap korban; melatih empati, koordinasi, dan kepemimpinan.</p>
+                  <p><b>Materi:</b> P3K pada korban simulasi.</p>
+                  <p><b>Skenario sederhana:</b> Ada “korban” pingsan karena kelelahan (panitia berperan). Peserta diminta melakukan tindakan:</p>
+                <ul>
+                  <li>1. Mengecek kesadaran dan pernapasan.</li>
+                  <li>2. Memposisikan korban dengan aman (posisi stabil).</li>
+                  <li>3. Memeriksa luka ringan (misalnya luka gores; panitia bisa tempel plester pura-pura).</li>
+                  <li>4. Memanggil bantuan medis bila perlu.</li>
+                </ul>
+                  <p><b>Tujuan:</b> Melatih kesiapsiagaan, pembagian peran, empati, dan kepemimpinan dalam tim.</p>
+                `,
+                },
+                {
+                title: "Pos 4–Refleksi Nilai Juang",
+                content: `
+                  <h4>(Olah Hati)</h4>
+                    <p>Peserta membaca kisah perjuangan, melakukan renungan, lalu menuliskan komitmen pribadi untuk memperkuat growth mindset.</p>
+                    <p><b>Materi:</b> Membaca surat perjuangan pahlawan & membuat komitmen pribadi.</p>
+                    <p><b>Contoh Surat Perjuangan:</b> kutipan singkat dari surat Bung Tomo menjelang 10 November, atau surat Kartini (“Habis Gelap Terbitlah Terang”).</p>
+                    <p>•	Misalnya: “Bukan kemerdekaan yang saya perjuangkan untuk diri saya sendiri, melainkan untuk seluruh bangsa…”<p>
+                    <p><b>Tugas peserta:</b> setelah mendengar/membaca, masing-masing menuliskan satu komitmen pribadi pada kartu kecil.</p>
+                    <p>•	Contoh komitmen: “Saya berkomitmen menjaga kedisiplinan sebagai anggota Paskibra”, “Saya akan berani mencoba hal baru meskipun sulit”.</p>
+                    <p><b>Contoh renungan singkat:</b></p>
+                    <p>“Bayangkan perjuangan para pahlawan seusia kalian. Mereka menghadapi rasa takut namun tetap berjuang. Malam ini kita belajar hal yang sama: berani mencoba, berani disiplin, dan tetap rendah hati. Mari kita hening sejenak mengenang pengorbanan mereka…” (hening cipta 30 detik).</p>
+                  `,
+                  },
+                  {
+                  title: "Pos 5–Teka-Teki Strategi",
+                  content: `
+                    <h4>(Olah Pikir & Hati)</h4>
+                    <p>Peserta memecahkan teka-teki strategi untuk mencapai titik aman terakhir, melatih kemampuan berpikir adaptif dan kolaboratif.</p>
+                    <p><b>Materi:</b> Tim diminta memecahkan teka-teki strategi untuk mencapai “titik aman”.</p>
+                    <p><b>Contoh teka-teki:</b></p>
+                    <p>• Di atas kertas terdapat peta sederhana dengan “rintangan” (sungai, jembatan rusak, dsb.).</p>
+                    <p>• Ada tiga jalur; hanya satu yang “aman”. Peserta harus memilih jalur berdasarkan petunjuk kecil (misalnya sandi Morse atau kata kunci).</p>
+                    <p>• Atau permainan “menyelamatkan benda” dengan tali/alat sederhana tanpa menyentuh tanah.</p>
+                    <p><b>Goal:</b> kelompok sampai pada “titik aman” dengan strategi yang mereka pilih sendiri.</p>
+                    <p><b>Tujuan:</b> menguji kemampuan berpikir adaptif, komunikasi, inovasi.</p>
+                  `,
+                  },
+                  {
+                  title: "Pasca Kegiatan",
+                  content: `
+                    <p>Setelah seluruh pos selesai, peserta dikumpulkan untuk evaluasi singkat, 
+                      istirahat, serta persiapan menuju sesi refleksi akhir.</p>
+                  <h4>a. Evaluasi Panitia</h4>
+                  <ul>
+                    <li>Menghimpun rubrik penilaian tiap pos.</li>
+                    <li>Mengisi formulir evaluasi internal tentang kelancaran teknis, keamanan, dan kepuasan peserta.</li>
+                  </ul>
+                  <h4>b. Pelaporan</h4>
+                  <ul>
+                    <li>Menyusun laporan kegiatan lengkap (tujuan, pelaksanaan, hasil, dokumentasi).</li>
+                    <li>Menyampaikan laporan kepada kepala sekolah dan orang tua/wali.</li>
+                  </ul>
+                  <h4>c. Tindak Lanjut</h4>
+                  <ul>
+                    <li>Memberikan umpan balik kepada peserta tentang hasil rubrik (misalnya dalam pertemuan evaluasi atau upacara berikutnya).</li>
+                    <li>Menyusun program pembinaan lanjutan untuk memperkuat nilai-nilai yang diperoleh (misalnya latihan kepemimpinan, proyek sosial).</li>
+                  </ul>
+                  `,
+                  },
+                  {
+                  title: "Standar Keselamatan",
+                  content: `
+                  <ul>
+                    <li>Setiap pos dilengkapi minimal dua panitia dengan peralatan komunikasi dan kotak P3K.</li>
+                    <li>Ada tim medis stand by di titik tertentu.</li>
+                    <li>Jalur aman dan sudah disurvei sebelumnya.</li>
+                    <li>Tidak ada unsur perpeloncoan atau kekerasan. Semua aktivitas bersifat edukatif, aman, dan menyenangkan.</li>
+                  </ul>
+                  `,
+                  },
+                  {
+                  title: "Mekanisme Penilaian",
+                  content: `
+                  <ul>
+                    <li>Panitia tiap pos mengisi rubrik penilaian berbasis taksonomi SOLO (skor 1–5).</li>
+                    <li>Hasil rubrik digunakan untuk menyusun laporan perkembangan peserta.</li>
+                    <li>Peserta diberi penghargaan simbolis (sertifikat/pin) sebagai bentuk apresiasi.</li>
+                  </ul>
+                  `,
+                  },
+                  {
+                  title: "Penutup",
+                  content: `
+                  <ul>
+                    <li>Kegiatan diakhiri dengan doa bersama dan foto dokumentasi.</li>
+                    <li>Simbol komitmen dibawa peserta sebagai pengingat nilai-nilai yang dipelajari.</li>
+                  </ul>
+                  `,
+                  }
+                ]
+          },
+          {
+            title: "Pembagian Panitia", 
+            content: `
+              <p>Panitia Jurit Malam terdiri dari anggota inti dan pendukung yang dibagi dalam berbagai peran agar kegiatan berjalan lancar, aman, dan terkoordinasi.</p>
+            `,
+            children: [
+              {
+              title: "Jumlah Panitia",
+              content: `
+                <p>Setiap pos diisi oleh ±10 panitia. Selain itu terdapat ±10 panitia umum yang menangani logistik, keamanan, kesehatan, dan dokumentasi.</p>
+              <h4>Setiap pos didukung 10 panitia dengan pembagian:</h4>
+              <ul>
+                <li> 1 Koordinator Pos: mengatur keseluruhan pos.</li>
+                <li> 2 Fasilitator Materi/Instruksi.</li>
+                <li> 2 Asisten Pengamatan & Penilaian.</li>
+                <li> 2 Pengatur Alur/Keamanan.</li>
+                <li> 1 Dokumentasi.</li>
+                <li> 1 Logistik.</li>
+                <li> 1 Cadangan/Runner.</li>
+              </ul>
+              <h4>Selain itu 10 panitia di luar pos:</h4>
+              <ul>
+                <li> 1 Koordinator Umum.</li>
+                <li> 2 Tim Medis.</li>
+                <li> 2 Tim Keamanan Perimeter.</li>
+                <li> 2 Tim Logistik Pusat.</li>
+                <li> 2 Tim Dokumentasi Umum.</li>
+                <li> 1 Tim Komunikasi & Informasi.</li>
+               </ul>
+              `,
+              },
+              {
+              title: "Tugas Internal",
+              content: `
+                <p>Pembagian detail tugas internal panitia pos adalah sebagai berikut:</p>
+
+              <table border="1" cellpadding="6" cellspacing="0" 
+              style="border-collapse:collapse; width:100%; text-align:center; font-size:0.8rem;">
+              <thead style="background:#e5e7eb;">
+                <tr>
+                  <th style="width:5%;">NO</th>
+                  <th style="width:25%;">PERAN PANITIA POS</th>
+                  <th style="width:70%;">TUGAS DETAIL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Koordinator Pos / PIC</td>
+                  <td>Memimpin pos, briefing panitia, mengatur alur peserta dan waktu.</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Fasilitator Materi 1</td>
+                  <td>Memberi instruksi utama sesuai materi pos.</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Fasilitator Materi 2</td>
+                  <td>Membantu instruksi, memegang alat/bahan.</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Observer Penilaian 1</td>
+                  <td>Mengisi rubrik penilaian peserta kelompok 1–3.</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Observer Penilaian 2</td>
+                  <td>Mengisi rubrik penilaian peserta kelompok 4–6.</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Observer Penilaian 3</td>
+                  <td>Mengisi rubrik penilaian peserta kelompok 7–9.</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Keamanan Pos</td>
+                  <td>Mengawasi area sekitar pos, memastikan tidak ada peserta keluar jalur.</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Medis Mini Pos</td>
+                  <td>Menangani pertolongan pertama ringan di pos tersebut, menghubungi tim medis utama bila perlu.</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Logistik Pos</td>
+                  <td>Mengatur alat/bahan pos, mengisi ulang perlengkapan, memastikan kebersihan.</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Dokumentasi Pos</td>
+                  <td>Foto/video kegiatan pos, menyimpan hasil kerja peserta (puzzle, komitmen).</td>
+                </tr>
+              </tbody>
+              </table>
+              `,
+              },
+              {
+              title: "Tugas Eksternal",
+              content: `
+                <p>Pembagian detail tugas eksternal panitia umum adalah sebagai berikut:</p>
+
+                <table border="1" cellpadding="6" cellspacing="0" 
+                style="border-collapse:collapse; width:100%; text-align:center; font-size:0.8rem;">
+                <thead style="background:#e5e7eb;">
+                  <tr>
+                   <th style="width:5%;">NO</th>
+                   <th style="width:25%;">PERAN PANITIA UMUM</th>
+                   <th style="width:70%;">TUGAS DETAIL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Ketua Umum / Komandan Kegiatan</td>
+                    <td>Mengendalikan seluruh kegiatan, komunikasi dengan tiap pos.</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Wakil Ketua / Pengarah Teknis</td>
+                    <td>Mengatur rotasi peserta antar pos, jadi penghubung.</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Sekretariat / Administrasi</td>
+                    <td>Mengelola data peserta, rubrik penilaian yang masuk dari observer pos.</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Logistik Utama</td>
+                    <td>Mengirim/menarik perlengkapan antar pos, cadangan alat.</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Tim Medis Utama</td>
+                    <td>Standby di posko, siap mobile jika dipanggil pos.</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Tim Keamanan Umum 1</td>
+                    <td>Menjaga jalur antar pos, mengarahkan peserta.</td>
+                  </tr>
+                  <tr>
+                  <td>7</td>
+                    <td>Tim Keamanan Umum 2</td>
+                    <td>Menjaga area parkir/titik kumpul.</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>Dokumentasi Umum (Foto)</td>
+                    <td>Foto wide shot, suasana umum.</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>Dokumentasi Umum (Video)</td>
+                    <td>Video kegiatan & testimoni peserta.</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>MC / Moderator Apel</td>
+                    <td>Memimpin apel pembukaan, penutupan, ice breaking.</td>
+                  </tr>
+                </tbody>
+                </table>
+                `,
+                },
+                {
+                title: "Mekanisme Koordinasi",
+                content: `
+                  <p>Koordinasi dilakukan melalui briefing sebelum, selama, dan setelah kegiatan. 
+                      Setiap seksi melaporkan perkembangan tugasnya kepada ketua panitia melalui rapat singkat 
+                      atau komunikasi via HT/telepon seluler untuk memastikan keterhubungan dan respons cepat.</p>
+                <ul>
+                  <li>Tiap <b>Koordinator Pos</b> melapor ke <b>Ketua Umum</b> melalui HT/HP.</li>
+                  <li><b>Observer</b> menyerahkan rubrik ke <b>sekretariat</b> setelah selesai.</li>
+                  <li><b>Medis mini pos</b> berkoordinasi dengan <b>Tim Medis Utama</b> bila ada kasus.</li>
+                  <li><b>Dokumentasi pos</b> menyerahkan file ke <b>dokumentasi umum</b> untuk digabung jadi arsip.</li>
+                </ul>
+                `,
+                }
+              ]
+          },
+          {
+            title: "Evaluasi & Asesmen", 
+            content: `
+              <p>Evaluasi kegiatan Jurit Malam dilakukan dengan pendekatan penilaian autentik menggunakan rubrik berbasis taksonomi SOLO. 
+                Penilaian ini tidak hanya menekankan pada hasil akhir, tetapi juga pada proses, sikap, dan keterampilan peserta.</p>
+            `,
+            children: [
+              {
+              title: "Model dan Skala",
+              content: `
+                  <p>Penilaian menggunakan <strong>Taksonomi SOLO</strong> dengan skala 1–5:</p>
+              <ul>
+                <li>Level 1: Prestruktural (belum memahami tugas).</li>
+                <li>Level 2: Unistruktural (hanya memahami sebagian kecil).</li>
+                <li>Level 3: Multistruktural (memahami beberapa aspek, namun belum terintegrasi).</li>
+                <li>Level 4: Relasional (mampu mengaitkan aspek dan menyimpulkan).</li>
+                <li>Level 5: Extended Abstract (mampu menggeneralisasi dan menerapkan pada konteks lain).</li>
+              </ul>
+              `,
+              },
+              {
+              title: "Materi Pos 1",
+              content: `
+                <p>Rubrik penilaian untuk Pos 1 <strong>“Tantangan PBB”</strong> 
+                menggunakan indikator berbasis SOLO (Structure of Observed Learning Outcomes):</p>
+
+                <table border="1" cellpadding="6" cellspacing="0" 
+                style="border-collapse:collapse; width:100%; font-size:0.8rem;">
+                <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                <th style="width:25%;">ASPEK YANG DINILAI</th>
+                <th style="width:75%;">INDIKATOR (BERBASIS SOLO)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:center;">Kedisiplinan</td>
+                  <td style="text-align:left;">
+                  1: Tidak mengikuti aba-aba<br>
+                  2: Mengikuti sebagian aba-aba<br>
+                  3: Mengikuti semua aba-aba tapi belum serentak<br>
+                  4: Serentak, rapi, konsisten<br>
+                  5: Serentak, rapi, inisiatif memberi contoh kepada teman
+                </td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">Kekompakan</td>
+                  <td style="text-align:left;">
+                  1: Bergerak sendiri-sendiri<br>
+                  2: Ada sebagian mengikuti<br>
+                  3: Mayoritas mengikuti dengan kompak<br>
+                  4: Kompak penuh<br>
+                  5: Kompak penuh, mengatur ritme sendiri
+                </td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;">Pemahaman Aba-aba</td>
+                  <td style="text-align:left;">
+                  1: Tidak memahami aba-aba<br>
+                  2: Memahami 1 aba-aba<br>
+                  3: Memahami beberapa aba-aba<br>
+                  4: Memahami seluruh aba-aba dengan tepat<br>
+                  5: Memahami dan mengimprovisasi dengan tepat
+                </td>
+                </tr>
+              </tbody>
+              </table>
+              `,
+              },
+              {
+              title: "Materi Pos 2",
+              content: `
+                <p>Rubrik penilaian untuk Pos 2 <strong>“Puzzle Kebangsaan”</strong> 
+                menggunakan indikator berbasis SOLO (Structure of Observed Learning Outcomes):</p>
+
+                <table border="1" cellpadding="6" cellspacing="0" 
+                  style="border-collapse:collapse; width:100%; font-size:0.8rem;">
+                <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                  <th style="width:25%;">ASPEK YANG DINILAI</th>
+                  <th style="width:75%;">INDIKATOR (BERBASIS SOLO)</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <td style="text-align:center;">Pemahaman Materi Kebangsaan</td>
+                    <td style="text-align:left;">
+                      1: Tidak mengenali simbol/nama<br>
+                      2: Mengenali satu simbol/nama<br>
+                      3: Mengenali beberapa simbol/nama<br>
+                      4: Mengenal semua simbol/nama dan menjelaskan<br>
+                      5: Menjelaskan simbol/nama plus makna mendalam
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;">Kerja Sama Tim</td>
+                    <td style="text-align:left;">
+                      1: Tidak bekerja sama<br>
+                      2: Hanya 1–2 orang bekerja<br>
+                      3: Bekerja bersama tapi belum efektif<br>
+                      4: Bekerja bersama efektif<br>
+                      5: Bekerja bersama efektif + mengkoordinasi anggota lain
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;">Strategi Penyusunan Puzzle</td>
+                    <td style="text-align:left;">
+                      1: Acak tanpa strategi<br>
+                      2: Strategi sederhana<br>
+                      3: Strategi lebih dari satu tetapi tidak terkoordinasi<br>
+                      4: Strategi sistematis dan kooperatif<br>
+                      5: Strategi inovatif, efektif, dan kreatif
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+                `,
+                },
+                {
+                title: "Materi Pos 3",
+                content: `
+                  <p>Rubrik penilaian untuk Pos 3 <strong>“Simulasi Penyelamatan”</strong> 
+                  menggunakan indikator berbasis SOLO (Structure of Observed Learning Outcomes):</p>
+
+                  <table border="1" cellpadding="6" cellspacing="0" 
+                    style="border-collapse:collapse; width:100%; font-size:0.8rem;">
+                  <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                    <th style="width:25%;">ASPEK YANG DINILAI</th>
+                    <th style="width:75%;">INDIKATOR (BERBASIS SOLO)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align:center;">Keterampilan Dasar P3K</td>
+                    <td style="text-align:left;">
+                      1: Tidak tahu langkah P3K<br>
+                      2: Mengetahui satu langkah<br>
+                      3: Melaksanakan beberapa langkah<br>
+                      4: Melaksanakan seluruh langkah dengan benar<br>
+                      5: Melaksanakan seluruh langkah dengan tepat & improvisasi aman
+                    </td>
+                  </tr>
+                    <tr>
+                      <td style="text-align:center;">Kepedulian pada Korban</td>
+                      <td style="text-align:left;">
+                        1: Acuh tak acuh<br>
+                        2: Menyapa korban tanpa tindakan<br>
+                        3: Memberi tindakan dasar<br>
+                        4: Memberi tindakan sesuai SOP<br>
+                        5: Memberi tindakan sesuai SOP & menenangkan korban
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="text-align:center;">Koordinasi Tim Penyelamatan</td>
+                      <td style="text-align:left;">
+                        1: Tidak ada koordinasi<br>
+                        2: Koordinasi terbatas<br>
+                        3: Koordinasi sebagian anggota<br>
+                        4: Koordinasi penuh & jelas<br>
+                        5: Koordinasi penuh + pembagian tugas kreatif
+                      </td>
+                    </tr>
+                  </tbody>
+                  </table>
+                  `,
+                  },
+                  {
+                  title: "Materi Pos 4",
+                  content: `
+                    <p>Fokus pada <em>Refleksi Nilai Juang</em>. 
+                    Penilaian menggunakan rubrik berbasis Taksonomi SOLO sebagai berikut:</p>
+
+                  <table border="1" cellpadding="6" cellspacing="0" 
+                    style="border-collapse:collapse; width:100%; font-size:0.8rem;">
+                  <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                    <th style="width:25%;">ASPEK YANG DINILAI</th>
+                    <th style="width:75%;">INDIKATOR (BERBASIS SOLO)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="text-align:center;">Pemahaman Nilai Juang</td>
+                    <td style="text-align:left;">
+                      1: Tidak memahami<br>
+                      2: Menyebut satu nilai<br>
+                      3: Menyebut beberapa nilai<br>
+                      4: Menyebut dan mengaitkan nilai dengan pengalaman<br>
+                      5: Menyebut, mengaitkan, dan mengekspresikan nilai secara kreatif (tulisan, komitmen)
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;">Kemampuan Refleksi Diri</td>
+                    <td style="text-align:left;">
+                      1: Tidak dapat merefleksi<br>
+                      2: Refleksi sederhana<br>
+                      3: Refleksi beberapa aspek terpisah<br>
+                      4: Refleksi komprehensif<br>
+                      5: Refleksi komprehensif & membuat rencana aksi
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;">Ekspresi Komitmen</td>
+                    <td style="text-align:left;">
+                      1: Tidak membuat komitmen<br>
+                      2: Komitmen sederhana<br>
+                      3: Komitmen lebih dari satu aspek<br>
+                      4: Komitmen konkret & realistis<br>
+                      5: Komitmen konkret & inovatif (inisiatif pribadi/kelompok)
+                    </td>
+                  </tr>
+                </tbody>
+                </table>
+                `,
+                },
+                {
+                title: "Materi Pos 5",
+                content: `
+                <p>Fokus pada <em>Strategi Tim</em>. 
+                Penilaian menggunakan rubrik berbasis Taksonomi SOLO sebagai berikut:</p>
+
+                <table border="1" cellpadding="6" cellspacing="0" 
+                  style="border-collapse:collapse; width:100%; font-size:0.8rem;">
+                <thead style="background:#e5e7eb; text-align:center;"> <tr>
+                  <th style="width:25%;">ASPEK YANG DINILAI</th>
+                  <th style="width:75%;">INDIKATOR (BERBASIS SOLO)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align:center;">Perumusan Strategi</td>
+                  <td style="text-align:left;">
+                    1: Tidak ada strategi<br>
+                    2: Strategi tunggal sederhana<br>
+                    3: Strategi lebih dari satu tetapi tidak sinergis<br>
+                    4: Strategi sistematis & realistis<br>
+                    5: Strategi sistematis, kreatif, adaptif
+                  </td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:center;">Kerja Sama dalam Implementasi</td>
+                    <td style="text-align:left;">
+                      1: Tidak bekerja sama<br>
+                      2: Hanya 1–2 orang bekerja<br>
+                      3: Bekerja sama belum efektif<br>
+                      4: Bekerja sama efektif<br>
+                      5: Bekerja sama efektif & mengkoordinasi sendiri
+                    </td>
+                  </tr>
+                    <tr>
+                    <td style="text-align:center;">Hasil & Dampak Strategi</td>
+                    <td style="text-align:left;">
+                      1: Tidak tercapai<br>
+                      2: Sebagian kecil tercapai<br>
+                      3: Mayoritas tercapai<br>
+                      4: Tercapai sesuai target<br>
+                      5: Tercapai melebihi target dengan inovasi baru
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              `,
+              },
+              {
+              title: "Penggunaan Rubrik",
+              content: `
+                <p>Rubrik digunakan oleh panitia di setiap pos untuk menilai aspek kognitif, afektif, dan psikomotor peserta. 
+                Hasil penilaian dicatat, kemudian direkap untuk memberikan gambaran perkembangan peserta secara komprehensif.</p>
+                <ul>
+                  <li>Setiap panitia pos memberi skor 1–5 pada setiap aspek.</li>
+                  <li>Skor tiap aspek dijumlahkan untuk melihat perkembangan peserta.</li>
+                  <li>Nilai total bisa digunakan untuk umpan balik kepada peserta dan laporan akhir kegiatan.</li>
+                </ul>
+                `,
+                }
+              ]
+          },
+          {
+            title: "Penutup", 
+            content: `
+              <p>Puji syukur ke hadirat Tuhan Yang Maha Esa atas tersusunnya Modul Jurit Malam Paskibra ini. Modul ini bukan sekadar panduan teknis pelaksanaan kegiatan, tetapi juga menjadi wujud komitmen bersama antara pembina, panitia, sekolah, orang tua, dan peserta dalam menanamkan nilai-nilai karakter luhur pada generasi muda.</p>
+              <p>Kegiatan Jurit Malam Paskibra disusun secara berkesadaran, bermakna, dan menggembirakan dengan mengacu pada Undang-Undang Republik Indonesia Nomor 20 Tahun 2003 tentang Sistem Pendidikan Nasional dan kebijakan penguatan pendidikan karakter. Melalui modul ini, diharapkan seluruh pihak yang terlibat memiliki acuan yang jelas sehingga kegiatan berlangsung aman, terarah, dan penuh nilai edukasi.</p>
+              <p>Pelaksanaan jurit malam bukan hanya sekadar latihan fisik atau keberanian berjalan malam, tetapi juga pembelajaran nyata tentang kepemimpinan, kedisiplinan, solidaritas, kemampuan mengambil keputusan, serta menumbuhkan pola pikir positif (growth mindset) yang menjadi bekal penting bagi para peserta di masa depan. Dengan desain kegiatan yang melibatkan olah pikir, olah hati, olah rasa, dan olah raga secara terpadu, peserta diharapkan dapat merasakan pengalaman belajar yang mendalam dan berkesan.</p>
+              <p>Kami menyadari teknis ini masih memerlukan penyempurnaan seiring perkembangan kebutuhan dan dinamika pembinaan di lapangan. Oleh karena itu, kritik dan saran yang konstruktif dari semua pihak sangat kami harapkan untuk perbaikan teknis ini di masa mendatang.</p>
+              <p>Akhir kata, besar harapan kami semoga teknis ini dapat menjadi panduan yang bermanfaat dan menginspirasi bagi seluruh pihak dalam mengembangkan kegiatan Paskibra di sekolah, sehingga lahir generasi muda yang berkarakter, tangguh, berjiwa kepemimpinan, cinta tanah air, dan siap berkontribusi positif bagi bangsa dan negara.</p>
+              `,
+             }
+        ]
+      }
+    ]
+  },
+  {
+    title: "BINTAL", // H1
+    content: `<h2>BINTAL (Pembinaan Mental)</h2><p>Bintal bertujuan memperkuat dimensi spiritual, etika, dan moral anggota agar memiliki akhlak yang mulia.</p>`,
+    children: [
+      // 1. Spiritual & Karakter 
+      {
+        title: "Spiritual & Karakter", 
+        content: "Fokus utama BINTAL untuk membangun kecerdasan spiritual, integritas, dan kedewasaan emosional peserta.",
+        children: [
+          {
+            title: "Renungan Malam", 
+            content: "<h4>Refleksi dan Introspeksi Diri</h4><p>Sesi hening untuk merenungkan pengalaman dan pelajaran hari itu, menguatkan komitmen diri, serta menyadari peran dan tujuan hidup.</p>"
+          },
+          {
+            title: "Simulasi Kehidupan", 
+            content: "<h4>Mengenal Konflik dan Dilema</h4><p>Permainan peran atau skenario singkat yang menempatkan peserta pada situasi sulit atau dilema moral. Tujuannya adalah melatih pengambilan keputusan beretika dan menumbuhkan rasa syukur.</p>"
+          },
+          {
+            title: "Surat untuk Diri & OrTu", 
+            content: "<h4>Membangun Koneksi Emosional</h4><p>Aktivitas menulis surat yang diarahkan untuk mengekspresikan harapan, ketakutan, dan rasa terima kasih kepada diri sendiri dan orang tua. Membantu peserta menyadari pengorbanan dan dukungan keluarga.</p>"
+          },
+          {
+            title: "Akhlak & Mental", 
+            content: "<h4>Nilai-nilai Dasar Karakter</h4><p>Sesi diskusi mengenai pentingnya akhlak mulia, etika pergaulan, dan cara menjaga kesehatan mental (mental toughness) dalam menghadapi tekanan dan tantangan Paskibra.</p>"
+          }
+        ]
+      },
+      // 2. Intelektual & Analisis
+      {
+        title: "Intelektual & Analisis", 
+        content: "Meningkatkan kemampuan berpikir kritis, analisis kasus, dan mengasah keterampilan menyampaikan ide secara terstruktur dan logis.",
+        children: [
+          {
+            title: "Bedah Film", 
+            content: "<h4>Diskusi Film Bertema Kepemimpinan</h4><p>Menonton film pendek atau cuplikan video yang mengangkat tema kepemimpinan, etika, atau nasionalisme. Dilanjutkan dengan sesi diskusi kritis untuk menganalisis pelajaran moral dan strategi kepemimpinan yang ditampilkan.</p>"
+          },
+          {
+            title: "Case Study Leadership", 
+            content: "<h4>Simulasi Kasus Nyata</h4><p>Peserta diberikan studi kasus yang berhubungan dengan masalah kepemimpinan dalam organisasi Paskibra atau situasi nyata. Kelompok ditugaskan menganalisis masalah, merumuskan solusi, dan mempresentasikan argumen mereka.</p>"
+          },
+          {
+            title: "Forum Inspirasi", 
+            content: "<h4>Membangun Visi Masa Depan</h4><p>Sesi panel atau kuliah singkat dari tokoh inspiratif (alumni sukses, akademisi, atau profesional) yang berbagi wawasan tentang pengembangan diri, karir, dan peran pemuda dalam pembangunan bangsa. Dilanjutkan dengan sesi tanya jawab interaktif.</p>"
+          }
+        ]
+      },
+// 3. Emosi, Empati, Kebersamaan
+      {
+        title: "Empati & Kebersamaan", 
+        content: "Fokus pada pengembangan kecerdasan emosional, kemampuan memahami perasaan orang lain, dan penguatan ikatan soliditas tim.",
+        children: [
+          {
+            title: "Jembatan Emosi", 
+            content: "<h4>Komunikasi Non-Verbal</h4><p>Latihan yang dirancang untuk menyampaikan atau mengenali emosi melalui ekspresi wajah, bahasa tubuh, atau tindakan tanpa kata-kata. Tujuannya adalah meningkatkan kepekaan sosial dan komunikasi efektif.</p>"
+          },
+          {
+            title: "Sharing Circle", 
+            content: "<h4>Lingkaran Berbagi Pengalaman</h4><p>Sesi di mana peserta duduk melingkar dan didorong untuk berbagi perasaan, tantangan, atau pandangan pribadi dalam suasana aman dan saling mendukung. Membangun rasa percaya dan penerimaan.</p>"
+          },
+          {
+            title: "Simulasi Kehidupan", 
+            content: "<h4>Memposisikan Diri pada Orang Lain</h4><p>Skenario atau permainan peran yang mengharuskan peserta bertukar posisi dan melihat situasi dari sudut pandang anggota tim lain. Memperkuat empati dan mengurangi prasangka.</p>"
+          }
+        ]
+      },
+      // 4. Tetap Ada, Tapi Ringan
+      {
+        title: "Tetap Ada, Tapi Ringan", 
+        content: "Materi yang berfokus pada keseimbangan fisik-mental melalui aktivitas kebugaran ringan, relaksasi, dan fokus diri untuk menjaga daya tahan mental.",
+        children: [
+          {
+            title: "Yoga / Relaksasi", 
+            content: "<h4>Latihan Ketenangan Jiwa</h4><p>Sesi panduan singkat untuk meditasi, teknik pernapasan, atau gerakan yoga ringan. Tujuannya adalah meredakan stres, meningkatkan fokus, dan memulihkan energi.</p>"
+          },
+          {
+            title: "Long March Misi", 
+            content: "<h4>Jalan Jauh Bertujuan</h4><p>Aktivitas jalan kaki atau long march santai dengan membawa misi kelompok yang spesifik (misalnya, mengumpulkan data atau berinteraksi dengan lingkungan). Fokus pada kebersamaan dan ketahanan ringan, bukan kecepatan.</p>"
+          },
+          {
+            title: "Konsentrasi & Dayatahan", 
+            content: "<h4>Asah Fokus Mental</h4><p>Permainan atau tugas yang menuntut konsentrasi tinggi dalam jangka waktu tertentu (misalnya: memecahkan teka-teki kelompok atau menjaga keseimbangan). Bertujuan melatih daya tahan mental dan ketekunan.</p>"
+          }
+        ]
+      }
+    ]
+  }, 
+  {
+    title: "BINTUR", // H1
+    content: `<h2>BINTUR (Pembinaan Teritorial)</h2><p>Bintur fokus pada aspek keorganisasian, kemandirian, dan kontribusi anggota di lingkungan sekitar.</p>`,
+    children: [
+      // 1. Kesadaran Diri & Kepemimpinan
+      {
+        title: "Kesadaran Pemimpin", 
+        content: "Fokus pada pengembangan kesadaran diri instruktur, gaya kepemimpinan yang efektif, dan kemampuan memimpin dengan teladan.",
+        children: [
+          {
+            title: "Refleksi Kepemimpinan", 
+            content: "<h4>Mengevaluasi Gaya Kepemimpinan</h4><p>Sesi refleksi mendalam mengenai kekuatan dan kelemahan diri sebagai pemimpin/instruktur. Mengidentifikasi area pengembangan pribadi dan profesional.</p>"
+          },
+          {
+            title: "Peran Instruktur", 
+            content: "<h4>Filosofi Menjadi Pembimbing</h4><p>Diskusi tentang esensi peran instruktur, mulai dari fasilitator, motivator, hingga mentor. Menetapkan standar etika dan profesionalisme dalam pembinaan.</p>"
+          },
+          {
+            title: "Sharing Pengalaman", 
+            content: "<h4>Forum Tukar Wawasan</h4><p>Instruktur berbagi pengalaman keberhasilan dan kegagalan dalam melatih atau mengelola kegiatan. Tujuannya adalah saling belajar dari praktik terbaik (best practices) dan tantangan yang dihadapi.</p>"
+          }
+        ]
+      },
+      // 2. Analisis & Intelektual
+      {
+        title: "Analisis & Intelektual", 
+        content: "Meningkatkan kompetensi teknis instruktur dalam merancang, menyampaikan, dan mengevaluasi program pelatihan secara terstruktur dan analitis.",
+        children: [
+          {
+            title: "Workshop Microteaching", 
+            content: "<h4>Latihan Keterampilan Mengajar</h4><p>Instruktur mempraktikkan sesi mengajar singkat (microteaching) dan menerima umpan balik kritis konstruktif mengenai metode penyampaian materi, kejelasan, dan interaksi dengan peserta.</p>"
+          },
+          {
+            title: "Diskusi & Studi Kasus", 
+            content: "<h4>Pemecahan Masalah Kompleks</h4><p>Menganalisis studi kasus nyata atau hipotesis mengenai isu-isu sulit dalam pembinaan Paskibra (misalnya: manajemen konflik, mengatasi kebosanan, atau pelanggaran disiplin). Merumuskan solusi berbasis data dan etika.</p>"
+          },
+          {
+            title: "Evaluasi Kegiatan", 
+            content: "<h4>Analisis Kinerja Program</h4><p>Sesi evaluasi formal terhadap efektivitas program dan kegiatan yang telah berjalan. Mengidentifikasi metrik keberhasilan dan merencanakan perbaikan untuk bulan berikutnya.</p>"
+          },
+          {
+            title: "Perencanaan Panitia", 
+            content: "<h4>Latihan Merancang Acara Besar</h4><p>Instruktur berlatih menyusun proposal kegiatan besar (misalnya: Diklat Lanjutan) mulai dari konsep, anggaran, pembagian tugas panitia, hingga manajemen risiko.</p>"
+          }
+        ]
+      },
+      // 3. Empati, Kerjasama, Dinamika
+      {
+        title: "Kerjasama & Dinamika", 
+        content: "Memperkuat soliditas tim instruktur, meningkatkan empati terhadap peserta didik, dan mengelola dinamika tim secara sehat.",
+        children: [
+          {
+            title: "Simulasi Konflik", 
+            content: "<h4>Mengelola Tekanan Tim</h4><p>Permainan peran untuk mensimulasikan situasi konflik internal panitia. Tujuannya adalah melatih instruktur menemukan akar masalah, memediasi, dan menyelesaikan konflik secara profesional dan tanpa emosi.</p>"
+          },
+          {
+            title: "Outbound Leadership", 
+            content: "<h4>Aktivitas Penguatan Tim Instruktur</h4><p>Kegiatan luar ruangan (outbound) yang dirancang khusus untuk mempererat ikatan, meningkatkan rasa saling percaya, dan membangun komunikasi non-hirarkis di antara instruktur.</p>"
+          },
+          {
+            title: "Sesi Apresiasi", 
+            content: "<h4>Menghargai Kontribusi</h4><p>Sesi di mana setiap instruktur didorong untuk memberikan apresiasi dan umpan balik positif kepada rekan timnya. Mendorong budaya kerja yang suportif dan menghargai usaha.</p>"
+          },
+          {
+            title: "Mentoring Junior", 
+            content: "<h4>Transfer Pengetahuan & Nilai</h4><p>Pelatihan dan penugasan khusus bagi instruktur senior untuk membimbing instruktur junior. Memastikan transfer pengetahuan, budaya, dan standar kualitas pembinaan yang konsisten.</p>"
+          }
+        ]
+      },
+      // 4. Fisik & Disiplin (BARU)
+      {
+        title: "Fisik & Disiplin", 
+        content: "Materi yang fokus pada peningkatan standar fisik, penguasaan PBB, dan kedisiplinan diri sebagai teladan bagi peserta didik.",
+        children: [
+          {
+            title: "PBB Instruktur", 
+            content: "<h4>Penguasaan Teknik PBB Lanjutan</h4><p>Sesi latihan PBB dengan penekanan pada detail, kekompakan, dan kejelasan aba-aba. Bertujuan memastikan instruktur memiliki standar PBB tertinggi sebelum melatih.</p>"
+          },
+          {
+            title: "Senam Kreatif", 
+            content: "<h4>Perancangan Latihan Kebugaran</h4><p>Workshop untuk merancang sesi senam atau peregangan yang inovatif, menarik, namun tetap efektif. Melatih instruktur untuk membuat variasi kegiatan fisik yang tidak monoton.</p>"
+          },
+          {
+            title: "Games Ketahanan Fisik", 
+            content: "<h4>Latihan Fisik Berbasis Tugas Ganda</h4><p>Permainan yang menuntut kombinasi antara ketahanan fisik (endurance) dan fokus mental (konsentrasi). Contoh: lari estafet sambil menghafal urutan angka. Melatih multi-tasking di bawah tekanan.</p>"
+          },
+          {
+            title: "Simulasi Latihan Fisik", 
+            content: "<h4>Latihan Menjadi Komandan Lapangan</h4><p>Instruktur bergantian memimpin sesi latihan fisik penuh, mulai dari pemanasan hingga pendinginan. Diberi umpan balik mengenai intonasi suara, motivasi, dan manajemen waktu latihan.</p>"
+          }
+        ]
+      }
+    ]
+  },
+  {
+  "title": "FORM",
+  "content": "<h3>Formulir Pendaftaran</h3><form><label>Nama:</label><br><input type='text'/><br><label>Email:</label><br><input type='email'/><br><button type='submit'>Kirim</button></form>",
+  "children": [
+      // 1. Penilaian Individu
+      {
+        title: "Penilaian Individu", 
+        content: "Fokus pada pengembangan kesadaran diri instruktur, gaya kepemimpinan yang efektif, dan kemampuan memimpin dengan teladan.",
+        children: [
+          {
+            title: "Penilaian Diklat", 
+            content: "<iframe src='https://andes-web.github.io/mpsmobile/Form_Individu.html' style='width:100%;height:100vh;border:none;'></iframe>"
+          },
+          {
+            title: "Penilaian Bintal", 
+            content: "<h4>Filosofi Menjadi Pembimbing</h4><p>Diskusi tentang esensi peran instruktur, mulai dari fasilitator, motivator, hingga mentor. Menetapkan standar etika dan profesionalisme dalam pembinaan.</p>"
+          },
+          {
+            title: "Penilaian Bintur", 
+            content: "<h4>Forum Tukar Wawasan</h4><p>Instruktur berbagi pengalaman keberhasilan dan kegagalan dalam melatih atau mengelola kegiatan. Tujuannya adalah saling belajar dari praktik terbaik (best practices) dan tantangan yang dihadapi.</p>"
+          }
+        ]
+      },
+      // 2. Analisis & Intelektual
+      {
+        title: "Penilaian Kelompok", 
+        content: "Meningkatkan kompetensi teknis instruktur dalam merancang, menyampaikan, dan mengevaluasi program pelatihan secara terstruktur dan analitis.",
+        children: [
+          {
+            title: "Penilaian K-Diklat", 
+            content: "<iframe src='https://andes-web.github.io/mpsmobile/Form_Kelompok.html' style='width:100%;height:100vh;border:none;'></iframe>"
+          },
+          {
+            title: "Penilaian K-Bintal", 
+            content: "<h4>Pemecahan Masalah Kompleks</h4><p>Menganalisis studi kasus nyata atau hipotesis mengenai isu-isu sulit dalam pembinaan Paskibra (misalnya: manajemen konflik, mengatasi kebosanan, atau pelanggaran disiplin). Merumuskan solusi berbasis data dan etika.</p>"
+          },
+          {
+            title: "Penilaian K-Bintur1", 
+            content: "<h4>Analisis Kinerja Program</h4><p>Sesi evaluasi formal terhadap efektivitas program dan kegiatan yang telah berjalan. Mengidentifikasi metrik keberhasilan dan merencanakan perbaikan untuk bulan berikutnya.</p>"
+          },
+          {
+            title: "Penilaian K-Bintur2", 
+            content: "<h4>Latihan Merancang Acara Besar</h4><p>Instruktur berlatih menyusun proposal kegiatan besar (misalnya: Diklat Lanjutan) mulai dari konsep, anggaran, pembagian tugas panitia, hingga manajemen risiko.</p>"
+          }
+        ]
+      },
+      // 3. Empati, Kerjasama, Dinamika
+      {
+        title: "Penilaian Diri Sendiri", 
+        content: "Memperkuat soliditas tim instruktur, meningkatkan empati terhadap peserta didik, dan mengelola dinamika tim secara sehat.",
+        children: [
+          {
+            title: "Penilaian D-Diklat", 
+            content: "<iframe src='https://andesofiani.github.io/pemetaan-profil-pola-pikir/' style='width:100%;height:100vh;border:none;'></iframe>"
+          },
+          {
+            title: "Penilaian D-BINTAL", 
+            content: "<h4>Aktivitas Penguatan Tim Instruktur</h4><p>Kegiatan luar ruangan (outbound) yang dirancang khusus untuk mempererat ikatan, meningkatkan rasa saling percaya, dan membangun komunikasi non-hirarkis di antara instruktur.</p>"
+          },
+          {
+            title: "Penilaian D-BINTUR1", 
+            content: "<h4>Menghargai Kontribusi</h4><p>Sesi di mana setiap instruktur didorong untuk memberikan apresiasi dan umpan balik positif kepada rekan timnya. Mendorong budaya kerja yang suportif dan menghargai usaha.</p>"
+          },
+          {
+            title: "Penilaian D-BINTUR2", 
+            content: "<h4>Mentoring Junior</h4><p>Pelatihan dan penugasan khusus bagi instruktur senior untuk membimbing instruktur junior. Memastikan transfer pengetahuan, budaya, dan standar kualitas pembinaan yang konsisten.</p>"
+          }
+        ]
+      },
+      // 4. Fisik & Disiplin (BARU)
+      {
+        title: "Penilaian Antar Teman", 
+        content: "Materi yang fokus pada peningkatan standar fisik, penguasaan PBB, dan kedisiplinan diri sebagai teladan bagi peserta didik.",
+        children: [
+          {
+            title: "Penilaian T-Diklat", 
+            content: "<iframe src='https://andes-web.github.io/mpsmobile/pola_pikirMPS.html' style='width:100%;height:100vh;border:none;'></iframe>"
+          },
+          {
+            title: "Penilaian T-Bintal", 
+            content: "<h4>Perancangan Latihan Kebugaran</h4><p>Workshop untuk merancang sesi senam atau peregangan yang inovatif, menarik, namun tetap efektif. Melatih instruktur untuk membuat variasi kegiatan fisik yang tidak monoton.</p>"
+          },
+          {
+            title: "Penilaian T-Bintur1", 
+            content: "<h4>Latihan Fisik Berbasis Tugas Ganda</h4><p>Permainan yang menuntut kombinasi antara ketahanan fisik (endurance) dan fokus mental (konsentrasi). Contoh: lari estafet sambil menghafal urutan angka. Melatih multi-tasking di bawah tekanan.</p>"
+          },
+          {
+            title: "Penilaian T-Bintur2", 
+            content: "<h4>Latihan Menjadi Komandan Lapangan</h4><p>Instruktur bergantian memimpin sesi latihan fisik penuh, mulai dari pemanasan hingga pendinginan. Diberi umpan balik mengenai intonasi suara, motivasi, dan manajemen waktu latihan.</p>"
+          }
+        ]
+      }
+    ]
+}
+];
+
+const sidebar=document.getElementById('sidebar-left');
+const content=document.getElementById('content');
+function showContent(title, html){content.innerHTML=`<h2>${title}</h2>`+html;}
+
+jurlamChildren.forEach(item=>{
+  const group=document.createElement('div');
+  const btn=document.createElement('button');
+  btn.className='accordion';
+  let iconChar='';
+  if(item.title.includes("DIKLAT")) iconChar="👥";
+  if(item.title.includes("BINTAL")) iconChar="👥";
+  if(item.title.includes("BINTUR")) iconChar="👥";
+  if(item.title.includes("FORM")) iconChar = "📝";
+  btn.innerHTML=`<span class="icon">${iconChar}</span><span>${item.title}</span>`;
+  const panel=document.createElement('div');
+  panel.className='panel';
+  const inner=document.createElement('div');
+  inner.className='panel-inner';
+  panel.appendChild(inner);
+
+  item.children?.forEach(h2=>{
+    const b2=document.createElement('button');
+    b2.className='h2-accordion';
+    b2.textContent=h2.title;
+    inner.appendChild(b2);
+    const sub=document.createElement('div');
+    sub.className='subpanel';
+    inner.appendChild(sub);
+    b2.addEventListener('click',()=>{
+      b2.classList.toggle('active');
+      sub.style.display=sub.style.display==='block'?'none':'block';
+      showContent(h2.title,h2.content||'');
+    });
+    h2.children?.forEach(h3=>{
+      const b3=document.createElement('button');
+      b3.className='h3-accordion';
+      b3.textContent=h3.title;
+      sub.appendChild(b3);
+      const sub2=document.createElement('div');
+      sub2.className='subpanel';
+      sub.appendChild(sub2);
+      b3.addEventListener('click',()=>{
+        b3.classList.toggle('active');
+        sub2.style.display=sub2.style.display==='block'?'none':'block';
+        showContent(h3.title,h3.content||'');
+      });
+      h3.children?.forEach(h4=>{
+        const b4=document.createElement('button');
+        b4.className='h4-button';
+        b4.textContent=h4.title;
+        sub2.appendChild(b4);
+        b4.addEventListener('click',()=>showContent(h4.title,h4.content||''));
+      });
+    });
+  });
+
+  group.appendChild(btn);
+  group.appendChild(panel);
+  sidebar.appendChild(group);
+
+  btn.addEventListener('click',()=>{
+    const isMobile=window.innerWidth<=768;
+    const open=panel.style.display==='block';
+    document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+    if(open){panel.style.display='none';return;}
+    if(!isMobile){panel.style.display='block';showContent(item.title,item.content);}
+    else {
+      document.body.appendChild(panel);
+      panel.style.display='block';
+      panel.style.position='fixed';
+      const rect=btn.getBoundingClientRect();
+      // If this is the FORM or BINTUR menu on mobile, align panel's RIGHT edge with menu's RIGHT edge
+      if(item.title && (String(item.title).toUpperCase().includes('FORM') || String(item.title).toUpperCase().includes('BINTUR'))){
+        panel.style.left = '0px';
+        panel.style.visibility = 'hidden';
+        const naturalW = panel.offsetWidth || Math.min(window.innerWidth * 0.9, 300);
+        const pad = 8;
+        let left = Math.round(rect.right - naturalW);
+        if(left < pad) left = pad;
+        if(left + naturalW > window.innerWidth - pad) left = Math.max(pad, window.innerWidth - naturalW - pad);
+        panel.style.left = left + 'px';
+        panel.style.top = (rect.bottom + 4) + 'px';
+        panel.style.visibility = 'visible';
+      } else {
+        // default: align to left edge of the button
+        panel.style.left = rect.left + 'px';
+        panel.style.top = (rect.bottom + 4) + 'px';
+      }
+      const outside=(ev)=>{
+        if(!panel.contains(ev.target) && ev.target !== btn){
+          panel.style.display='none';
+          if(panel._origParent)panel._origParent.appendChild(panel);
+          window.removeEventListener('click',outside);
+        }
+      };
+      setTimeout(()=>window.addEventListener('click',outside),0);
+    }
+  });
+});
+if(!isMobile()){ 
+  // di desktop, nonaktifkan menu home
+  document.querySelector(".menu-home").style.pointerEvents = "none";
+  document.querySelector(".menu-home").style.opacity = "0.5"; // opsional kasih tampilan abu-abu
+}
+
+</script>
+<script>
+  // Simpel: gunakan localStorage agar tidak reset tiap refresh
+  let count = localStorage.getItem("visitorCount");
+  if (!count) {
+    count = 1;
+  } else {
+    count = parseInt(count) + 1;
+  }
+  localStorage.setItem("visitorCount", count);
+  document.getElementById("visitorNumber").textContent = count;
+</script>
+
+<script>
+// Toggle active emboss effect persistently
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".accordion, .h2-accordion, .h3-accordion, .h4-button").forEach(function(btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      this.classList.toggle("active");
+    });
+  });
+});
+</script>
+<script>
+// Toggle embos aktif untuk menu, submenu, dan sub-submenu
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".accordion, .h2-accordion, .h3-accordion, .h4-button")
+    .forEach(function(btn) {
+      btn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.classList.toggle("active");
+      });
+    });
+});
+</script>
+<script>
+function isMobile(){
+  return window.innerWidth <= 768;
+}
+
+document.addEventListener("click", function(e){
+  if(e.target && e.target.textContent.trim() === "Penilaian Diklat"){
+    if(isMobile()){
+      // 🔹 Mobile → langsung buka halaman penuh
+      window.location.href = "Form_Individu.html";
+    } else {
+      // 🔹 Desktop → tampilkan di iframe
+      document.getElementById("content").innerHTML = `
+        <iframe src="Form_Individu.html" style="width:100%;height:100vh;border:none;"></iframe>
+      `;
+    }
+  }
+});
+</script>
+	<!-- ===== Paste THIS before </body> in MPS_Mobile.html ===== -->
+<script>
+(function(){
+  const FORM_URL = 'https://andes-web.github.io/mpsmobile/Form_Individu.html';
+  const IFRAME_SRC = FORM_URL;
+  const IFRAME_STYLE = 'width:100%;height:100vh;border:none;';
+
+  function isMobile(){
+    return window.innerWidth <= 768; // ubah batas jika perlu
+  }
+
+  // pola aman: cocokkan "penilaian diklat" dalam teks (case-insensitive)
+  const MENU_REGEX = /\bpenilaian\s*diklat\b/i;
+
+  // cari elemen area konten (ganti selector jika #content berbeda)
+  function getContentElement(){
+    return document.getElementById('content') || document.querySelector('main') || document.body;
+  }
+
+  // helper: periksa apakah node mengandung teks menu yang cocok
+  function nodeHasMenuText(node){
+    if(!node || node.nodeType !== 1) return false;
+    const txt = (node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
+    return MENU_REGEX.test(txt);
+  }
+
+  // saat klik, tangkap di fase capture supaya mencegah renderer menu lain menimpa
+  document.addEventListener('click', function(ev){
+    try{
+      // periksa seluruh path (support shadow DOM / composedPath)
+      const path = (ev.composedPath && ev.composedPath()) || (ev.path) || (() => {
+        // fallback: bangun sendiri
+        const p = [];
+        let node = ev.target;
+        while(node){
+          p.push(node);
+          node = node.parentElement;
+        }
+        return p;
+      })();
+
+      let matchedNode = null;
+      for(const node of path){
+        if(nodeHasMenuText(node)){
+          matchedNode = node;
+          break;
+        }
+      }
+      if(!matchedNode) return; // bukan klik Penilaian Diklat -> lanjutkan
+
+      // kita tangani sendiri -> cegah handler lain (prevent + stop)
+      ev.preventDefault && ev.preventDefault();
+      ev.stopImmediatePropagation && ev.stopImmediatePropagation();
+      ev.stopPropagation && ev.stopPropagation();
+
+      // Sekarang lakukan action sesuai device
+      if(isMobile()){
+        // Mobile: redirect full page
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Desktop: load form di dalam konten (iframe)
+      const content = getContentElement();
+      if(!content){
+        console.warn('[menu-diklat] content element not found, fallback: open in same tab');
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Jika iframe sudah ada dengan src yang sama, do nothing (or focus)
+      const existing = content.querySelector('iframe[data-role="form-individu-iframe"]');
+      if(existing){
+        // sudah ada — fokus (scroll to) dan return
+        try{ existing.scrollIntoView({behavior:'smooth'}); }catch(e){}
+        return;
+      }
+
+      // Ganti isi content dengan iframe (bersih)
+      content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto">' +
+        '<iframe data-role="form-individu-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe>' +
+      '</div>';
+      return;
+
+    }catch(err){
+      console.error('[menu-diklat] handler error:', err);
+      // fallback simple
+    }
+  }, true); // capture = true so our handler runs before others
+
+  // also provide an optional function to programmatically open
+  window.__openPenilaianDiklat = function(){
+    if(isMobile()) window.location.href = FORM_URL;
+    else {
+      const content = getContentElement();
+      if(content) content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto"><iframe data-role="form-individu-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe></div>';
+      else window.location.href = FORM_URL;
+    }
+  };
+
+  // debug log
+  console.log('[menu-diklat] init handler (capture). Mobile breakpoint:', 768);
+})();
+</script>
+<!-- ===== end paste INDIVIDU ===== -->
+ <script>
+function isMobile(){
+  return window.innerWidth <= 768;
+}
+
+document.addEventListener("click", function(e){
+  if(e.target && e.target.textContent.trim() === "Penilaian K-Diklat"){
+    if(isMobile()){
+      // 🔹 Mobile → langsung buka halaman penuh
+      window.location.href = "Form_Kelompok.html";
+    } else {
+      // 🔹 Desktop → tampilkan di iframe
+      document.getElementById("content").innerHTML = `
+        <iframe src="Form_Kelompok.html" style="width:100%;height:100vh;border:none;"></iframe>
+      `;
+    }
+  }
+});
+</script>
+	<!-- ===== Paste THIS before </body> in MPS_Mobile.html KELOMPOK===== -->
+<script>
+(function(){
+  const FORM_URL = 'https://andes-web.github.io/mpsmobile/Form_Kelompok.html';
+  const IFRAME_SRC = FORM_URL;
+  const IFRAME_STYLE = 'width:100%;height:100vh;border:none;';
+
+  function isMobile(){
+    return window.innerWidth <= 768; // ubah batas jika perlu
+  }
+
+  // pola aman: cocokkan "penilaian k-diklat" dalam teks (case-insensitive)
+  const MENU_REGEX = /\bpenilaian\s*k-diklat\b/i;
+
+  // cari elemen area konten (ganti selector jika #content berbeda)
+  function getContentElement(){
+    return document.getElementById('content') || document.querySelector('main') || document.body;
+  }
+
+  // helper: periksa apakah node mengandung teks menu yang cocok
+  function nodeHasMenuText(node){
+    if(!node || node.nodeType !== 1) return false;
+    const txt = (node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
+    return MENU_REGEX.test(txt);
+  }
+
+  // saat klik, tangkap di fase capture supaya mencegah renderer menu lain menimpa
+  document.addEventListener('click', function(ev){
+    try{
+      // periksa seluruh path (support shadow DOM / composedPath)
+      const path = (ev.composedPath && ev.composedPath()) || (ev.path) || (() => {
+        // fallback: bangun sendiri
+        const p = [];
+        let node = ev.target;
+        while(node){
+          p.push(node);
+          node = node.parentElement;
+        }
+        return p;
+      })();
+
+      let matchedNode = null;
+      for(const node of path){
+        if(nodeHasMenuText(node)){
+          matchedNode = node;
+          break;
+        }
+      }
+      if(!matchedNode) return; // bukan klik Penilaian Diklat -> lanjutkan
+
+      // kita tangani sendiri -> cegah handler lain (prevent + stop)
+      ev.preventDefault && ev.preventDefault();
+      ev.stopImmediatePropagation && ev.stopImmediatePropagation();
+      ev.stopPropagation && ev.stopPropagation();
+
+      // Sekarang lakukan action sesuai device
+      if(isMobile()){
+        // Mobile: redirect full page
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Desktop: load form di dalam konten (iframe)
+      const content = getContentElement();
+      if(!content){
+        console.warn('[menu-diklat] content element not found, fallback: open in same tab');
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Jika iframe sudah ada dengan src yang sama, do nothing (or focus)
+      const existing = content.querySelector('iframe[data-role="form-kelompok-iframe"]');
+      if(existing){
+        // sudah ada — fokus (scroll to) dan return
+        try{ existing.scrollIntoView({behavior:'smooth'}); }catch(e){}
+        return;
+      }
+
+      // Ganti isi content dengan iframe (bersih)
+      content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto">' +
+        '<iframe data-role="form-kelompok-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe>' +
+      '</div>';
+      return;
+
+    }catch(err){
+      console.error('[menu-diklat] handler error:', err);
+      // fallback simple
+    }
+  }, true); // capture = true so our handler runs before others
+
+  // also provide an optional function to programmatically open
+  window.__openPenilaianDiklat = function(){
+    if(isMobile()) window.location.href = FORM_URL;
+    else {
+      const content = getContentElement();
+      if(content) content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto"><iframe data-role="form-kelompok-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe></div>';
+      else window.location.href = FORM_URL;
+    }
+  };
+
+  // debug log
+  console.log('[menu-diklat] init handler (capture). Mobile breakpoint:', 768);
+})();
+</script>
+<!-- ===== end paste KELOMPOK===== -->
+ 	<!-- ===== Paste THIS before </body> in MPS_Mobile.html DIRI===== -->
+<script>
+(function(){
+  const FORM_URL = 'https://andesofiani.github.io/pemetaan-profil-pola-pikir/';
+  const IFRAME_SRC = FORM_URL;
+  const IFRAME_STYLE = 'width:100%;height:100vh;border:none;';
+
+  function isMobile(){
+    return window.innerWidth <= 768; // ubah batas jika perlu
+  }
+
+  // pola aman: cocokkan "penilaian d-diklat" dalam teks (case-insensitive)
+  const MENU_REGEX = /\bpenilaian\s*d-diklat\b/i;
+
+  // cari elemen area konten (ganti selector jika #content berbeda)
+  function getContentElement(){
+    return document.getElementById('content') || document.querySelector('main') || document.body;
+  }
+
+  // helper: periksa apakah node mengandung teks menu yang cocok
+  function nodeHasMenuText(node){
+    if(!node || node.nodeType !== 1) return false;
+    const txt = (node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
+    return MENU_REGEX.test(txt);
+  }
+
+  // saat klik, tangkap di fase capture supaya mencegah renderer menu lain menimpa
+  document.addEventListener('click', function(ev){
+    try{
+      // periksa seluruh path (support shadow DOM / composedPath)
+      const path = (ev.composedPath && ev.composedPath()) || (ev.path) || (() => {
+        // fallback: bangun sendiri
+        const p = [];
+        let node = ev.target;
+        while(node){
+          p.push(node);
+          node = node.parentElement;
+        }
+        return p;
+      })();
+
+      let matchedNode = null;
+      for(const node of path){
+        if(nodeHasMenuText(node)){
+          matchedNode = node;
+          break;
+        }
+      }
+      if(!matchedNode) return; // bukan klik Penilaian Diklat -> lanjutkan
+
+      // kita tangani sendiri -> cegah handler lain (prevent + stop)
+      ev.preventDefault && ev.preventDefault();
+      ev.stopImmediatePropagation && ev.stopImmediatePropagation();
+      ev.stopPropagation && ev.stopPropagation();
+
+      // Sekarang lakukan action sesuai device
+      if(isMobile()){
+        // Mobile: redirect full page
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Desktop: load form di dalam konten (iframe)
+      const content = getContentElement();
+      if(!content){
+        console.warn('[menu-diklat] content element not found, fallback: open in same tab');
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Jika iframe sudah ada dengan src yang sama, do nothing (or focus)
+      const existing = content.querySelector('iframe[data-role="pemetaan-profil-pola-pikir-iframe"]');
+      if(existing){
+        // sudah ada — fokus (scroll to) dan return
+        try{ existing.scrollIntoView({behavior:'smooth'}); }catch(e){}
+        return;
+      }
+
+      // Ganti isi content dengan iframe (bersih)
+      content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto">' +
+        '<iframe data-role="pemetaan-profil-pola-pikir-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe>' +
+      '</div>';
+      return;
+
+    }catch(err){
+      console.error('[menu-diklat] handler error:', err);
+      // fallback simple
+    }
+  }, true); // capture = true so our handler runs before others
+
+  // also provide an optional function to programmatically open
+  window.__openPenilaianDiklat = function(){
+    if(isMobile()) window.location.href = FORM_URL;
+    else {
+      const content = getContentElement();
+      if(content) content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto"><iframe data-role="pemetaan-profil-pola-pikir-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe></div>';
+      else window.location.href = FORM_URL;
+    }
+  };
+
+  // debug log
+  console.log('[menu-diklat] init handler (capture). Mobile breakpoint:', 768);
+})();
+</script>
+<!-- ===== end paste KELOMPOK===== -->
+ <script>
+  // Simpel: gunakan localStorage agar tidak reset tiap refresh
+  let count = localStorage.getItem("visitorCount");
+  if (!count) {
+    count = 1;
+  } else {
+    count = parseInt(count) + 1;
+  }
+  localStorage.setItem("visitorCount", count);
+  document.getElementById("visitorNumber").textContent = count;
+</script>
+
+<script>
+// Toggle active emboss effect persistently
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".accordion, .h2-accordion, .h3-accordion, .h4-button").forEach(function(btn) {
+    btn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      this.classList.toggle("active");
+    });
+  });
+});
+</script>
+<script>
+// Toggle embos aktif untuk menu, submenu, dan sub-submenu
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll(".accordion, .h2-accordion, .h3-accordion, .h4-button")
+    .forEach(function(btn) {
+      btn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        this.classList.toggle("active");
+      });
+    });
+});
+</script>
+<script>
+function isMobile(){
+  return window.innerWidth <= 768;
+}
+
+document.addEventListener("click", function(e){
+  if(e.target && e.target.textContent.trim() === "Penilaian Diklat"){
+    if(isMobile()){
+      // 🔹 Mobile → langsung buka halaman penuh
+      window.location.href = "Form_Individu.html";
+    } else {
+      // 🔹 Desktop → tampilkan di iframe
+      document.getElementById("content").innerHTML = `
+        <iframe src="Form_Individu.html" style="width:100%;height:100vh;border:none;"></iframe>
+      `;
+    }
+  }
+});
+</script>
+	<!-- ===== Paste THIS before </body> in MPS_Mobile.html ===== -->
+<script>
+(function(){
+  const FORM_URL = 'https://andes-web.github.io/mpsmobile/pola_pikirMPS.html';
+  const IFRAME_SRC = FORM_URL;
+  const IFRAME_STYLE = 'width:100%;height:100vh;border:none;';
+
+  function isMobile(){
+    return window.innerWidth <= 768; // ubah batas jika perlu
+  }
+
+  // pola aman: cocokkan "penilaian diklat" dalam teks (case-insensitive)
+  const MENU_REGEX = /\bpenilaian\t*diklat\b/i;
+
+  // cari elemen area konten (ganti selector jika #content berbeda)
+  function getContentElement(){
+    return document.getElementById('content') || document.querySelector('main') || document.body;
+  }
+
+  // helper: periksa apakah node mengandung teks menu yang cocok
+  function nodeHasMenuText(node){
+    if(!node || node.nodeType !== 1) return false;
+    const txt = (node.innerText || node.textContent || '').replace(/\s+/g,' ').trim();
+    return MENU_REGEX.test(txt);
+  }
+
+  // saat klik, tangkap di fase capture supaya mencegah renderer menu lain menimpa
+  document.addEventListener('click', function(ev){
+    try{
+      // periksa seluruh path (support shadow DOM / composedPath)
+      const path = (ev.composedPath && ev.composedPath()) || (ev.path) || (() => {
+        // fallback: bangun sendiri
+        const p = [];
+        let node = ev.target;
+        while(node){
+          p.push(node);
+          node = node.parentElement;
+        }
+        return p;
+      })();
+
+      let matchedNode = null;
+      for(const node of path){
+        if(nodeHasMenuText(node)){
+          matchedNode = node;
+          break;
+        }
+      }
+      if(!matchedNode) return; // bukan klik Penilaian Diklat -> lanjutkan
+
+      // kita tangani sendiri -> cegah handler lain (prevent + stop)
+      ev.preventDefault && ev.preventDefault();
+      ev.stopImmediatePropagation && ev.stopImmediatePropagation();
+      ev.stopPropagation && ev.stopPropagation();
+
+      // Sekarang lakukan action sesuai device
+      if(isMobile()){
+        // Mobile: redirect full page
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Desktop: load form di dalam konten (iframe)
+      const content = getContentElement();
+      if(!content){
+        console.warn('[menu-diklat] content element not found, fallback: open in same tab');
+        window.location.href = FORM_URL;
+        return;
+      }
+
+      // Jika iframe sudah ada dengan src yang sama, do nothing (or focus)
+      const existing = content.querySelector('iframe[data-role="pola-pikirmps-iframe"]');
+      if(existing){
+        // sudah ada — fokus (scroll to) dan return
+        try{ existing.scrollIntoView({behavior:'smooth'}); }catch(e){}
+        return;
+      }
+
+      // Ganti isi content dengan iframe (bersih)
+      content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto">' +
+        '<iframe data-role="pola-pikirmps-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe>' +
+      '</div>';
+      return;
+
+    }catch(err){
+      console.error('[menu-diklat] handler error:', err);
+      // fallback simple
+    }
+  }, true); // capture = true so our handler runs before others
+
+  // also provide an optional function to programmatically open
+  window.__openPenilaianDiklat = function(){
+    if(isMobile()) window.location.href = FORM_URL;
+    else {
+      const content = getContentElement();
+      if(content) content.innerHTML = '<div style="width:100%;height:100vh;overflow:auto"><iframe data-role="pola-pikirmps-iframe" src="' + IFRAME_SRC + '" style="' + IFRAME_STYLE + '"></iframe></div>';
+      else window.location.href = FORM_URL;
+    }
+  };
+
+  // debug log
+  console.log('[menu-diklat] init handler (capture). Mobile breakpoint:', 768);
+})();
+</script>
+<!-- ===== end paste INDIVIDU ===== -->
+ <script>
+function isMobile(){
+  return window.innerWidth <= 768;
+}
+
+document.addEventListener("click", function(e){
+  if(e.target && e.target.textContent.trim() === "Penilaian T-Diklat"){
+    if(isMobile()){
+      // 🔹 Mobile → langsung buka halaman penuh
+      window.location.href = "pola_pikirMPS.html";
+    } else {
+      // 🔹 Desktop → tampilkan di iframe
+      document.getElementById("content").innerHTML = `
+        <iframe src="pola_pikirMPS.html" style="width:100%;height:100vh;border:none;"></iframe>
+      `;
+    }
+  }
+});
+</script>
+</body>
+</html>
