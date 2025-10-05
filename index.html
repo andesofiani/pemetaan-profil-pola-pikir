@@ -372,6 +372,11 @@ h1 {
   margin-top: 4px;  /* jarak antara Analisa Grafik dan tanggal */
   color: #1e3a8a;
 }
+.home {
+  background: linear-gradient(135deg, #9333ea, #6d28d9); /* ungu kebiruan */
+  color: #fff;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <!-- pastikan Chart.js di-load lebih dulu -->
@@ -474,8 +479,12 @@ document.addEventListener('DOMContentLoaded', async function() {
      GRAFIK
     </button>
 <button class="btn warning" id="cetakTanpaAnalisisBtn" type="button">
-     CETAK ISIAN RESPONDEN
-    </button>
+     CETAK
+</button>
+<button class="btn home" id="homeBtn" type="button">
+     HOME
+</button>
+
 <!-- Hasil Skor & Kategori -->
 </div>
 <div class="result" id="result">
@@ -2244,7 +2253,46 @@ document.addEventListener('DOMContentLoaded', function(){
     else if (ansLabel === 'STS') question.classList.add('warna-STS');
   });
 });
-
+</script>
+<script>
+document.getElementById('homeBtn').addEventListener('click', function() {
+  Swal.fire({
+    title: 'Masukkan Password',
+    input: 'password',
+    inputPlaceholder: 'Ketik password di sini',
+    inputAttributes: {
+      maxlength: 20,
+      autocapitalize: 'off',
+      autocorrect: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Masuk',
+    cancelButtonText: 'Batal',
+    customClass: { popup: 'swal-3d' },
+    preConfirm: (pwd) => {
+      if (pwd === 'mps123') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: 'Mengalihkan ke halaman Utama...',
+          showConfirmButton: false,
+          timer: 1500,
+          customClass: { popup: 'swal-3d' }
+        }).then(() => {
+          window.open('https://andes-web.github.io/mpsmobile/', '_blank');
+          window.close();
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal',
+          text: 'Password salah!',
+          customClass: { popup: 'swal-3d' }
+        });
+      }
+    }
+  });
+});
 </script>
 </body>
 </html>
