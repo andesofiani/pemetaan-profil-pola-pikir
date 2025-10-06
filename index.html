@@ -2279,8 +2279,8 @@ document.getElementById('homeBtn').addEventListener('click', function() {
           timer: 1500,
           customClass: { popup: 'swal-3d' }
         }).then(() => {
-          window.open('https://andes-web.github.io/mpsmobile/', '_blank');
-          window.close();
+          // 👇 ini bagian penting agar keluar dari iframe
+          window.top.location.href = 'https://andes-web.github.io/mpsmobile/';
         });
       } else {
         Swal.fire({
@@ -2296,3 +2296,4 @@ document.getElementById('homeBtn').addEventListener('click', function() {
 </script>
 </body>
 </html>
+
