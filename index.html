@@ -2294,6 +2294,18 @@ document.getElementById('homeBtn').addEventListener('click', function() {
   });
 });
 </script>
+   <!-- === Tambah hitungan pengunjung (tidak menampilkan angka) === -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const endpoint = "https://script.google.com/macros/s/AKfycbzrXSEevvL6nDIzmuXuP5aq7y_YUmYx7RKRugoZBGpfs6bbCTuLJ9luHhXIhBxmCBpo/exec";
+  // Panggil tanpa parameter → otomatis menambah +1
+  fetch(endpoint)
+    .then(() => console.log("✅ Visitor count incremented"))
+    .catch(err => console.warn("Visitor count error:", err));
+});
+</script>
+
 </body>
 </html>
+
 
